@@ -37,9 +37,9 @@ export function Footer() {
           <div>
             <h4 className="font-display font-semibold text-lg mb-4">Contact Us</h4>
             <ul className="space-y-3 text-sm text-primary-foreground/70">
-              <li className="flex items-start gap-2"><Phone className="w-4 h-4 mt-0.5 shrink-0" /> +91 99999 99999</li>
-              <li className="flex items-start gap-2"><Mail className="w-4 h-4 mt-0.5 shrink-0" /> info@luxurybusrental.com</li>
-              <li className="flex items-start gap-2"><MapPin className="w-4 h-4 mt-0.5 shrink-0" /> Mumbai, Maharashtra, India</li>
+              <li className="flex items-start gap-2"><Phone className="w-4 h-4 mt-0.5 shrink-0" /><span>+91 99999 99999</span></li>
+              <li className="flex items-start gap-2"><Mail className="w-4 h-4 mt-0.5 shrink-0" /><span>info@luxurybusrental.com</span></li>
+              <li className="flex items-start gap-2"><MapPin className="w-4 h-4 mt-0.5 shrink-0" /><span>Mumbai, Maharashtra, India</span></li>
             </ul>
           </div>
         </div>
