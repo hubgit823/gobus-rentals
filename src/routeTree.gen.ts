@@ -17,7 +17,19 @@ import { Route as BookRouteImport } from './routes/book'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VendorRegisterRouteImport } from './routes/vendor.register'
+import { Route as VendorQuotesRouteImport } from './routes/vendor.quotes'
+import { Route as VendorProfileRouteImport } from './routes/vendor.profile'
 import { Route as VendorLoginRouteImport } from './routes/vendor.login'
+import { Route as VendorLeadsRouteImport } from './routes/vendor.leads'
+import { Route as VendorFleetRouteImport } from './routes/vendor.fleet'
+import { Route as VendorEarningsRouteImport } from './routes/vendor.earnings'
+import { Route as VendorDashboardRouteImport } from './routes/vendor.dashboard'
+import { Route as VendorBookingsRouteImport } from './routes/vendor.bookings'
+import { Route as CustomerReviewsRouteImport } from './routes/customer.reviews'
+import { Route as CustomerQuotesRouteImport } from './routes/customer.quotes'
+import { Route as CustomerProfileRouteImport } from './routes/customer.profile'
+import { Route as CustomerDashboardRouteImport } from './routes/customer.dashboard'
+import { Route as CustomerBookingsRouteImport } from './routes/customer.bookings'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const VendorRoute = VendorRouteImport.update({
@@ -60,10 +72,70 @@ const VendorRegisterRoute = VendorRegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => VendorRoute,
 } as any)
+const VendorQuotesRoute = VendorQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorProfileRoute = VendorProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => VendorRoute,
+} as any)
 const VendorLoginRoute = VendorLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => VendorRoute,
+} as any)
+const VendorLeadsRoute = VendorLeadsRouteImport.update({
+  id: '/leads',
+  path: '/leads',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorFleetRoute = VendorFleetRouteImport.update({
+  id: '/fleet',
+  path: '/fleet',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorEarningsRoute = VendorEarningsRouteImport.update({
+  id: '/earnings',
+  path: '/earnings',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorDashboardRoute = VendorDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => VendorRoute,
+} as any)
+const VendorBookingsRoute = VendorBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => VendorRoute,
+} as any)
+const CustomerReviewsRoute = CustomerReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerQuotesRoute = CustomerQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerProfileRoute = CustomerProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerDashboardRoute = CustomerDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => CustomerRoute,
+} as any)
+const CustomerBookingsRoute = CustomerBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => CustomerRoute,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
@@ -75,24 +147,48 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/book': typeof BookRoute
-  '/customer': typeof CustomerRoute
+  '/customer': typeof CustomerRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/vendor': typeof VendorRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
+  '/customer/bookings': typeof CustomerBookingsRoute
+  '/customer/dashboard': typeof CustomerDashboardRoute
+  '/customer/profile': typeof CustomerProfileRoute
+  '/customer/quotes': typeof CustomerQuotesRoute
+  '/customer/reviews': typeof CustomerReviewsRoute
+  '/vendor/bookings': typeof VendorBookingsRoute
+  '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendor/earnings': typeof VendorEarningsRoute
+  '/vendor/fleet': typeof VendorFleetRoute
+  '/vendor/leads': typeof VendorLeadsRoute
   '/vendor/login': typeof VendorLoginRoute
+  '/vendor/profile': typeof VendorProfileRoute
+  '/vendor/quotes': typeof VendorQuotesRoute
   '/vendor/register': typeof VendorRegisterRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/book': typeof BookRoute
-  '/customer': typeof CustomerRoute
+  '/customer': typeof CustomerRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/vendor': typeof VendorRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
+  '/customer/bookings': typeof CustomerBookingsRoute
+  '/customer/dashboard': typeof CustomerDashboardRoute
+  '/customer/profile': typeof CustomerProfileRoute
+  '/customer/quotes': typeof CustomerQuotesRoute
+  '/customer/reviews': typeof CustomerReviewsRoute
+  '/vendor/bookings': typeof VendorBookingsRoute
+  '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendor/earnings': typeof VendorEarningsRoute
+  '/vendor/fleet': typeof VendorFleetRoute
+  '/vendor/leads': typeof VendorLeadsRoute
   '/vendor/login': typeof VendorLoginRoute
+  '/vendor/profile': typeof VendorProfileRoute
+  '/vendor/quotes': typeof VendorQuotesRoute
   '/vendor/register': typeof VendorRegisterRoute
 }
 export interface FileRoutesById {
@@ -100,12 +196,24 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/book': typeof BookRoute
-  '/customer': typeof CustomerRoute
+  '/customer': typeof CustomerRouteWithChildren
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/vendor': typeof VendorRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
+  '/customer/bookings': typeof CustomerBookingsRoute
+  '/customer/dashboard': typeof CustomerDashboardRoute
+  '/customer/profile': typeof CustomerProfileRoute
+  '/customer/quotes': typeof CustomerQuotesRoute
+  '/customer/reviews': typeof CustomerReviewsRoute
+  '/vendor/bookings': typeof VendorBookingsRoute
+  '/vendor/dashboard': typeof VendorDashboardRoute
+  '/vendor/earnings': typeof VendorEarningsRoute
+  '/vendor/fleet': typeof VendorFleetRoute
+  '/vendor/leads': typeof VendorLeadsRoute
   '/vendor/login': typeof VendorLoginRoute
+  '/vendor/profile': typeof VendorProfileRoute
+  '/vendor/quotes': typeof VendorQuotesRoute
   '/vendor/register': typeof VendorRegisterRoute
 }
 export interface FileRouteTypes {
@@ -119,7 +227,19 @@ export interface FileRouteTypes {
     | '/signup'
     | '/vendor'
     | '/admin/login'
+    | '/customer/bookings'
+    | '/customer/dashboard'
+    | '/customer/profile'
+    | '/customer/quotes'
+    | '/customer/reviews'
+    | '/vendor/bookings'
+    | '/vendor/dashboard'
+    | '/vendor/earnings'
+    | '/vendor/fleet'
+    | '/vendor/leads'
     | '/vendor/login'
+    | '/vendor/profile'
+    | '/vendor/quotes'
     | '/vendor/register'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -131,7 +251,19 @@ export interface FileRouteTypes {
     | '/signup'
     | '/vendor'
     | '/admin/login'
+    | '/customer/bookings'
+    | '/customer/dashboard'
+    | '/customer/profile'
+    | '/customer/quotes'
+    | '/customer/reviews'
+    | '/vendor/bookings'
+    | '/vendor/dashboard'
+    | '/vendor/earnings'
+    | '/vendor/fleet'
+    | '/vendor/leads'
     | '/vendor/login'
+    | '/vendor/profile'
+    | '/vendor/quotes'
     | '/vendor/register'
   id:
     | '__root__'
@@ -143,7 +275,19 @@ export interface FileRouteTypes {
     | '/signup'
     | '/vendor'
     | '/admin/login'
+    | '/customer/bookings'
+    | '/customer/dashboard'
+    | '/customer/profile'
+    | '/customer/quotes'
+    | '/customer/reviews'
+    | '/vendor/bookings'
+    | '/vendor/dashboard'
+    | '/vendor/earnings'
+    | '/vendor/fleet'
+    | '/vendor/leads'
     | '/vendor/login'
+    | '/vendor/profile'
+    | '/vendor/quotes'
     | '/vendor/register'
   fileRoutesById: FileRoutesById
 }
@@ -151,7 +295,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   BookRoute: typeof BookRoute
-  CustomerRoute: typeof CustomerRoute
+  CustomerRoute: typeof CustomerRouteWithChildren
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   VendorRoute: typeof VendorRouteWithChildren
@@ -215,12 +359,96 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VendorRegisterRouteImport
       parentRoute: typeof VendorRoute
     }
+    '/vendor/quotes': {
+      id: '/vendor/quotes'
+      path: '/quotes'
+      fullPath: '/vendor/quotes'
+      preLoaderRoute: typeof VendorQuotesRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/profile': {
+      id: '/vendor/profile'
+      path: '/profile'
+      fullPath: '/vendor/profile'
+      preLoaderRoute: typeof VendorProfileRouteImport
+      parentRoute: typeof VendorRoute
+    }
     '/vendor/login': {
       id: '/vendor/login'
       path: '/login'
       fullPath: '/vendor/login'
       preLoaderRoute: typeof VendorLoginRouteImport
       parentRoute: typeof VendorRoute
+    }
+    '/vendor/leads': {
+      id: '/vendor/leads'
+      path: '/leads'
+      fullPath: '/vendor/leads'
+      preLoaderRoute: typeof VendorLeadsRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/fleet': {
+      id: '/vendor/fleet'
+      path: '/fleet'
+      fullPath: '/vendor/fleet'
+      preLoaderRoute: typeof VendorFleetRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/earnings': {
+      id: '/vendor/earnings'
+      path: '/earnings'
+      fullPath: '/vendor/earnings'
+      preLoaderRoute: typeof VendorEarningsRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/dashboard': {
+      id: '/vendor/dashboard'
+      path: '/dashboard'
+      fullPath: '/vendor/dashboard'
+      preLoaderRoute: typeof VendorDashboardRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/vendor/bookings': {
+      id: '/vendor/bookings'
+      path: '/bookings'
+      fullPath: '/vendor/bookings'
+      preLoaderRoute: typeof VendorBookingsRouteImport
+      parentRoute: typeof VendorRoute
+    }
+    '/customer/reviews': {
+      id: '/customer/reviews'
+      path: '/reviews'
+      fullPath: '/customer/reviews'
+      preLoaderRoute: typeof CustomerReviewsRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/quotes': {
+      id: '/customer/quotes'
+      path: '/quotes'
+      fullPath: '/customer/quotes'
+      preLoaderRoute: typeof CustomerQuotesRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/profile': {
+      id: '/customer/profile'
+      path: '/profile'
+      fullPath: '/customer/profile'
+      preLoaderRoute: typeof CustomerProfileRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/dashboard': {
+      id: '/customer/dashboard'
+      path: '/dashboard'
+      fullPath: '/customer/dashboard'
+      preLoaderRoute: typeof CustomerDashboardRouteImport
+      parentRoute: typeof CustomerRoute
+    }
+    '/customer/bookings': {
+      id: '/customer/bookings'
+      path: '/bookings'
+      fullPath: '/customer/bookings'
+      preLoaderRoute: typeof CustomerBookingsRouteImport
+      parentRoute: typeof CustomerRoute
     }
     '/admin/login': {
       id: '/admin/login'
@@ -242,13 +470,47 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
+interface CustomerRouteChildren {
+  CustomerBookingsRoute: typeof CustomerBookingsRoute
+  CustomerDashboardRoute: typeof CustomerDashboardRoute
+  CustomerProfileRoute: typeof CustomerProfileRoute
+  CustomerQuotesRoute: typeof CustomerQuotesRoute
+  CustomerReviewsRoute: typeof CustomerReviewsRoute
+}
+
+const CustomerRouteChildren: CustomerRouteChildren = {
+  CustomerBookingsRoute: CustomerBookingsRoute,
+  CustomerDashboardRoute: CustomerDashboardRoute,
+  CustomerProfileRoute: CustomerProfileRoute,
+  CustomerQuotesRoute: CustomerQuotesRoute,
+  CustomerReviewsRoute: CustomerReviewsRoute,
+}
+
+const CustomerRouteWithChildren = CustomerRoute._addFileChildren(
+  CustomerRouteChildren,
+)
+
 interface VendorRouteChildren {
+  VendorBookingsRoute: typeof VendorBookingsRoute
+  VendorDashboardRoute: typeof VendorDashboardRoute
+  VendorEarningsRoute: typeof VendorEarningsRoute
+  VendorFleetRoute: typeof VendorFleetRoute
+  VendorLeadsRoute: typeof VendorLeadsRoute
   VendorLoginRoute: typeof VendorLoginRoute
+  VendorProfileRoute: typeof VendorProfileRoute
+  VendorQuotesRoute: typeof VendorQuotesRoute
   VendorRegisterRoute: typeof VendorRegisterRoute
 }
 
 const VendorRouteChildren: VendorRouteChildren = {
+  VendorBookingsRoute: VendorBookingsRoute,
+  VendorDashboardRoute: VendorDashboardRoute,
+  VendorEarningsRoute: VendorEarningsRoute,
+  VendorFleetRoute: VendorFleetRoute,
+  VendorLeadsRoute: VendorLeadsRoute,
   VendorLoginRoute: VendorLoginRoute,
+  VendorProfileRoute: VendorProfileRoute,
+  VendorQuotesRoute: VendorQuotesRoute,
   VendorRegisterRoute: VendorRegisterRoute,
 }
 
@@ -259,7 +521,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   BookRoute: BookRoute,
-  CustomerRoute: CustomerRoute,
+  CustomerRoute: CustomerRouteWithChildren,
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   VendorRoute: VendorRouteWithChildren,
