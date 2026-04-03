@@ -45,7 +45,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-primary-foreground/10 mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-primary-foreground/50">
-          <p>&copy; {new Date().getFullYear()} LuxuryBusRental. All rights reserved.</p>
+          <p>&copy; 2025 LuxuryBusRental. All rights reserved.</p>
           <div className="flex gap-6">
             <a href="#" className="hover:text-primary-foreground transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-primary-foreground transition-colors">Terms of Service</a>
