@@ -30,7 +30,16 @@ import { Route as CustomerQuotesRouteImport } from './routes/customer.quotes'
 import { Route as CustomerProfileRouteImport } from './routes/customer.profile'
 import { Route as CustomerDashboardRouteImport } from './routes/customer.dashboard'
 import { Route as CustomerBookingsRouteImport } from './routes/customer.bookings'
+import { Route as AdminVendorsRouteImport } from './routes/admin.vendors'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminQuotesRouteImport } from './routes/admin.quotes'
+import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
+import { Route as AdminNotificationsRouteImport } from './routes/admin.notifications'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
+import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
+import { Route as AdminCmsRouteImport } from './routes/admin.cms'
+import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
 
 const VendorRoute = VendorRouteImport.update({
   id: '/vendor',
@@ -137,9 +146,54 @@ const CustomerBookingsRoute = CustomerBookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => CustomerRoute,
 } as any)
+const AdminVendorsRoute = AdminVendorsRouteImport.update({
+  id: '/vendors',
+  path: '/vendors',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminQuotesRoute = AdminQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminNotificationsRoute = AdminNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDashboardRoute = AdminDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCustomersRoute = AdminCustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCmsRoute = AdminCmsRouteImport.update({
+  id: '/cms',
+  path: '/cms',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminBookingsRoute = AdminBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
   getParentRoute: () => AdminRoute,
 } as any)
 
@@ -151,7 +205,16 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/vendor': typeof VendorRouteWithChildren
+  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/cms': typeof AdminCmsRoute
+  '/admin/customers': typeof AdminCustomersRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/notifications': typeof AdminNotificationsRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/quotes': typeof AdminQuotesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/vendors': typeof AdminVendorsRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/customer/profile': typeof CustomerProfileRoute
@@ -175,7 +238,16 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/vendor': typeof VendorRouteWithChildren
+  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/cms': typeof AdminCmsRoute
+  '/admin/customers': typeof AdminCustomersRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/notifications': typeof AdminNotificationsRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/quotes': typeof AdminQuotesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/vendors': typeof AdminVendorsRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/customer/profile': typeof CustomerProfileRoute
@@ -200,7 +272,16 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/vendor': typeof VendorRouteWithChildren
+  '/admin/bookings': typeof AdminBookingsRoute
+  '/admin/cms': typeof AdminCmsRoute
+  '/admin/customers': typeof AdminCustomersRoute
+  '/admin/dashboard': typeof AdminDashboardRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/notifications': typeof AdminNotificationsRoute
+  '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/quotes': typeof AdminQuotesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/vendors': typeof AdminVendorsRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
   '/customer/profile': typeof CustomerProfileRoute
@@ -226,7 +307,16 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/vendor'
+    | '/admin/bookings'
+    | '/admin/cms'
+    | '/admin/customers'
+    | '/admin/dashboard'
     | '/admin/login'
+    | '/admin/notifications'
+    | '/admin/payments'
+    | '/admin/quotes'
+    | '/admin/settings'
+    | '/admin/vendors'
     | '/customer/bookings'
     | '/customer/dashboard'
     | '/customer/profile'
@@ -250,7 +340,16 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/vendor'
+    | '/admin/bookings'
+    | '/admin/cms'
+    | '/admin/customers'
+    | '/admin/dashboard'
     | '/admin/login'
+    | '/admin/notifications'
+    | '/admin/payments'
+    | '/admin/quotes'
+    | '/admin/settings'
+    | '/admin/vendors'
     | '/customer/bookings'
     | '/customer/dashboard'
     | '/customer/profile'
@@ -274,7 +373,16 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/vendor'
+    | '/admin/bookings'
+    | '/admin/cms'
+    | '/admin/customers'
+    | '/admin/dashboard'
     | '/admin/login'
+    | '/admin/notifications'
+    | '/admin/payments'
+    | '/admin/quotes'
+    | '/admin/settings'
+    | '/admin/vendors'
     | '/customer/bookings'
     | '/customer/dashboard'
     | '/customer/profile'
@@ -450,6 +558,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerBookingsRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/admin/vendors': {
+      id: '/admin/vendors'
+      path: '/vendors'
+      fullPath: '/admin/vendors'
+      preLoaderRoute: typeof AdminVendorsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/quotes': {
+      id: '/admin/quotes'
+      path: '/quotes'
+      fullPath: '/admin/quotes'
+      preLoaderRoute: typeof AdminQuotesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/payments': {
+      id: '/admin/payments'
+      path: '/payments'
+      fullPath: '/admin/payments'
+      preLoaderRoute: typeof AdminPaymentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/notifications': {
+      id: '/admin/notifications'
+      path: '/notifications'
+      fullPath: '/admin/notifications'
+      preLoaderRoute: typeof AdminNotificationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -457,15 +600,61 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/dashboard': {
+      id: '/admin/dashboard'
+      path: '/dashboard'
+      fullPath: '/admin/dashboard'
+      preLoaderRoute: typeof AdminDashboardRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/customers': {
+      id: '/admin/customers'
+      path: '/customers'
+      fullPath: '/admin/customers'
+      preLoaderRoute: typeof AdminCustomersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/cms': {
+      id: '/admin/cms'
+      path: '/cms'
+      fullPath: '/admin/cms'
+      preLoaderRoute: typeof AdminCmsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/bookings': {
+      id: '/admin/bookings'
+      path: '/bookings'
+      fullPath: '/admin/bookings'
+      preLoaderRoute: typeof AdminBookingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminBookingsRoute: typeof AdminBookingsRoute
+  AdminCmsRoute: typeof AdminCmsRoute
+  AdminCustomersRoute: typeof AdminCustomersRoute
+  AdminDashboardRoute: typeof AdminDashboardRoute
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminNotificationsRoute: typeof AdminNotificationsRoute
+  AdminPaymentsRoute: typeof AdminPaymentsRoute
+  AdminQuotesRoute: typeof AdminQuotesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminVendorsRoute: typeof AdminVendorsRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBookingsRoute: AdminBookingsRoute,
+  AdminCmsRoute: AdminCmsRoute,
+  AdminCustomersRoute: AdminCustomersRoute,
+  AdminDashboardRoute: AdminDashboardRoute,
   AdminLoginRoute: AdminLoginRoute,
+  AdminNotificationsRoute: AdminNotificationsRoute,
+  AdminPaymentsRoute: AdminPaymentsRoute,
+  AdminQuotesRoute: AdminQuotesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminVendorsRoute: AdminVendorsRoute,
 }
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
