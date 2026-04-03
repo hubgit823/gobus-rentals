@@ -31,11 +31,11 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "LuxuryBusRental — Premium Bus Rental Marketplace in India" },
+      { name: "description", content: "Compare quotes from top bus operators across India. Book AC/Non-AC buses for weddings, corporate events, tours & more. Best prices guaranteed." },
+      { name: "author", content: "LuxuryBusRental" },
+      { property: "og:title", content: "LuxuryBusRental — Premium Bus Rental Marketplace" },
+      { property: "og:description", content: "Compare quotes from top bus operators across India. Book AC/Non-AC buses for weddings, corporate events, tours & more." },
       { property: "og:type", content: "website" },
       { property: "og:image", content: "https://lovable.dev/opengraph-image-p98pqg.png" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -46,6 +46,19 @@ export const Route = createRootRoute({
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      {
+        rel: "preconnect",
+        href: "https://fonts.googleapis.com",
+      },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous" as const,
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap",
       },
     ],
   }),
