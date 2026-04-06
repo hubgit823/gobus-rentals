@@ -1,10 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail, Lock, Phone, User, ArrowRight } from "lucide-react";
+import { api } from "@/lib/api";
+import { setAuth, type StoredUser } from "@/lib/auth-storage";
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
@@ -16,7 +21,29 @@ export const Route = createFileRoute("/signup")({
   }),
 });
 
+type RegRes = { token: string; user: StoredUser };
+
 function SignupPage() {
+  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+
+  const mut = useMutation({
+    mutationFn: () =>
+      api<RegRes>("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({ name, email, phone, password }),
+      }),
+    onSuccess: (data) => {
+      setAuth(data.token, data.user);
+      toast.success("Account created!");
+      navigate({ to: "/customer/dashboard" });
+    },
+    onError: (e: Error) => toast.error(e.message || "Sign up failed"),
+  });
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -28,36 +55,48 @@ function SignupPage() {
           </div>
 
           <div className="bg-card rounded-2xl shadow-lg border border-border p-6 sm:p-8">
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                mut.mutate();
+              }}
+              className="space-y-4"
+            >
               <div className="space-y-2">
                 <Label htmlFor="name" className="flex items-center gap-1.5">
                   <User className="w-4 h-4 text-primary" /> Full Name
                 </Label>
-                <Input id="name" placeholder="John Doe" />
+                <Input id="name" placeholder="John Doe" value={name} onChange={(e) => setName(e.target.value)} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email" className="flex items-center gap-1.5">
                   <Mail className="w-4 h-4 text-primary" /> Email Address
                 </Label>
-                <Input id="email" type="email" placeholder="you@example.com" />
+                <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="mobile" className="flex items-center gap-1.5">
                   <Phone className="w-4 h-4 text-primary" /> Mobile Number
                 </Label>
-                <Input id="mobile" type="tel" placeholder="+91 98765 43210" />
+                <Input id="mobile" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password" className="flex items-center gap-1.5">
                   <Lock className="w-4 h-4 text-primary" /> Password
                 </Label>
-                <Input id="password" type="password" placeholder="Minimum 8 characters" />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Minimum 8 characters"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  minLength={8}
+                  required
+                />
               </div>
-              <Link to="/customer/dashboard">
-                <Button className="w-full" size="lg">
-                  Create Account <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
+              <Button className="w-full" size="lg" type="submit" disabled={mut.isPending}>
+                {mut.isPending ? "Creating…" : "Create Account"} <ArrowRight className="w-4 h-4" />
+              </Button>
             </form>
 
             <p className="text-center text-sm text-muted-foreground mt-6">

@@ -1,6 +1,8 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { LayoutDashboard, Users, Building2, BookOpen, MessageSquareQuote, IndianRupee, FileText, Bell, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { clearAuth } from "@/lib/auth-storage";
+import { COMPANY } from "@/lib/company";
 
 const links = [
   { to: "/admin/dashboard" as const, icon: LayoutDashboard, label: "Dashboard" },
@@ -21,7 +23,7 @@ export function AdminSidebar() {
     <aside className="w-64 bg-card border-r border-border min-h-screen hidden lg:flex flex-col">
       <div className="p-5 border-b border-border">
         <Link to="/" className="flex items-center gap-2">
-          <img src="/images/logo.jpeg" alt="LuxuryBusRental" className="h-8 w-auto" />
+          <img src="/images/logo.png" alt={COMPANY.platformBrand} className="h-10 w-auto object-contain object-left" width={884} height={458} decoding="async" />
         </Link>
         <p className="text-xs text-destructive font-semibold mt-1">Admin Panel</p>
       </div>
@@ -47,6 +49,7 @@ export function AdminSidebar() {
       <div className="p-3 border-t border-border">
         <Link
           to="/admin/login"
+          onClick={() => clearAuth()}
           className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
         >
           <LogOut className="w-4 h-4" />

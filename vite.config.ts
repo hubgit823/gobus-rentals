@@ -175,6 +175,13 @@ export default defineConfig(({ command, mode }) => {
     server: {
       host: "::",
       port: 8080,
+      // When VITE_API_URL is unset, the app calls same-origin /api/* — forward to the dev mock API.
+      proxy: {
+        "/api": {
+          target: "http://127.0.0.1:3001",
+          changeOrigin: true,
+        },
+      },
     },
     define: envDefine,
     resolve: {

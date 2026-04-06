@@ -54,6 +54,27 @@ export function HowItWorks() {
             </div>
           ))}
         </div>
+
+        <div className="mt-16 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {[
+            { src: "/images/home/group-travel.jpg", alt: "Small group pickup" },
+            { src: "/images/home/bus-travel.jpg", alt: "On the road with your charter" },
+            { src: "/images/home/corporate-team.jpg", alt: "Corporate booking experience" },
+            { src: "/images/home/mountains-north.jpg", alt: "Hill station and North India routes" },
+          ].map((ph) => (
+            <div key={ph.src} className="relative overflow-hidden rounded-xl border border-border aspect-[4/3] group">
+              <img
+                src={ph.src}
+                alt={ph.alt}
+                width={600}
+                height={450}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

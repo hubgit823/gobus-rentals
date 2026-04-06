@@ -1,31 +1,66 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { Bus, ClipboardList, IndianRupee, Star, TrendingUp, Users } from "lucide-react";
+import { api } from "@/lib/api";
 
 export const Route = createFileRoute("/vendor/dashboard")({
   component: VendorDashboard,
 });
 
-const stats = [
-  { label: "Total Buses", value: "12", icon: Bus, color: "text-primary" },
-  { label: "Active Leads", value: "8", icon: ClipboardList, color: "text-chart-5" },
-  { label: "Confirmed Bookings", value: "24", icon: Users, color: "text-chart-2" },
-  { label: "Total Earnings", value: "₹4,85,000", icon: IndianRupee, color: "text-chart-4" },
-  { label: "Avg Rating", value: "4.6", icon: Star, color: "text-chart-5" },
-  { label: "This Month", value: "₹1,20,000", icon: TrendingUp, color: "text-primary" },
-];
-
-const recentLeads = [
-  { id: "L001", customer: "Priya S.", route: "Mumbai → Goa", date: "2025-02-18", bus: "40 Seater AC", status: "New" },
-  { id: "L002", customer: "Rajesh M.", route: "Delhi → Agra", date: "2025-02-20", bus: "26 Seater AC", status: "Quoted" },
-  { id: "L003", customer: "Anita V.", route: "Pune → Shirdi", date: "2025-02-22", bus: "17 Seater", status: "New" },
-];
+type DashRes = {
+  totalBuses: string;
+  activeLeads: string;
+  confirmedBookings: string;
+  totalEarnings: string;
+  netAfterCommission?: string;
+  commissionPercent?: number;
+  payoutRule?: string;
+  avgRating: string;
+  thisMonth: string;
+  recentLeads: Array<{
+    id: string;
+    customer: string;
+    route: string;
+    date: string;
+    bus: string;
+    status: string;
+  }>;
+};
 
 function VendorDashboard() {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["vendor-dashboard-stats"],
+    queryFn: () => api<DashRes>("/api/vendor/dashboard-stats"),
+  });
+
+  if (isLoading) return <div className="p-8 text-sm text-muted-foreground">Loading dashboard…</div>;
+  if (error) return <div className="p-8 text-sm text-destructive">{(error as Error).message}</div>;
+
+  const stats = [
+    { label: "Total Buses", value: data?.totalBuses ?? "0", icon: Bus, color: "text-primary" },
+    { label: "Active Leads", value: data?.activeLeads ?? "0", icon: ClipboardList, color: "text-chart-5" },
+    { label: "Confirmed Bookings", value: data?.confirmedBookings ?? "0", icon: Users, color: "text-chart-2" },
+    { label: "Total Earnings", value: data?.totalEarnings ?? "₹0", icon: IndianRupee, color: "text-chart-4" },
+    { label: "Avg Rating", value: data?.avgRating ?? "—", icon: Star, color: "text-chart-5" },
+    { label: "This Month (est.)", value: data?.thisMonth ?? "₹0", icon: TrendingUp, color: "text-primary" },
+  ];
+
+  const recentLeads = data?.recentLeads ?? [];
+
   return (
     <div className="p-6 sm:p-8 max-w-6xl">
       <div className="mb-8">
         <h1 className="font-display text-2xl font-bold text-foreground">Vendor Dashboard</h1>
         <p className="text-muted-foreground text-sm mt-1">Overview of your bus rental business</p>
+        <div className="mt-4 rounded-xl border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+          <p className="font-medium text-foreground">Commission &amp; payouts</p>
+          <p className="mt-1">
+            Platform fee: <span className="text-destructive font-medium">{data?.commissionPercent ?? 10}%</span> deducted from your rental
+            (subtotal, before GST).{" "}
+            {data?.payoutRule ?? "Automatic payout after you mark the trip completed (full customer payment required)."}{" "}
+            Net paid out (completed): <span className="text-chart-2 font-medium">{data?.netAfterCommission ?? "₹0"}</span>
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
@@ -43,30 +78,34 @@ function VendorDashboard() {
           <h2 className="font-display font-semibold text-foreground">Recent Leads</h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border text-muted-foreground">
-                <th className="text-left px-5 py-3 font-medium">Lead ID</th>
-                <th className="text-left px-5 py-3 font-medium">Customer</th>
-                <th className="text-left px-5 py-3 font-medium">Route</th>
-                <th className="text-left px-5 py-3 font-medium">Date</th>
-                <th className="text-left px-5 py-3 font-medium">Bus Type</th>
-                <th className="text-left px-5 py-3 font-medium">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentLeads.map((l) => (
-                <tr key={l.id} className="border-b border-border last:border-0 hover:bg-muted/50">
-                  <td className="px-5 py-3 font-medium text-foreground">{l.id}</td>
-                  <td className="px-5 py-3 text-foreground">{l.customer}</td>
-                  <td className="px-5 py-3 text-foreground">{l.route}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{l.date}</td>
-                  <td className="px-5 py-3 text-muted-foreground">{l.bus}</td>
-                  <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${l.status === "New" ? "bg-primary/20 text-primary" : "bg-chart-4/20 text-chart-4"}`}>{l.status}</span></td>
+          {recentLeads.length === 0 ? (
+            <p className="p-5 text-sm text-muted-foreground">No leads yet.</p>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border text-muted-foreground">
+                  <th className="text-left px-5 py-3 font-medium">Lead ID</th>
+                  <th className="text-left px-5 py-3 font-medium">Customer</th>
+                  <th className="text-left px-5 py-3 font-medium">Route</th>
+                  <th className="text-left px-5 py-3 font-medium">Date</th>
+                  <th className="text-left px-5 py-3 font-medium">Bus Type</th>
+                  <th className="text-left px-5 py-3 font-medium">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {recentLeads.map((l) => (
+                  <tr key={l.id} className="border-b border-border last:border-0 hover:bg-muted/50">
+                    <td className="px-5 py-3 font-medium text-foreground font-mono text-xs">{l.id.slice(-8)}</td>
+                    <td className="px-5 py-3 text-foreground">{l.customer}</td>
+                    <td className="px-5 py-3 text-foreground">{l.route}</td>
+                    <td className="px-5 py-3 text-muted-foreground">{l.date}</td>
+                    <td className="px-5 py-3 text-muted-foreground">{l.bus}</td>
+                    <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${l.status === "New" ? "bg-primary/20 text-primary" : "bg-chart-4/20 text-chart-4"}`}>{l.status}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>

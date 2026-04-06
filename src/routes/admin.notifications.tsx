@@ -1,26 +1,54 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Bell, Send, Mail, MessageSquare, Smartphone } from "lucide-react";
+import { Send } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { api } from "@/lib/api";
 
 export const Route = createFileRoute("/admin/notifications")({
   component: AdminNotifications,
 });
 
-const recentNotifications = [
-  { id: 1, type: "SMS", to: "All Vendors", message: "New lead available in Mumbai area", date: "2025-02-15 10:30 AM" },
-  { id: 2, type: "Email", to: "Priya Sharma", message: "Your booking BK001 is confirmed", date: "2025-02-14 3:15 PM" },
-  { id: 3, type: "Push", to: "All Users", message: "Special discount on weekend bookings!", date: "2025-02-13 9:00 AM" },
-];
+type Log = { id: string; channel: string; subject: string; body: string; audience: string; date: string };
+type LogsRes = { logs: Log[] };
 
 function AdminNotifications() {
+  const qc = useQueryClient();
+  const [channel, setChannel] = useState("email");
+  const [audience, setAudience] = useState("");
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
+
+  const logsQ = useQuery({
+    queryKey: ["admin-notification-logs"],
+    queryFn: () => api<LogsRes>("/api/admin/notification-logs"),
+  });
+
+  const sendMut = useMutation({
+    mutationFn: () =>
+      api("/api/admin/notifications", {
+        method: "POST",
+        body: JSON.stringify({ channel, subject, body, audience }),
+      }),
+    onSuccess: () => {
+      toast.success("Notification logged for audit");
+      setSubject("");
+      setBody("");
+      qc.invalidateQueries({ queryKey: ["admin-notification-logs"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   return (
     <div className="p-6 sm:p-8 max-w-4xl">
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Notifications</h1>
-      <p className="text-muted-foreground text-sm mb-6">Send push notifications, SMS, and emails</p>
+      <p className="text-muted-foreground text-sm mb-6">Queue messages via your API; connect Twilio/SendGrid for real delivery.</p>
 
       <Tabs defaultValue="send">
         <TabsList className="mb-6">
@@ -30,55 +58,63 @@ function AdminNotifications() {
 
         <TabsContent value="send">
           <div className="bg-card rounded-xl border border-border p-6">
-            <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                sendMut.mutate();
+              }}
+              className="space-y-4"
+            >
               <div className="space-y-2">
                 <Label>Channel</Label>
-                <div className="flex gap-3">
-                  {[
-                    { icon: Smartphone, label: "SMS" },
-                    { icon: Mail, label: "Email" },
-                    { icon: Bell, label: "Push" },
-                    { icon: MessageSquare, label: "WhatsApp" },
-                  ].map((ch) => (
-                    <label key={ch.label} className="flex items-center gap-2 cursor-pointer">
-                      <input type="checkbox" className="rounded border-input" />
-                      <ch.icon className="w-4 h-4 text-primary" />
-                      <span className="text-sm text-foreground">{ch.label}</span>
-                    </label>
-                  ))}
-                </div>
+                <Select value={channel} onValueChange={setChannel}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sms">SMS</SelectItem>
+                    <SelectItem value="email">Email</SelectItem>
+                    <SelectItem value="push">Push</SelectItem>
+                    <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
-                <Label>Recipients</Label>
-                <Input placeholder="All Users, All Vendors, or specific user ID" />
+                <Label>Recipients / audience</Label>
+                <Input placeholder="e.g. All vendors, customer segment" value={audience} onChange={(e) => setAudience(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Subject</Label>
-                <Input placeholder="Notification subject" />
+                <Input placeholder="Notification subject" value={subject} onChange={(e) => setSubject(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Message</Label>
-                <Textarea placeholder="Type your notification message..." rows={4} />
+                <Textarea placeholder="Type your notification message..." rows={4} value={body} onChange={(e) => setBody(e.target.value)} />
               </div>
-              <Button className="gap-2"><Send className="w-4 h-4" /> Send Notification</Button>
+              <Button className="gap-2" type="submit" disabled={sendMut.isPending}><Send className="w-4 h-4" /> Send Notification</Button>
             </form>
           </div>
         </TabsContent>
 
         <TabsContent value="history">
           <div className="bg-card rounded-xl border border-border">
-            {recentNotifications.map((n) => (
-              <div key={n.id} className="flex items-center justify-between px-5 py-4 border-b border-border last:border-0">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-medium">{n.type}</span>
-                    <span className="text-sm font-medium text-foreground">→ {n.to}</span>
+            {logsQ.isLoading ? (
+              <p className="p-5 text-sm text-muted-foreground">Loading…</p>
+            ) : (logsQ.data?.logs ?? []).length === 0 ? (
+              <p className="p-5 text-sm text-muted-foreground">No logs yet.</p>
+            ) : (
+              logsQ.data!.logs.map((n) => (
+                <div key={n.id} className="flex items-center justify-between px-5 py-4 border-b border-border last:border-0">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs font-medium">{n.channel}</span>
+                      <span className="text-sm font-medium text-foreground">→ {n.audience || "—"}</span>
+                    </div>
+                    <p className="text-sm font-medium text-foreground">{n.subject}</p>
+                    <p className="text-sm text-muted-foreground">{n.body}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground">{n.message}</p>
+                  <p className="text-xs text-muted-foreground shrink-0 ml-4">{n.date}</p>
                 </div>
-                <p className="text-xs text-muted-foreground shrink-0 ml-4">{n.date}</p>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </TabsContent>
       </Tabs>
