@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, Ban, Mail } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { api } from "@/lib/api";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/admin/customers")({
   component: AdminCustomers,
@@ -43,24 +44,31 @@ function AdminCustomers() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  if (isLoading) return <div className="p-8 text-sm text-muted-foreground">Loading…</div>;
-  if (error) return <div className="p-8 text-sm text-destructive">{(error as Error).message}</div>;
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading…</div>;
+  if (error) return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
 
   const customers = data?.users ?? [];
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Customer Management</h1>
-      <p className="text-muted-foreground text-sm mb-6">View and manage platform users</p>
+      <p className="text-muted-foreground text-sm mb-6">
+        View and manage customer accounts (block/unblock). Operators are under{" "}
+        <Link to="/admin/vendors" className="text-primary font-medium underline-offset-4 hover:underline">
+          Vendors
+        </Link>
+        .
+      </p>
 
       <div className="bg-card rounded-xl border border-border overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[720px] text-sm">
           <thead>
             <tr className="border-b border-border text-muted-foreground">
               <th className="text-left px-5 py-3 font-medium">ID</th>
               <th className="text-left px-5 py-3 font-medium">Name</th>
               <th className="text-left px-5 py-3 font-medium">Email</th>
               <th className="text-left px-5 py-3 font-medium">Phone</th>
+              <th className="text-left px-5 py-3 font-medium">Bookings</th>
               <th className="text-left px-5 py-3 font-medium">Joined</th>
               <th className="text-left px-5 py-3 font-medium">Status</th>
               <th className="text-left px-5 py-3 font-medium">Actions</th>
@@ -73,6 +81,7 @@ function AdminCustomers() {
                 <td className="px-5 py-3 font-medium text-foreground">{c.name}</td>
                 <td className="px-5 py-3 text-muted-foreground">{c.email}</td>
                 <td className="px-5 py-3 text-muted-foreground">{c.phone}</td>
+                <td className="px-5 py-3 text-muted-foreground tabular-nums">{c.bookings}</td>
                 <td className="px-5 py-3 text-muted-foreground">{c.joined}</td>
                 <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${c.status === "Active" ? "bg-chart-2/20 text-chart-2" : "bg-destructive/20 text-destructive"}`}>{c.status}</span></td>
                 <td className="px-5 py-3">

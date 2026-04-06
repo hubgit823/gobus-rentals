@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Percent, Clock, Globe, Receipt } from "lucide-react";
 import { api } from "@/lib/api";
+import { panelPage } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/admin/settings")({
   component: AdminSettings,
@@ -90,7 +91,7 @@ function AdminSettings() {
   });
 
   return (
-    <div className="p-6 sm:p-8 max-w-2xl">
+    <div className={panelPage.narrow}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Platform Settings</h1>
       <p className="text-muted-foreground text-sm mb-6">Company profile, GST, commission, and payouts (CMS-facing)</p>
 

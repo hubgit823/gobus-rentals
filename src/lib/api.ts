@@ -1,8 +1,10 @@
 import { getToken } from "./auth-storage";
+import { localApiRequest } from "./local-api";
 
 /** Origin of your API (no trailing slash), e.g. http://localhost:4000 — set in `.env` as VITE_API_URL */
 const raw = typeof import.meta.env.VITE_API_URL === "string" ? import.meta.env.VITE_API_URL.trim() : "";
 const base = raw.replace(/\/$/, "");
+const useLocalApi = import.meta.env.VITE_USE_LOCAL_API !== "false";
 
 export class ApiError extends Error {
   status: number;
@@ -26,6 +28,15 @@ export async function api<T = unknown>(path: string, init: RequestInit = {}): Pr
   }
   const t = getToken();
   if (t) headers.set("Authorization", `Bearer ${t}`);
+
+  if (typeof globalThis.window !== "undefined" && useLocalApi && path.startsWith("/api/")) {
+    try {
+      return (await localApiRequest(path, { ...init, headers })) as T;
+    } catch (e) {
+      const err = e as { status?: number; message?: string };
+      throw new ApiError(err.message || "Local API failed", err.status || 500);
+    }
+  }
 
   const res = await fetch(`${base}${path}`, { ...init, headers });
   const text = await res.text();

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Users, Building2, BookOpen, IndianRupee, TrendingUp, Bus } from "lucide-react";
 import { api } from "@/lib/api";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/admin/dashboard")({
   component: AdminDashboard,
@@ -78,15 +79,15 @@ function AdminDashboard() {
   const recent = (bookQ.data?.bookings ?? []).slice(0, 8);
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <div className="mb-8">
         <h1 className="font-display text-2xl font-bold text-foreground">Admin Dashboard</h1>
         <p className="text-muted-foreground text-sm mt-1">Platform overview and analytics</p>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8">
         {stats.map((x) => (
-          <div key={x.label} className="bg-card rounded-xl border border-border p-5">
+          <div key={x.label} className="bg-card rounded-xl border border-border p-4 sm:p-5">
             <x.icon className={`w-5 h-5 ${x.color} mb-2`} />
             <span className={`font-display text-xl font-bold ${x.color} block`}>{x.value}</span>
             <p className="text-xs text-muted-foreground mt-1">{x.label}</p>
@@ -104,7 +105,7 @@ function AdminDashboard() {
           ) : recent.length === 0 ? (
             <p className="p-5 text-sm text-muted-foreground">No bookings yet.</p>
           ) : (
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[640px] text-sm">
               <thead>
                 <tr className="border-b border-border text-muted-foreground">
                   <th className="text-left px-5 py-3 font-medium">ID</th>

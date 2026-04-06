@@ -170,6 +170,10 @@ try {
   await api(`/api/customer/quotes/${quoteId}/accept`, {
     method: "POST",
     headers: { Authorization: `Bearer ${custToken}` },
+    body: JSON.stringify({
+      paymentType: "advance",
+      policyAccepted: true,
+    }),
   });
 
   // 9) Booking exists for customer + admin

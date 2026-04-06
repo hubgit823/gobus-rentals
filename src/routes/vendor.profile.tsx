@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Building2 } from "lucide-react";
 import { api } from "@/lib/api";
+import { panelPage } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/vendor/profile")({
   component: VendorProfile,
@@ -64,11 +65,11 @@ function VendorProfile() {
   });
 
   return (
-    <div className="p-6 sm:p-8 max-w-2xl">
+    <div className={panelPage.narrow}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Vendor Profile</h1>
       <p className="text-muted-foreground text-sm mb-6">Update your business information</p>
 
-      <div className="bg-card rounded-xl border border-border p-6 space-y-6">
+      <div className="bg-card rounded-xl border border-border p-4 sm:p-6 space-y-6">
         {isLoading ? (
           <p className="text-sm text-muted-foreground">Loading…</p>
         ) : error ? (

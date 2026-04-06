@@ -16,6 +16,7 @@ import {
 import { Check, X, Clock, ArrowDownAZ, IndianRupee, Star, Timer } from "lucide-react";
 import { api } from "@/lib/api";
 import { COMPANY, formatInr } from "@/lib/company";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/customer/quotes")({
   component: CustomerQuotes,
@@ -63,15 +64,23 @@ function CustomerQuotes() {
 
   const acceptMut = useMutation({
     mutationFn: (payload: { id: string; paymentType: "advance" | "full"; policyAccepted: boolean }) =>
-      api("/api/customer/quotes/" + payload.id + "/accept", {
-        method: "POST",
-        body: JSON.stringify({
-          paymentType: payload.paymentType,
-          policyAccepted: payload.policyAccepted,
-        }),
-      }),
-    onSuccess: () => {
-      toast.success("Booking created — complete payment from My Bookings.");
+      api<{ ok?: boolean; bookingRef?: string; bookingId?: string }>(
+        "/api/customer/quotes/" + payload.id + "/accept",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            paymentType: payload.paymentType,
+            policyAccepted: payload.policyAccepted,
+          }),
+        },
+      ),
+    onSuccess: (data) => {
+      const ref = data?.bookingRef;
+      toast.success(
+        ref
+          ? `Booking ${ref} confirmed. Check your email for the summary (and PDF when your backend is live). Complete payment in My Bookings.`
+          : "Booking created — complete payment from My Bookings.",
+      );
       setAcceptId(null);
       setPolicyOk(false);
       qc.invalidateQueries({ queryKey: ["customer-quotes"] });
@@ -105,11 +114,11 @@ function CustomerQuotes() {
   };
 
   if (isLoading) {
-    return <div className="p-8 text-muted-foreground text-sm">Loading quotes…</div>;
+    return <div className={`${panelStatePadding} text-muted-foreground text-sm`}>Loading quotes…</div>;
   }
   if (error) {
     return (
-      <div className="p-8 text-destructive text-sm">
+      <div className={`${panelStatePadding} text-destructive text-sm`}>
         {(error as Error).message}. Log in as a customer to view quotes.
       </div>
     );
@@ -121,7 +130,7 @@ function CustomerQuotes() {
       : "";
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">My Quotes</h1>
       <p className="text-muted-foreground text-sm mb-4">Compare quotes — totals include {COMPANY.gstPercentage}% GST</p>
 
@@ -134,18 +143,22 @@ function CustomerQuotes() {
         .
       </div>
 
-      <div className="flex flex-wrap gap-2 mb-6">
-        <Button variant={sort === "price" ? "default" : "outline"} size="sm" className="gap-1" onClick={() => setSort("price")}>
-          <IndianRupee className="w-3.5 h-3.5" /> Price (incl. GST)
-        </Button>
-        <Button variant={sort === "rating" ? "default" : "outline"} size="sm" className="gap-1" onClick={() => setSort("rating")}>
-          <Star className="w-3.5 h-3.5" /> Rating
-        </Button>
-        <Button variant={sort === "response" ? "default" : "outline"} size="sm" className="gap-1" onClick={() => setSort("response")}>
-          <Timer className="w-3.5 h-3.5" /> Response time
-        </Button>
-        <span className="text-xs text-muted-foreground self-center ml-2 flex items-center gap-1">
-          <ArrowDownAZ className="w-3.5 h-3.5" /> Sorting applies to the list below
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center mb-6">
+        <div className="flex flex-wrap gap-2">
+          <Button variant={sort === "price" ? "default" : "outline"} size="sm" className="gap-1 flex-1 sm:flex-none" onClick={() => setSort("price")}>
+            <IndianRupee className="w-3.5 h-3.5" /> Price
+          </Button>
+          <Button variant={sort === "rating" ? "default" : "outline"} size="sm" className="gap-1 flex-1 sm:flex-none" onClick={() => setSort("rating")}>
+            <Star className="w-3.5 h-3.5" /> Rating
+          </Button>
+          <Button variant={sort === "response" ? "default" : "outline"} size="sm" className="gap-1 flex-1 sm:flex-none" onClick={() => setSort("response")}>
+            <Timer className="w-3.5 h-3.5" /> Response
+          </Button>
+        </div>
+        <span className="text-xs text-muted-foreground flex items-center gap-1 sm:ml-2">
+          <ArrowDownAZ className="w-3.5 h-3.5 shrink-0" />
+          <span className="hidden sm:inline">Sorting applies to the list below</span>
+          <span className="sm:hidden">Sort order below</span>
         </span>
       </div>
 

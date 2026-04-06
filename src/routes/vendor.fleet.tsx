@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { api } from "@/lib/api";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/vendor/fleet")({
   component: VendorFleet,
@@ -125,17 +126,19 @@ function VendorFleet() {
 
   const buses = data?.buses ?? [];
 
-  if (isLoading) return <div className="p-8 text-sm text-muted-foreground">Loading fleet…</div>;
-  if (error) return <div className="p-8 text-sm text-destructive">{(error as Error).message}</div>;
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading fleet…</div>;
+  if (error) return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
-      <div className="flex items-center justify-between mb-6">
-        <div>
+    <div className={panelPage.standard}>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between mb-6">
+        <div className="min-w-0">
           <h1 className="font-display text-2xl font-bold text-foreground">Fleet Management</h1>
           <p className="text-muted-foreground text-sm mt-1">Add, edit, and manage your bus fleet</p>
         </div>
-        <Button onClick={() => { resetForm(); setShowAdd(!showAdd); }} className="gap-2"><Plus className="w-4 h-4" /> Add Bus</Button>
+        <Button onClick={() => { resetForm(); setShowAdd(!showAdd); }} className="gap-2 w-full sm:w-auto shrink-0">
+          <Plus className="w-4 h-4" /> Add Bus
+        </Button>
       </div>
 
       {showAdd && (

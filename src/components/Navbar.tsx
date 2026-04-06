@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, LogIn } from "lucide-react";
 import { COMPANY } from "@/lib/company";
 
 export function Navbar() {
@@ -38,6 +38,12 @@ export function Navbar() {
             <Phone className="w-4 h-4" />
             {COMPANY.contactPhoneDisplay}
           </a>
+          <Link to="/login">
+            <Button variant="outline" size="lg" className="gap-2">
+              <LogIn className="w-4 h-4" />
+              Login
+            </Button>
+          </Link>
           <Link to="/book">
             <Button size="lg">Get Quotes</Button>
           </Link>
@@ -58,6 +64,12 @@ export function Navbar() {
           <Link to="/guides" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Guides</Link>
           <Link to="/contact" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Contact</Link>
           <a href="#fleet" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Fleet</a>
+          <Link to="/login" onClick={() => setMobileOpen(false)}>
+            <Button variant="outline" className="w-full gap-2" size="lg">
+              <LogIn className="w-4 h-4" />
+              Login
+            </Button>
+          </Link>
           <Link to="/book" onClick={() => setMobileOpen(false)}>
             <Button className="w-full" size="lg">Get Quotes</Button>
           </Link>

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User, Mail, Phone } from "lucide-react";
 import { api } from "@/lib/api";
+import { panelPage } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/customer/profile")({
   component: CustomerProfile,
@@ -47,11 +48,11 @@ function CustomerProfile() {
   });
 
   return (
-    <div className="p-6 sm:p-8 max-w-2xl">
+    <div className={panelPage.narrow}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">My Profile</h1>
       <p className="text-muted-foreground text-sm mb-6">Update your personal information</p>
 
-      <div className="bg-card rounded-xl border border-border p-6">
+      <div className="bg-card rounded-xl border border-border p-4 sm:p-6">
         {meQ.isLoading ? (
           <p className="text-sm text-muted-foreground">Loading…</p>
         ) : meQ.error ? (

@@ -1,5 +1,6 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { VendorSidebar } from "@/components/dashboards/VendorSidebar";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { ResponsivePanelLayout } from "@/components/dashboards/ResponsivePanelLayout";
+import { vendorPanelLinks } from "@/components/dashboards/panel-links";
 
 export const Route = createFileRoute("/vendor")({
   component: VendorLayout,
@@ -7,11 +8,8 @@ export const Route = createFileRoute("/vendor")({
 
 function VendorLayout() {
   return (
-    <div className="min-h-screen bg-surface flex">
-      <VendorSidebar />
-      <div className="flex-1 min-w-0">
-        <Outlet />
-      </div>
-    </div>
+    <ResponsivePanelLayout links={vendorPanelLinks} panelLabel="Vendor Panel" logoutTo="/vendor/login">
+      <Outlet />
+    </ResponsivePanelLayout>
   );
 }

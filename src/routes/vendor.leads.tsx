@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { api } from "@/lib/api";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/vendor/leads")({
   component: VendorLeads,
@@ -68,7 +69,7 @@ function VendorLeads() {
         }),
       }),
     onSuccess: () => {
-      toast.success("Quote submitted");
+      toast.success("Quote submitted. The customer gets an email when your API sends it (see Admin → Notifications history in local dev).");
       setQuoteLead(null);
       setAmount("");
       qc.invalidateQueries({ queryKey: ["vendor-leads"] });
@@ -84,13 +85,13 @@ function VendorLeads() {
     Rejected: "bg-destructive/20 text-destructive",
   };
 
-  if (isLoading) return <div className="p-8 text-sm text-muted-foreground">Loading leads…</div>;
-  if (error) return <div className="p-8 text-sm text-destructive">{(error as Error).message}</div>;
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading leads…</div>;
+  if (error) return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
 
   const leads = data?.leads ?? [];
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Lead Management</h1>
       <p className="text-muted-foreground text-sm mb-2">View and respond to customer booking requests</p>
       {data?.notice ? <p className="text-sm text-chart-5 mb-4">{data.notice}</p> : null}

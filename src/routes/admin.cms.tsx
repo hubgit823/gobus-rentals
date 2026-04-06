@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { api } from "@/lib/api";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/admin/cms")({
   component: AdminCMS,
@@ -132,11 +133,11 @@ function AdminCMS() {
     setSlug(i.slug ?? "");
   };
 
-  if (isLoading) return <div className="p-8 text-sm text-muted-foreground">Loading…</div>;
-  if (error) return <div className="p-8 text-sm text-destructive">{(error as Error).message}</div>;
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading…</div>;
+  if (error) return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Content Management</h1>
       <p className="text-muted-foreground text-sm mb-6">Manage blogs, FAQs, and pages</p>
 

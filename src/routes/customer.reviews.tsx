@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { api } from "@/lib/api";
+import { panelPage } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/customer/reviews")({
   component: CustomerReviews,
@@ -48,11 +49,11 @@ function CustomerReviews() {
   const reviews = listQ.data?.reviews ?? [];
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">My Reviews</h1>
       <p className="text-muted-foreground text-sm mb-6">Your feedback helps other travelers</p>
 
-      <div className="bg-card border border-border rounded-xl p-5 mb-8 space-y-3">
+      <div className="bg-card border border-border rounded-xl p-4 sm:p-5 mb-8 space-y-3">
         <h2 className="font-semibold text-foreground text-sm">Add review (vendor ID from your API)</h2>
         <div className="grid sm:grid-cols-2 gap-3">
           <div className="space-y-1">

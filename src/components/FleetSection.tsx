@@ -1,4 +1,5 @@
 import { Users, Snowflake, Moon } from "lucide-react";
+import { fleetImages } from "@/lib/media";
 
 const fleetItems = [
   {
@@ -6,56 +7,56 @@ const fleetItems = [
     seats: "12",
     desc: "Perfect for small groups & airport transfers",
     ac: true,
-    image: "/images/home/group-travel.jpg",
+    image: fleetImages.vanUrbaniaFront,
   },
   {
     title: "17 Seater Mini Bus",
     seats: "17",
     desc: "Ideal for family trips & outings",
     ac: true,
-    image: "/images/home/road-trip.jpg",
+    image: fleetImages.vanTravellerSide,
   },
   {
     title: "26 Seater Bus",
     seats: "26",
     desc: "Great for school trips & office outings",
     ac: true,
-    image: "/images/home/bus-travel.jpg",
+    image: fleetImages.vanInteriorAisle,
   },
   {
     title: "32 Seater Bus",
     seats: "32",
     desc: "Best for medium-sized group tours",
     ac: true,
-    image: "/images/home/city-lights.jpg",
+    image: fleetImages.busInteriorOverheadRacks,
   },
   {
     title: "40 Seater Luxury Bus",
     seats: "40",
     desc: "Premium comfort for large groups",
     ac: true,
-    image: "/images/home/corporate-team.jpg",
+    image: fleetImages.coachSeatsReclining,
   },
   {
     title: "49/52 Seater Coach",
     seats: "49-52",
     desc: "Full-size coach for weddings & events",
     ac: true,
-    image: "/images/home/wedding-celebration.jpg",
+    image: fleetImages.coachDepotLine,
   },
   {
     title: "Sleeper Bus",
     seats: "30-40",
     desc: "Overnight journeys in comfort",
     ac: true,
-    image: "/images/home/city-lights.jpg",
+    image: fleetImages.coachInteriorSemiSleeper,
   },
   {
     title: "Non-AC Bus",
     seats: "40-52",
     desc: "Budget-friendly option for any trip",
     ac: false,
-    image: "/images/home/mountains-north.jpg",
+    image: fleetImages.coachMountainRoad,
   },
 ];
 
@@ -89,7 +90,6 @@ export function FleetSection() {
                   decoding="async"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-transparent to-transparent" />
               </div>
               <div className="p-5 pt-4">
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">

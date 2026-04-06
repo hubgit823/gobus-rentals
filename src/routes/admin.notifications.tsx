@@ -10,6 +10,7 @@ import { Send } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { api } from "@/lib/api";
+import { panelPage } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/admin/notifications")({
   component: AdminNotifications,
@@ -46,9 +47,11 @@ function AdminNotifications() {
   });
 
   return (
-    <div className="p-6 sm:p-8 max-w-4xl">
+    <div className={panelPage.md}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Notifications</h1>
-      <p className="text-muted-foreground text-sm mb-6">Queue messages via your API; connect Twilio/SendGrid for real delivery.</p>
+      <p className="text-muted-foreground text-sm mb-6">
+        Queue broadcast messages via your API (Twilio/SendGrid in production). With the in-browser local API, quote and booking emails are logged here automatically under History for QA.
+      </p>
 
       <Tabs defaultValue="send">
         <TabsList className="mb-6">

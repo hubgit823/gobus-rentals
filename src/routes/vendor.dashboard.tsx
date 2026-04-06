@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Bus, ClipboardList, IndianRupee, Star, TrendingUp, Users } from "lucide-react";
 import { api } from "@/lib/api";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/vendor/dashboard")({
   component: VendorDashboard,
@@ -33,8 +34,8 @@ function VendorDashboard() {
     queryFn: () => api<DashRes>("/api/vendor/dashboard-stats"),
   });
 
-  if (isLoading) return <div className="p-8 text-sm text-muted-foreground">Loading dashboard…</div>;
-  if (error) return <div className="p-8 text-sm text-destructive">{(error as Error).message}</div>;
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading dashboard…</div>;
+  if (error) return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
 
   const stats = [
     { label: "Total Buses", value: data?.totalBuses ?? "0", icon: Bus, color: "text-primary" },
@@ -48,11 +49,11 @@ function VendorDashboard() {
   const recentLeads = data?.recentLeads ?? [];
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <div className="mb-8">
         <h1 className="font-display text-2xl font-bold text-foreground">Vendor Dashboard</h1>
         <p className="text-muted-foreground text-sm mt-1">Overview of your bus rental business</p>
-        <div className="mt-4 rounded-xl border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground">
+        <div className="mt-4 rounded-xl border border-border bg-muted/40 px-4 py-3 text-sm text-muted-foreground break-words">
           <p className="font-medium text-foreground">Commission &amp; payouts</p>
           <p className="mt-1">
             Platform fee: <span className="text-destructive font-medium">{data?.commissionPercent ?? 10}%</span> deducted from your rental
@@ -63,9 +64,9 @@ function VendorDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-8">
         {stats.map((s) => (
-          <div key={s.label} className="bg-card rounded-xl border border-border p-5">
+          <div key={s.label} className="bg-card rounded-xl border border-border p-4 sm:p-5">
             <s.icon className={`w-5 h-5 ${s.color} mb-2`} />
             <span className={`font-display text-xl font-bold ${s.color} block`}>{s.value}</span>
             <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
@@ -81,7 +82,7 @@ function VendorDashboard() {
           {recentLeads.length === 0 ? (
             <p className="p-5 text-sm text-muted-foreground">No leads yet.</p>
           ) : (
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[640px] text-sm">
               <thead>
                 <tr className="border-b border-border text-muted-foreground">
                   <th className="text-left px-5 py-3 font-medium">Lead ID</th>

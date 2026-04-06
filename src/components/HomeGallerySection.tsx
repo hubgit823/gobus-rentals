@@ -1,12 +1,13 @@
 import { COMPANY } from "@/lib/company";
+import { fleetImages } from "@/lib/media";
 
 const photos = [
-  { src: "/images/home/bus-travel.jpg", alt: "Comfortable bus travel for groups", tall: true },
-  { src: "/images/home/mountains-north.jpg", alt: "Scenic hill and highway routes", tall: false },
-  { src: "/images/home/wedding-celebration.jpg", alt: "Wedding and celebration transport", tall: false },
-  { src: "/images/home/corporate-team.jpg", alt: "Corporate outings and team travel", tall: true },
-  { src: "/images/home/group-travel.jpg", alt: "Family and friends on the road", tall: false },
-  { src: "/images/home/city-lights.jpg", alt: "City departures and evening travel", tall: false },
+  { src: fleetImages.coachSeatsReclining, alt: "Reclining seats on a premium coach", tall: true },
+  { src: fleetImages.coachMountainRoad, alt: "Coach on a scenic mountain road", tall: false },
+  { src: fleetImages.coachGoldenHour, alt: "Luxury coach at sunset", tall: false },
+  { src: fleetImages.vanInteriorAisle, alt: "Spacious mini-bus cabin for groups", tall: true },
+  { src: fleetImages.vanTravellerSide, alt: "Mini bus for airport and city transfers", tall: false },
+  { src: fleetImages.coachFrontMountain, alt: "Volvo coach ready for hill routes", tall: false },
 ];
 
 export function HomeGallerySection() {
@@ -27,8 +28,8 @@ export function HomeGallerySection() {
         {/* Wide highlight */}
         <figure className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-md mb-4 sm:mb-5 group">
           <img
-            src="/images/home/road-trip.jpg"
-            alt="Highway charter and intercity bus travel"
+            src={fleetImages.coachDepotLine}
+            alt="Fleet of luxury coaches ready for charter"
             width={1600}
             height={640}
             loading="lazy"

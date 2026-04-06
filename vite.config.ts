@@ -171,6 +171,8 @@ export default defineConfig(({ command, mode }) => {
     envDefine[`import.meta.env.${key}`] = JSON.stringify(value);
   }
 
+  const mockApiPort = process.env.MOCK_API_PORT?.trim() || "3001";
+
   return {
     server: {
       host: "::",
@@ -178,7 +180,7 @@ export default defineConfig(({ command, mode }) => {
       // When VITE_API_URL is unset, the app calls same-origin /api/* — forward to the dev mock API.
       proxy: {
         "/api": {
-          target: "http://127.0.0.1:3001",
+          target: `http://127.0.0.1:${mockApiPort}`,
           changeOrigin: true,
         },
       },

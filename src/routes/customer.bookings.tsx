@@ -12,6 +12,7 @@ import {
 import { Download, Eye, X, CreditCard } from "lucide-react";
 import { api } from "@/lib/api";
 import { COMPANY } from "@/lib/company";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/customer/bookings")({
   component: CustomerBookings,
@@ -114,15 +115,15 @@ function CustomerBookings() {
     };
   }
 
-  if (isLoading) return <div className="p-8 text-sm text-muted-foreground">Loading bookings…</div>;
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading bookings…</div>;
   if (error) {
-    return <div className="p-8 text-sm text-destructive">{(error as Error).message}</div>;
+    return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
   }
 
   const bookings = data?.bookings ?? [];
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">My Bookings</h1>
       <p className="text-muted-foreground text-sm mb-2">View and manage all your bus bookings</p>
       <p className="text-xs text-muted-foreground mb-6">
@@ -138,7 +139,7 @@ function CustomerBookings() {
         </p>
       ) : (
         <div className="bg-card rounded-xl border border-border overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[800px] text-sm">
             <thead>
               <tr className="border-b border-border text-muted-foreground">
                 <th className="text-left px-5 py-3 font-medium">ID</th>

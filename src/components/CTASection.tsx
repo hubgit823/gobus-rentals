@@ -2,13 +2,14 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Phone } from "lucide-react";
 import { COMPANY } from "@/lib/company";
+import { fleetImages } from "@/lib/media";
 
 export function CTASection() {
   return (
     <section className="relative py-20 sm:py-28 overflow-hidden">
       <div className="absolute inset-0">
         <img
-          src="/images/home/bus-travel.jpg"
+          src={fleetImages.coachGoldenHour}
           alt=""
           width={1920}
           height={1080}

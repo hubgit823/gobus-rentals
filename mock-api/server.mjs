@@ -22,6 +22,8 @@ const leads = [];
 const quotes = [];
 /** @type {any[]} */
 const bookings = [];
+/** Admin notification / email audit trail (mirrors production logs collection) */
+const notificationLogs = [];
 /** key `${leadId}:${vendorId}` -> 'rejected' */
 const leadVendorReject = new Map();
 
@@ -47,6 +49,21 @@ let companySettings = {
 
 function round2(n) {
   return Math.round(Number(n) * 100) / 100;
+}
+
+function bookingPublicRef(bookingId) {
+  return `LBR-${String(bookingId).replace(/-/g, "").slice(-8).toUpperCase()}`;
+}
+
+function logTransactionalEmail(subject, body, audience) {
+  notificationLogs.unshift({
+    id: randomUUID(),
+    channel: "email",
+    subject,
+    body,
+    audience,
+    date: new Date().toLocaleString("en-IN"),
+  });
 }
 
 function pricingFromSubtotal(subtotal) {
@@ -164,6 +181,7 @@ function seedAdmin() {
     name: "Platform Admin",
     phone: "",
     role: "admin",
+    createdAt: new Date().toISOString(),
   });
   console.log("[mock-api] Seeded admin: admin@luxurybus.dev / admin123");
 }
@@ -232,6 +250,7 @@ async function handle(req, res) {
         phone: b.phone,
         role: "customer",
         blocked: false,
+        createdAt: new Date().toISOString(),
       });
       const u = users.get(id);
       return json(res, 200, {
@@ -256,6 +275,7 @@ async function handle(req, res) {
         name: b.name,
         phone: b.phone || "",
         role: "vendor",
+        createdAt: new Date().toISOString(),
       });
       const vid = randomUUID();
       const city = (b.operatingCities || "").split(/[,;]/)[0]?.trim() || "—";
@@ -511,7 +531,24 @@ async function handle(req, res) {
         payoutAt: null,
         amount: rupee(totalWithGst),
       });
-      return json(res, 200, { ok: true, bookingId: bid, pricing: { subtotal, gstAmount, totalWithGst, paymentType } });
+      const ref = bookingPublicRef(bid);
+      const vendorUser = v?.userId ? users.get(v.userId) : null;
+      logTransactionalEmail(
+        `Your trip is booked — ${ref}`,
+        `HTML + PDF: ref ${ref}, ${lead.pickup} → ${lead.drop}, ${lead.journeyDate}, ${lead.busType}, ${v?.companyName || "Operator"}, total ${rupee(totalWithGst)}, plan ${paymentType}. Payment link placeholder.`,
+        `To: ${s.user.email}`,
+      );
+      logTransactionalEmail(
+        `Booking accepted — ${ref}`,
+        `Customer ${s.user.name} (${s.user.email}) accepted for ${lead.pickup} → ${lead.drop}. Ref ${ref}.`,
+        `To: ${vendorUser?.email || v?.companyName || "vendor"}`,
+      );
+      return json(res, 200, {
+        ok: true,
+        bookingId: bid,
+        bookingRef: ref,
+        pricing: { subtotal, gstAmount, totalWithGst, paymentType },
+      });
     }
 
     if (method === "POST" && path.match(/^\/api\/customer\/quotes\/[^/]+\/decline$/)) {
@@ -629,6 +666,14 @@ async function handle(req, res) {
         terms: b.terms || "",
         status: "pending",
       });
+      const op = vendors.get(s.vendorId);
+      const custAcct = lead.customerId ? users.get(lead.customerId) : null;
+      const to = lead.guestEmail || custAcct?.email || "—";
+      logTransactionalEmail(
+        `New price proposal for your trip (${lead.pickup} → ${lead.drop})`,
+        `Send HTML email: ${op?.companyName || "Operator"} quoted ${rupee(Number(b.amount))} (rental subtotal; GST at checkout). Quote ID: ${qid}. CTA: My Quotes.`,
+        `To: ${to}`,
+      );
       return json(res, 200, { ok: true, quoteId: qid });
     }
 
@@ -970,7 +1015,7 @@ async function handle(req, res) {
           email: u.email,
           phone: u.phone,
           bookings: bookings.filter((b) => b.customerId === u.id).length,
-          joined: "2026-01-01",
+          joined: u.createdAt ? new Date(u.createdAt).toLocaleDateString("en-IN") : "—",
           status: u.blocked ? "Blocked" : "Active",
           blocked: !!u.blocked,
         }));
@@ -1093,9 +1138,17 @@ async function handle(req, res) {
       });
     }
 
+    if (method === "GET" && path === "/api/admin/notification-logs") {
+      const s = userFromAuth(req);
+      if (!s || s.user.role !== "admin") return json(res, 403, { error: "Forbidden" });
+      return json(res, 200, { logs: notificationLogs });
+    }
+
     if (method === "POST" && path === "/api/admin/notifications") {
       const s = userFromAuth(req);
       if (!s || s.user.role !== "admin") return json(res, 403, { error: "Forbidden" });
+      const b = await readBody(req);
+      logTransactionalEmail(b.subject || "(no subject)", b.body || "", b.audience || "");
       return json(res, 200, { ok: true, queued: 1 });
     }
 

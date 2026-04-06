@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Bus, ArrowRight } from "lucide-react";
 import { COMPANY } from "@/lib/company";
-import heroBus from "@/assets/hero-bus.jpg";
+import { fleetImages } from "@/lib/media";
 
 export function HeroSection() {
   return (
@@ -10,8 +10,8 @@ export function HeroSection() {
       {/* Background image */}
       <div className="absolute inset-0">
         <img
-          src={heroBus}
-          alt="Luxury bus on highway"
+          src={fleetImages.coachFrontMountain}
+          alt="Luxury Volvo coach on a mountain road"
           className="w-full h-full object-cover"
           width={1920}
           height={1080}

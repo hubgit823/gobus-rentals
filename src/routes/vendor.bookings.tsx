@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { api } from "@/lib/api";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/vendor/bookings")({
   component: VendorBookings,
@@ -62,13 +63,13 @@ function VendorBookings() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  if (isLoading) return <div className="p-8 text-sm text-muted-foreground">Loading…</div>;
-  if (error) return <div className="p-8 text-sm text-destructive">{(error as Error).message}</div>;
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading…</div>;
+  if (error) return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
 
   const bookings = data?.bookings ?? [];
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Booking Management</h1>
       <p className="text-muted-foreground text-sm mb-6">Manage and update booking statuses</p>
 
@@ -76,7 +77,7 @@ function VendorBookings() {
         <p className="text-sm text-muted-foreground border border-border rounded-xl p-8 text-center bg-card">No bookings yet.</p>
       ) : (
         <div className="bg-card rounded-xl border border-border overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[880px] text-sm">
             <thead>
               <tr className="border-b border-border text-muted-foreground">
                 <th className="text-left px-5 py-3 font-medium">Booking ID</th>

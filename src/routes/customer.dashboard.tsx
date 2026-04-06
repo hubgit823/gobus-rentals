@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BookOpen, Clock, Star, Bus, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
+import { panelPage } from "@/lib/panel-page";
 import { getStoredUser } from "@/lib/auth-storage";
 
 export const Route = createFileRoute("/customer/dashboard")({
@@ -47,21 +48,21 @@ function CustomerDashboard() {
   const mockBookings = (bookingsQ.data?.bookings ?? []).slice(0, 5);
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <div className="mb-8">
-        <h1 className="font-display text-2xl font-bold text-foreground">
+        <h1 className="font-display text-xl sm:text-2xl font-bold text-foreground break-words">
           Welcome back{user?.name ? `, ${user.name}` : ""}! 👋
         </h1>
         <p className="text-muted-foreground text-sm mt-1">Manage your bus bookings and track quotes</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 min-[400px]:grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-8">
         {[
           { label: "Active Bookings", value: stats?.activeBookings ?? "—", icon: BookOpen, color: "text-primary" },
           { label: "Pending Quotes", value: stats?.pendingQuotes ?? "—", icon: Clock, color: "text-chart-5" },
           { label: "Reviews Given", value: stats?.reviewsGiven ?? "—", icon: Star, color: "text-chart-4" },
         ].map((s) => (
-          <div key={s.label} className="bg-card rounded-xl border border-border p-5">
+          <div key={s.label} className="bg-card rounded-xl border border-border p-4 sm:p-5">
             <div className="flex items-center justify-between mb-2">
               <s.icon className={`w-5 h-5 ${s.color}`} />
               <span className={`font-display text-2xl font-bold ${s.color}`}>{s.value}</span>
@@ -72,10 +73,12 @@ function CustomerDashboard() {
       </div>
 
       <div className="bg-card rounded-xl border border-border">
-        <div className="flex items-center justify-between p-5 border-b border-border">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-4 sm:p-5 border-b border-border">
           <h2 className="font-display font-semibold text-foreground">Recent Bookings</h2>
-          <Link to="/customer/bookings">
-            <Button variant="ghost" size="sm" className="gap-1 text-primary">View All <ArrowRight className="w-3.5 h-3.5" /></Button>
+          <Link to="/customer/bookings" className="shrink-0">
+            <Button variant="ghost" size="sm" className="gap-1 text-primary w-full sm:w-auto">
+              View All <ArrowRight className="w-3.5 h-3.5" />
+            </Button>
           </Link>
         </div>
         <div className="overflow-x-auto">
@@ -84,7 +87,7 @@ function CustomerDashboard() {
           ) : mockBookings.length === 0 ? (
             <p className="p-5 text-sm text-muted-foreground">No bookings yet.</p>
           ) : (
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[600px] text-sm">
               <thead>
                 <tr className="border-b border-border text-muted-foreground">
                   <th className="text-left px-5 py-3 font-medium">Booking</th>
@@ -115,8 +118,8 @@ function CustomerDashboard() {
       </div>
 
       <div className="mt-6">
-        <Link to="/book">
-          <Button size="lg" className="gap-2">
+        <Link to="/book" className="block sm:inline-block">
+          <Button size="lg" className="gap-2 w-full sm:w-auto">
             <Bus className="w-4 h-4" /> Book a New Bus
           </Button>
         </Link>

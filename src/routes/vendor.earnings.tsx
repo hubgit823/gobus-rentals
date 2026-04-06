@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { IndianRupee, TrendingUp, Clock, Percent } from "lucide-react";
 import { api } from "@/lib/api";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/vendor/earnings")({
   component: VendorEarnings,
@@ -33,20 +34,20 @@ function VendorEarnings() {
     queryFn: () => api<Res>("/api/vendor/earnings"),
   });
 
-  if (isLoading) return <div className="p-8 text-sm text-muted-foreground">Loading…</div>;
-  if (error) return <div className="p-8 text-sm text-destructive">{(error as Error).message}</div>;
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading…</div>;
+  if (error) return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
 
   const transactions = data?.transactions ?? [];
 
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Earnings Dashboard</h1>
       <p className="text-muted-foreground text-sm mb-6">Track your revenue and pending payouts</p>
       <p className="text-xs text-muted-foreground mb-6 rounded-lg border border-border bg-muted/30 px-3 py-2">
         {data?.payoutRule ?? "Automatic payout runs after trip completion. Commission is deducted on your side before payout."}
       </p>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
         {[
           { label: "Gross (completed)", value: data?.totalEarnings ?? "₹0", icon: IndianRupee, color: "text-chart-2" },
           { label: "Net paid out", value: data?.netPayoutTotal ?? "₹0", icon: TrendingUp, color: "text-primary" },
@@ -68,7 +69,7 @@ function VendorEarnings() {
         {transactions.length === 0 ? (
           <p className="p-5 text-sm text-muted-foreground">No completed trips yet. After you mark a booking completed (and the customer has paid in full), payout rows appear here.</p>
         ) : (
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[640px] text-sm">
             <thead>
               <tr className="border-b border-border text-muted-foreground">
                 <th className="text-left px-5 py-3 font-medium">Txn</th>
