@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button";
 import { COMPANY } from "@/lib/company";
 import { buildPageMeta } from "@/lib/seo/buildMeta";
 import { faqPageSchema } from "@/lib/seo/schemas";
+import { fleetImages } from "@/lib/media";
+import { Badge } from "@/components/ui/badge";
+import { CheckSquare, Compass, FileText, ShieldCheck } from "lucide-react";
 
 const faqs = [
   {
@@ -46,9 +49,34 @@ function GuidesPage() {
       <main className="pt-20 pb-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs items={[{ label: "Guides" }]} />
-          <h1 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-6">
-            Bus rental guides for India
-          </h1>
+          <section className="rounded-2xl border border-border bg-card overflow-hidden mb-8">
+            <img
+              src={fleetImages.coachMountainRoad}
+              alt="Bus rental guides for India"
+              className="w-full h-52 sm:h-64 object-cover"
+              width={1400}
+              height={800}
+            />
+            <div className="p-5 sm:p-7">
+              <Badge variant="secondary" className="mb-3">Planning hub</Badge>
+              <h1 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
+                Bus rental guides for India
+              </h1>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {[
+                  { label: "Checklists", icon: CheckSquare },
+                  { label: "Route planning", icon: Compass },
+                  { label: "Policy explainers", icon: FileText },
+                  { label: "Safety basics", icon: ShieldCheck },
+                ].map((s) => (
+                  <div key={s.label} className="rounded-lg border border-border bg-muted/30 p-3">
+                    <s.icon className="w-4 h-4 text-primary mb-1" />
+                    <p className="text-xs text-foreground font-medium">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
           <p className="text-muted-foreground leading-relaxed mb-6">
             These guides support <strong className="text-foreground">organic discovery</strong> for teams searching{" "}
@@ -56,6 +84,16 @@ function GuidesPage() {
             <strong>group travel bus booking</strong>. {COMPANY.legalName} operates {COMPANY.platformBrand} as a marketplace
             connecting customers with verified operators across {COMPANY.operatingLocations}.
           </p>
+
+          <section className="rounded-xl border border-border bg-card p-5 sm:p-6 mb-10">
+            <h2 className="font-display text-xl font-semibold text-foreground mb-3">Recommended reading order</h2>
+            <ol className="list-decimal pl-5 space-y-2 text-sm text-muted-foreground">
+              <li>Start with pricing fundamentals and inclusions checklist.</li>
+              <li>Pick fleet type using comfort and distance needs.</li>
+              <li>Use wedding/corporate operations guides for movement plans.</li>
+              <li>Finalize with policy, payment, and contingency checklist.</li>
+            </ol>
+          </section>
 
           <h2 className="font-display text-2xl font-semibold mt-10 mb-3">Start with our long-form articles</h2>
           <ul className="list-disc pl-5 text-primary space-y-2 mb-10">
@@ -82,6 +120,23 @@ function GuidesPage() {
             [city]. <strong className="text-foreground">Secondary:</strong> wedding bus rental, corporate bus hire, tempo
             traveller vs bus, school trip charter, pilgrimage group transport.
           </p>
+
+          <div className="grid sm:grid-cols-2 gap-4 mt-5 mb-8">
+            <img
+              src={fleetImages.coachSeatsReclining}
+              alt="Premium seater bus interior"
+              className="w-full h-48 object-cover rounded-xl border border-border"
+              width={900}
+              height={600}
+            />
+            <img
+              src={fleetImages.vanTravellerSide}
+              alt="Mini bus option for city transfers"
+              className="w-full h-48 object-cover rounded-xl border border-border"
+              width={900}
+              height={600}
+            />
+          </div>
 
           <h2 className="font-display text-2xl font-semibold mt-10 mb-3">Programmatic city pages</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">

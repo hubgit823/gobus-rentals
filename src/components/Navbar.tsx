@@ -29,7 +29,7 @@ export function Navbar() {
           <Link to="/bus-types" className="hover:text-primary transition-colors">Bus types</Link>
           <Link to="/guides" className="hover:text-primary transition-colors">Guides</Link>
           <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
-          <a href="#fleet" className="hover:text-primary transition-colors">Fleet</a>
+          <Link to="/login" className="hover:text-primary transition-colors">Login</Link>
           <Link to="/book" className="hover:text-primary transition-colors">Book</Link>
         </div>
 
@@ -63,7 +63,7 @@ export function Navbar() {
           <Link to="/bus-types" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Bus types</Link>
           <Link to="/guides" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Guides</Link>
           <Link to="/contact" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Contact</Link>
-          <a href="#fleet" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Fleet</a>
+          <Link to="/login" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Login</Link>
           <Link to="/login" onClick={() => setMobileOpen(false)}>
             <Button variant="outline" className="w-full gap-2" size="lg">
               <LogIn className="w-4 h-4" />
