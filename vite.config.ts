@@ -49,7 +49,11 @@ export default defineConfig(({ command, mode }) => {
       tsConfigPaths({
         projects: ["./tsconfig.json"],
       }),
-      tanstackStart(),
+      tanstackStart({
+        prerender: {
+          enabled: true,
+        },
+      }),
       viteReact(),
       mode === "development" && componentTagger(),
     ].filter(Boolean),
