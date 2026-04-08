@@ -34,7 +34,7 @@ export function HomeGallerySection() {
             height={640}
             loading="lazy"
             decoding="async"
-            className="w-full aspect-[21/9] sm:aspect-[3/1] object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+            className="w-full aspect-[21/9] sm:aspect-[3/1] object-contain sm:object-cover bg-muted/30 transition-transform duration-700 group-hover:scale-[1.02]"
           />
           <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/85 to-transparent px-5 py-6 sm:py-8">
             <p className="text-primary-foreground font-display text-lg sm:text-xl font-semibold">
@@ -48,7 +48,7 @@ export function HomeGallerySection() {
           {photos.map((p) => (
             <figure
               key={p.src}
-              className={`break-inside-avoid relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm group ${p.tall ? "" : ""}`}
+              className="break-inside-avoid relative overflow-hidden rounded-2xl border border-border bg-card shadow-sm group"
             >
               <img
                 src={p.src}
@@ -57,8 +57,8 @@ export function HomeGallerySection() {
                 height={p.tall ? 1000 : 640}
                 loading="lazy"
                 decoding="async"
-                className={`w-full object-cover transition-transform duration-500 group-hover:scale-105 ${
-                  p.tall ? "min-h-[220px] sm:min-h-[280px] max-h-[420px]" : "aspect-[4/3]"
+                className={`w-full object-contain sm:object-cover bg-muted/30 transition-transform duration-500 group-hover:scale-105 ${
+                  p.tall ? "min-h-[220px] sm:min-h-[280px]" : "aspect-[4/3]"
                 }`}
               />
               <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/80 via-foreground/30 to-transparent p-3 sm:p-4 pt-10 sm:pt-14">

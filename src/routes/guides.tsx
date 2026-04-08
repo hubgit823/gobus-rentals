@@ -53,7 +53,7 @@ function GuidesPage() {
             <img
               src={fleetImages.coachMountainRoad}
               alt="Bus rental guides for India"
-              className="w-full h-52 sm:h-64 object-cover"
+              className="w-full h-52 sm:h-64 object-contain sm:object-cover bg-muted/30"
               width={1400}
               height={800}
             />
@@ -125,14 +125,14 @@ function GuidesPage() {
             <img
               src={fleetImages.coachSeatsReclining}
               alt="Premium seater bus interior"
-              className="w-full h-48 object-cover rounded-xl border border-border"
+              className="w-full h-48 object-contain sm:object-cover rounded-xl border border-border bg-muted/30"
               width={900}
               height={600}
             />
             <img
               src={fleetImages.vanTravellerSide}
               alt="Mini bus option for city transfers"
-              className="w-full h-48 object-cover rounded-xl border border-border"
+              className="w-full h-48 object-contain sm:object-cover rounded-xl border border-border bg-muted/30"
               width={900}
               height={600}
             />

@@ -68,7 +68,7 @@ function BlogIndex() {
               <img
                 src={fleetImages.coachGoldenHour}
                 alt="Luxury coach for India travel guides"
-                className="w-full h-full min-h-[250px] object-cover"
+                className="w-full h-full min-h-[250px] object-contain sm:object-cover bg-muted/30"
                 width={1200}
                 height={800}
               />

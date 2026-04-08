@@ -94,7 +94,7 @@ function AboutPage() {
               <img
                 src={fleetImages.coachGoldenHour}
                 alt="Luxury coach fleet by Kartar Travels"
-                className="w-full h-[260px] sm:h-[320px] object-cover"
+                className="w-full h-[260px] sm:h-[320px] object-contain sm:object-cover bg-muted/30"
                 width={1200}
                 height={800}
               />

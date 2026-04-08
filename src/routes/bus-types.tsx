@@ -81,7 +81,7 @@ function BusTypesPage() {
             <img
               src={fleetImages.coachFrontMountain}
               alt="Bus types for hire in India"
-              className="w-full h-52 sm:h-64 object-cover"
+              className="w-full h-52 sm:h-64 object-contain sm:object-cover bg-muted/30"
               width={1400}
               height={820}
             />
@@ -115,7 +115,13 @@ function BusTypesPage() {
           <ul className="space-y-6">
             {types.map((t) => (
               <li key={t.name} className="rounded-xl border border-border bg-card overflow-hidden">
-                <img src={t.image} alt={t.name} className="w-full h-44 sm:h-52 object-cover" width={1100} height={620} />
+                <img
+                  src={t.image}
+                  alt={t.name}
+                  className="w-full h-44 sm:h-52 object-contain sm:object-cover bg-muted/30"
+                  width={1100}
+                  height={620}
+                />
                 <div className="p-5">
                   <h2 className="font-display text-lg font-semibold text-foreground mb-2">{t.name}</h2>
                   <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>

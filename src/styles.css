@@ -90,8 +90,9 @@
   --hero-gradient-end: oklch(0.50 0.20 230);
   --surface: oklch(0.97 0.008 240);
   --surface-foreground: oklch(0.30 0.04 250);
-  --font-display: 'Poppins', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  /* Use system stacks to remove render-blocking webfont CSS on mobile. */
+  --font-display: "Segoe UI", "Inter", "Poppins", "Roboto", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --font-body: "Segoe UI", "Inter", "Roboto", "Helvetica Neue", Arial, system-ui, sans-serif;
 }
 
 @layer base {
