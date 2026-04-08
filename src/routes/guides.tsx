@@ -53,7 +53,7 @@ function GuidesPage() {
             <img
               src={fleetImages.coachMountainRoad}
               alt="Bus rental guides for India"
-              className="w-full h-52 sm:h-64 object-contain sm:object-cover bg-muted/30"
+              className="w-full h-52 sm:h-64 object-contain bg-muted/30"
               width={1400}
               height={800}
             />
@@ -116,23 +116,23 @@ function GuidesPage() {
 
           <h2 className="font-display text-2xl font-semibold mt-10 mb-3">Keyword clusters we cover</h2>
           <p className="text-muted-foreground leading-relaxed mb-4">
-            <strong className="text-foreground">Primary:</strong> bus rental in [city], bus hire in [city], luxury bus rental in
-            [city]. <strong className="text-foreground">Secondary:</strong> wedding bus rental, corporate bus hire, tempo
-            traveller vs bus, school trip charter, pilgrimage group transport.
+            <strong className="text-foreground">Primary:</strong> bus rental in your city, bus hire in your city, luxury bus
+            rental near you. <strong className="text-foreground">Secondary:</strong> wedding bus rental, corporate bus hire,
+            tempo traveller vs bus, school trip charter, pilgrimage group transport.
           </p>
 
           <div className="grid sm:grid-cols-2 gap-4 mt-5 mb-8">
             <img
               src={fleetImages.coachSeatsReclining}
               alt="Premium seater bus interior"
-              className="w-full h-48 object-contain sm:object-cover rounded-xl border border-border bg-muted/30"
+              className="w-full h-48 object-contain rounded-xl border border-border bg-muted/30"
               width={900}
               height={600}
             />
             <img
               src={fleetImages.vanTravellerSide}
               alt="Mini bus option for city transfers"
-              className="w-full h-48 object-contain sm:object-cover rounded-xl border border-border bg-muted/30"
+              className="w-full h-48 object-contain rounded-xl border border-border bg-muted/30"
               width={900}
               height={600}
             />

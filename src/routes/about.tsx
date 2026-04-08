@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -6,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { INDIAN_CITIES } from "@/data/indian-cities";
 import { fleetImages } from "@/lib/media";
 import { Building2, CalendarRange, CheckCircle2, MapPin, ShieldCheck, Users } from "lucide-react";
+import { CircleMarker, MapContainer, TileLayer, Tooltip } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -48,20 +51,26 @@ function AboutPage() {
     },
   ];
 
+  const [mapReady, setMapReady] = useState(false);
   const mapCities = [
-    { name: "Delhi", top: "31%", left: "46%" },
-    { name: "Chandigarh", top: "23%", left: "43%" },
-    { name: "Jaipur", top: "38%", left: "41%" },
-    { name: "Ahmedabad", top: "52%", left: "33%" },
-    { name: "Mumbai", top: "69%", left: "30%" },
-    { name: "Pune", top: "73%", left: "34%" },
-    { name: "Lucknow", top: "35%", left: "56%" },
-    { name: "Patna", top: "39%", left: "63%" },
-    { name: "Kolkata", top: "51%", left: "73%" },
-    { name: "Hyderabad", top: "67%", left: "52%" },
-    { name: "Bengaluru", top: "84%", left: "47%" },
-    { name: "Chennai", top: "86%", left: "58%" },
+    { name: "Delhi", lat: 28.6139, lng: 77.209 },
+    { name: "Chandigarh", lat: 30.7333, lng: 76.7794 },
+    { name: "Jaipur", lat: 26.9124, lng: 75.7873 },
+    { name: "Ahmedabad", lat: 23.0225, lng: 72.5714 },
+    { name: "Mumbai", lat: 19.076, lng: 72.8777 },
+    { name: "Pune", lat: 18.5204, lng: 73.8567 },
+    { name: "Lucknow", lat: 26.8467, lng: 80.9462 },
+    { name: "Patna", lat: 25.5941, lng: 85.1376 },
+    { name: "Kolkata", lat: 22.5726, lng: 88.3639 },
+    { name: "Hyderabad", lat: 17.385, lng: 78.4867 },
+    { name: "Bengaluru", lat: 12.9716, lng: 77.5946 },
+    { name: "Chennai", lat: 13.0827, lng: 80.2707 },
   ];
+
+  useEffect(() => {
+    setMapReady(true);
+  }, []);
+  const gstText = COMPANY.gstEnabled ? `${COMPANY.gstPercentage}%` : "as applicable";
 
   return (
     <div className="min-h-screen bg-background">
@@ -94,7 +103,7 @@ function AboutPage() {
               <img
                 src={fleetImages.coachGoldenHour}
                 alt="Luxury coach fleet by Kartar Travels"
-                className="w-full h-[260px] sm:h-[320px] object-contain sm:object-cover bg-muted/30"
+                className="w-full h-[260px] sm:h-[320px] object-contain bg-muted/30"
                 width={1200}
                 height={800}
               />
@@ -145,23 +154,41 @@ function AboutPage() {
               </Badge>
             </div>
 
-            <div className="relative rounded-2xl border border-border bg-gradient-to-b from-primary/5 to-muted/40 h-[420px] sm:h-[500px] overflow-hidden">
-              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_50%,hsl(var(--primary))_0%,transparent_55%)]" />
-              <div className="absolute inset-0 p-4 sm:p-6">
-                <div className="absolute top-3 right-3 text-[10px] sm:text-xs text-muted-foreground bg-background/80 rounded px-2 py-1">
-                  Indicative route coverage map
-                </div>
-                {mapCities.map((city) => (
-                  <div key={city.name} className="absolute" style={{ top: city.top, left: city.left }}>
-                    <div className="group relative">
-                      <span className="flex h-3.5 w-3.5 rounded-full bg-primary ring-4 ring-primary/20" />
-                      <div className="absolute -translate-x-1/2 left-1/2 mt-1 whitespace-nowrap rounded bg-foreground text-primary-foreground text-[10px] sm:text-xs px-2 py-0.5 opacity-85 group-hover:opacity-100">
-                        {city.name}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+            <div className="relative rounded-2xl border border-border bg-muted/20 h-[420px] sm:h-[500px] overflow-hidden">
+              <div className="absolute top-3 right-3 z-[500] text-[10px] sm:text-xs text-muted-foreground bg-background/90 rounded px-2 py-1">
+                Live route coverage map
               </div>
+              {mapReady ? (
+                <MapContainer
+                  center={[22.9734, 78.6569]}
+                  zoom={5}
+                  minZoom={4}
+                  maxZoom={9}
+                  className="h-full w-full"
+                  scrollWheelZoom={false}
+                >
+                  <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+                  {mapCities.map((city) => (
+                    <CircleMarker
+                      key={city.name}
+                      center={[city.lat, city.lng]}
+                      radius={6}
+                      pathOptions={{ color: "#2563eb", fillColor: "#2563eb", fillOpacity: 0.8, weight: 2 }}
+                    >
+                      <Tooltip direction="top" offset={[0, -4]} opacity={1}>
+                        {city.name}
+                      </Tooltip>
+                    </CircleMarker>
+                  ))}
+                </MapContainer>
+              ) : (
+                <div className="h-full w-full grid place-items-center text-sm text-muted-foreground">
+                  Loading India map...
+                </div>
+              )}
             </div>
 
             <p className="text-sm text-muted-foreground mt-4">
@@ -176,7 +203,7 @@ function AboutPage() {
             <div className="grid md:grid-cols-3 gap-4">
               {[
                 { title: "Verified operators", icon: ShieldCheck, text: "Onboarded partners with profile checks and quality standards." },
-                { title: "Transparent checkout", icon: CheckCircle2, text: `Clear fare with GST ${COMPANY.gstEnabled ? `${COMPANY.gstPercentage}%` : "as applicable"} before confirmation.` },
+                { title: "Transparent checkout", icon: CheckCircle2, text: `Clear fare with GST ${gstText} before confirmation.` },
                 { title: "Support for all groups", icon: Users, text: "From small family trips to wedding and corporate movement plans." },
               ].map((item) => (
                 <div key={item.title} className="rounded-xl border border-border p-4 bg-muted/30">

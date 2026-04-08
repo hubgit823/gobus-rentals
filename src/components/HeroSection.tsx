@@ -7,16 +7,19 @@ import { fleetImages } from "@/lib/media";
 export function HeroSection() {
   return (
     <section className="relative min-h-[min(92vh,56rem)] flex flex-col justify-start overflow-hidden">
-      {/* Background image */}
+      {/* Background video */}
       <div className="absolute inset-0">
-        <img
-          src={fleetImages.coachFrontMountain}
-          alt="Luxury Volvo coach on a mountain road"
+        <video
           className="w-full h-full object-cover"
-          width={1920}
-          height={1080}
-          fetchPriority="high"
-        />
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster={fleetImages.coachFrontMountain}
+        >
+          <source src="/videos/hero-bus.mp4" type="video/mp4" />
+        </video>
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/60 to-foreground/30" />
       </div>
 
@@ -27,7 +30,7 @@ export function HeroSection() {
           </span>
 
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary-foreground leading-[1.15] mb-3 sm:mb-4">
-            Luxury buses across North India
+            Luxury buses across North India{" "}
             <span className="block text-accent mt-1">Volvo · Mercedes · Sleeper</span>
           </h1>
 

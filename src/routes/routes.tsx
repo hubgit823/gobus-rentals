@@ -67,9 +67,9 @@ function RoutesHubPage() {
             Bus rental routes &amp; city hub
           </h1>
           <p className="text-muted-foreground mb-8 max-w-2xl">
-            Jump to <strong className="text-foreground">bus rental in [city]</strong> landing pages for SEO coverage across
-            India. {COMPANY.platformBrand} hosts 400+ programmatic pages for <strong>bus hire</strong> and{" "}
-            <strong>luxury bus rental</strong> intent.
+            Jump to <strong className="text-foreground">bus rental in your city</strong> landing pages across India.
+            {` ${COMPANY.platformBrand}`} hosts 400+ city pages for <strong>bus hire</strong> and{" "}
+            <strong>luxury bus rental</strong> search intent.
           </p>
 
           <div className="mb-10">
