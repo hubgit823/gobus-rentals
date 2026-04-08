@@ -13,7 +13,7 @@
     "e2e:demo": "node scripts/e2e-demo.mjs",
     "build": "vite build",
     "build:dev": "vite build --mode development",
-    "postbuild": "npm run sitemap",
+    "postbuild": "npm run sitemap && node scripts/prepare-vercel-spa.mjs",
     "sitemap": "tsx scripts/generate-sitemap.ts",
     "trim-logo": "node scripts/trim-logo.mjs",
     "preview": "vite preview",
