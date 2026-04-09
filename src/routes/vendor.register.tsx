@@ -14,7 +14,7 @@ import { setAuth, type StoredUser } from "@/lib/auth-storage";
 
 export const Route = createFileRoute("/vendor/register")({
   component: VendorRegisterPage,
-  head: () => ({ meta: [{ title: "Register as Vendor — LuxuryBusRental" }] }),
+  head: () => ({ meta: [{ title: "Register as Vendor — Luxury Bus Rental" }] }),
 });
 
 type RegRes = { token: string; user: StoredUser };

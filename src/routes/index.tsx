@@ -14,7 +14,7 @@ import { faqPageSchema } from "@/lib/seo/schemas";
 
 const homeFaqs = [
   {
-    question: "How does LuxuryBusRental.in work?",
+    question: "How does Luxury Bus Rental work?",
     answer: `Submit your trip on ${COMPANY.platformBrand}; verified operators send quotes. Compare bus hire options, pay per policy, and travel with ${COMPANY.legalName}'s marketplace standards.`,
   },
   {
@@ -28,11 +28,11 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => {
     const { meta, links } = buildPageMeta({
-      title: "LuxuryBusRental.in — Bus Rental India | Compare Luxury Bus Hire Quotes",
+      title: "Luxury Bus Rental — Bus Rental India | Compare Luxury Bus Hire Quotes",
       description: `${COMPANY.about} Book bus rental in India: AC, Volvo, sleeper. GST-transparent checkout on ${COMPANY.platformBrand}.`,
       path: "/",
       keywords:
-        "bus rental India, bus hire India, luxury bus rental, Volvo bus booking, wedding bus rental, corporate bus hire, LuxuryBusRental.in",
+        "bus rental India, bus hire India, luxury bus rental, Volvo bus booking, wedding bus rental, corporate bus hire, Luxury Bus Rental",
     });
     return {
       meta: [...meta, { "script:ld+json": faqPageSchema(homeFaqs.map((f) => ({ question: f.question, answer: f.answer }))) }],

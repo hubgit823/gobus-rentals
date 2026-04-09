@@ -71,7 +71,7 @@ function CustomerProfile() {
               </div>
               <div>
                 <h3 className="font-semibold text-foreground">{name || "Customer"}</h3>
-                <p className="text-sm text-muted-foreground">LuxuryBusRental customer</p>
+                <p className="text-sm text-muted-foreground">Luxury Bus Rental customer</p>
               </div>
             </div>
 

@@ -10,7 +10,7 @@ export const Route = createFileRoute("/policies/refund-cancellation")({
       { title: `Refund & Cancellation — ${COMPANY.legalName}` },
       {
         name: "description",
-        content: "Refund, cancellation, and payment rules for Kartar Travels / LuxuryBusRental bookings.",
+        content: "Refund, cancellation, and payment rules for Kartar Travels / Luxury Bus Rental bookings.",
       },
     ],
   }),

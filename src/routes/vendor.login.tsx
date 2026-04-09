@@ -4,7 +4,7 @@ import { useLayoutEffect } from "react";
 /** Legacy URL — unified login at `/login` with vendor pre-selected */
 export const Route = createFileRoute("/vendor/login")({
   component: VendorLoginRedirect,
-  head: () => ({ meta: [{ title: "Vendor Login — LuxuryBusRental" }] }),
+  head: () => ({ meta: [{ title: "Vendor Login — Luxury Bus Rental" }] }),
 });
 
 function VendorLoginRedirect() {

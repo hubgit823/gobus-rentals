@@ -37,7 +37,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Kartar Travels — Luxury bus rental across North India | LuxuryBusRental" },
+      { title: "Kartar Travels — Luxury bus rental across North India | Luxury Bus Rental" },
       {
         name: "description",
         content:
@@ -47,7 +47,7 @@ export const Route = createRootRoute({
       {
         name: "keywords",
         content:
-          "bus rental India, luxury bus hire, bus hire online, Volvo bus rental, wedding bus rental, corporate bus hire, tempo traveller booking, group travel bus, bus rental Delhi, bus rental Mumbai, LuxuryBusRental",
+          "bus rental India, luxury bus hire, bus hire online, Volvo bus rental, wedding bus rental, corporate bus hire, tempo traveller booking, group travel bus, bus rental Delhi, bus rental Mumbai, Luxury Bus Rental",
       },
       { property: "og:title", content: "Kartar Travels — Premium bus rental marketplace" },
       {

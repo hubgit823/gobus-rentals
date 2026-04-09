@@ -15,8 +15,8 @@ export const Route = createFileRoute("/signup")({
   component: SignupPage,
   head: () => ({
     meta: [
-      { title: "Sign Up — LuxuryBusRental" },
-      { name: "description", content: "Create your LuxuryBusRental account." },
+      { title: "Sign Up — Luxury Bus Rental" },
+      { name: "description", content: "Create your Luxury Bus Rental account." },
     ],
   }),
 });

@@ -14,7 +14,7 @@ const faqs = [
   {
     question: "How do I compare bus rental quotes fairly?",
     answer:
-      "Align inclusions: fuel, driver, tolls, GST, minimum km, and overtime. Use LuxuryBusRental.in to receive comparable quotes from multiple operators for the same itinerary.",
+      "Align inclusions: fuel, driver, tolls, GST, minimum km, and overtime. Use Luxury Bus Rental to receive comparable quotes from multiple operators for the same itinerary.",
   },
   {
     question: "What documents should I verify before charter?",

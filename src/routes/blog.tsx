@@ -77,24 +77,24 @@ function BlogIndex() {
 
           <ul className="space-y-6">
             {BLOG_POSTS.map((p) => (
-              <li key={p.slug} className="rounded-xl border border-border bg-card p-6 hover:border-primary/30 transition-colors">
-                <Link to="/blog/$slug" params={{ slug: p.slug }} className="group">
-                  <h2 className="font-display text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
-                    {p.title}
-                  </h2>
-                </Link>
-                <p className="text-sm text-muted-foreground mt-2">{p.description}</p>
-                <div className="flex flex-wrap gap-3 mt-4 text-xs text-muted-foreground">
-                  <span>{p.datePublished}</span>
-                  <span>·</span>
-                  <span>{p.readTime} read</span>
-                </div>
+              <li key={p.slug}>
                 <Link
                   to="/blog/$slug"
                   params={{ slug: p.slug }}
-                  className="inline-block mt-3 text-sm font-medium text-primary hover:underline"
+                  className="group block rounded-xl border border-border bg-card p-6 hover:border-primary/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                 >
-                  Read guide →
+                  <h2 className="font-display text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                    {p.title}
+                  </h2>
+                  <p className="text-sm text-muted-foreground mt-2">{p.description}</p>
+                  <div className="flex flex-wrap gap-3 mt-4 text-xs text-muted-foreground">
+                    <span>{p.datePublished}</span>
+                    <span>·</span>
+                    <span>{p.readTime} read</span>
+                  </div>
+                  <span className="inline-block mt-3 text-sm font-medium text-primary group-hover:underline">
+                    Read guide →
+                  </span>
                 </Link>
               </li>
             ))}

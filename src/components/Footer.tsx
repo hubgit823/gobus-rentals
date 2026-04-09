@@ -44,6 +44,7 @@ export function Footer() {
               {COMPANY.gstEnabled ? `${COMPANY.gstPercentage}%` : "exempt"} on
               bookings — see checkout & invoice.
             </p>
+            <p className="text-primary-foreground/60 text-xs mt-2">{COMPANY.serviceBillingTagline}</p>
           </div>
 
           <div>

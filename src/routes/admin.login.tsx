@@ -4,7 +4,7 @@ import { useLayoutEffect } from "react";
 /** Legacy URL — unified login at `/login` with admin pre-selected */
 export const Route = createFileRoute("/admin/login")({
   component: AdminLoginRedirect,
-  head: () => ({ meta: [{ title: "Admin Login — LuxuryBusRental" }] }),
+  head: () => ({ meta: [{ title: "Admin Login — Luxury Bus Rental" }] }),
 });
 
 function AdminLoginRedirect() {

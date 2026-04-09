@@ -1,7 +1,8 @@
 /** Canonical public company & tax defaults — keep mock-api/server.mjs companySettings in sync. */
 export const COMPANY = {
   legalName: "Kartar Travels Private Limited",
-  platformBrand: "LuxuryBusRental",
+  platformBrand: "Luxury Bus Rental – Powered by Kartar Travels Private Limited",
+  serviceBillingTagline: "All Services, Billing & GST Invoicing Managed by Kartar Travels Pvt Ltd.",
   about:
     "Kartar Travels Private Limited is a trusted luxury bus rental service provider since 2018, offering Volvo, Mercedes-Benz, seater and sleeper buses for comfortable journeys. We are committed to delivering safe, reliable, and premium travel experiences across North India at the best prices.",
   operatingLocations:

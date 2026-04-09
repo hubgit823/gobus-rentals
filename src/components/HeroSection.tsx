@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { MapPin, Calendar, Bus, ArrowRight } from "lucide-react";
+import { MapPin, ArrowRight } from "lucide-react";
 import { COMPANY } from "@/lib/company";
 import { fleetImages } from "@/lib/media";
+import { BookingForm } from "@/components/BookingForm";
 
 export function HeroSection() {
   return (
@@ -38,45 +39,7 @@ export function HeroSection() {
             Enter your route and date — compare verified operators in one place.
           </p>
 
-          {/* Quick search strip — primary action, placed high in the hero */}
-          <div className="bg-card shadow-2xl rounded-2xl p-4 sm:p-5 border border-border ring-1 ring-primary/15">
-            <form className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 items-end">
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5" /> From
-                </label>
-                <input
-                  type="text"
-                  placeholder="Pickup City"
-                  className="w-full h-11 px-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
-                  <MapPin className="w-3.5 h-3.5" /> To
-                </label>
-                <input
-                  type="text"
-                  placeholder="Drop City"
-                  className="w-full h-11 px-3 rounded-xl border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5" /> Date
-                </label>
-                <input
-                  type="date"
-                  className="w-full h-11 px-3 rounded-xl border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40"
-                />
-              </div>
-              <Link to="/book" className="w-full sm:col-span-2 lg:col-span-1">
-                <Button size="lg" className="w-full h-11 gap-2 rounded-xl text-base font-semibold shadow-md">
-                  <Bus className="w-4 h-4" /> Search Buses
-                </Button>
-              </Link>
-            </form>
-          </div>
+          <BookingForm compact />
 
           <p className="text-primary-foreground/75 text-sm sm:text-base mt-6 mb-3 leading-relaxed max-w-2xl">
             {COMPANY.about.slice(0, 140)}…

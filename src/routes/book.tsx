@@ -11,7 +11,7 @@ export const Route = createFileRoute("/book")({
   component: BookPage,
   head: () =>
     buildPageMeta({
-      title: "Book a Bus — Get Free Quotes | LuxuryBusRental.in",
+      title: "Book a Bus — Get Free Quotes | Luxury Bus Rental",
       description: `Submit your trip for bus rental in India. ${COMPANY.legalName} connects you with operators for AC, Volvo, sleeper & wedding or corporate bus hire.`,
       path: "/book",
       keywords: "book bus online India, bus rental quotes, group travel booking, wedding bus enquiry, corporate bus hire quote",

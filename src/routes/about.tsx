@@ -4,9 +4,10 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { COMPANY } from "@/lib/company";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { INDIAN_CITIES } from "@/data/indian-cities";
 import { fleetImages } from "@/lib/media";
-import { Building2, CalendarRange, CheckCircle2, MapPin, ShieldCheck, Users } from "lucide-react";
+import { Building2, CalendarRange, CheckCircle2, Headset, MapPin, MessageCircle, Phone, ShieldCheck, Users } from "lucide-react";
 import { CircleMarker, MapContainer, TileLayer, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -46,7 +47,7 @@ function AboutPage() {
     {
       year: "Today",
       title: "Digital quote platform",
-      detail: "LuxuryBusRental helps travelers compare operators faster and book with GST-transparent checkout.",
+      detail: "Luxury Bus Rental helps travelers compare operators faster and book with GST-transparent checkout.",
       icon: CalendarRange,
     },
   ];
@@ -199,15 +200,39 @@ function AboutPage() {
 
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="rounded-2xl border border-border bg-card p-5 sm:p-7">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-5">Why travelers choose us</h2>
+            <div className="flex flex-wrap items-end justify-between gap-4 mb-5">
+              <div>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground">Why travelers choose us</h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Trusted operations, transparent billing, and real support from planning to trip completion.
+                </p>
+              </div>
+              <div className="grid grid-cols-3 gap-2 w-full sm:w-auto sm:min-w-[20rem]">
+                <div className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-center">
+                  <p className="text-lg font-bold text-foreground">2018</p>
+                  <p className="text-[11px] text-muted-foreground">Since</p>
+                </div>
+                <div className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-center">
+                  <p className="text-lg font-bold text-foreground">{INDIAN_CITIES.length}+</p>
+                  <p className="text-[11px] text-muted-foreground">City pages</p>
+                </div>
+                <div className="rounded-lg border border-border bg-muted/30 px-3 py-2 text-center">
+                  <p className="text-lg font-bold text-foreground">{COMPANY.gstPercentage}%</p>
+                  <p className="text-[11px] text-muted-foreground">GST clarity</p>
+                </div>
+              </div>
+            </div>
+
             <div className="grid md:grid-cols-3 gap-4">
               {[
                 { title: "Verified operators", icon: ShieldCheck, text: "Onboarded partners with profile checks and quality standards." },
                 { title: "Transparent checkout", icon: CheckCircle2, text: `Clear fare with GST ${gstText} before confirmation.` },
-                { title: "Support for all groups", icon: Users, text: "From small family trips to wedding and corporate movement plans." },
+                { title: "Support for all groups", icon: Headset, text: "From small family trips to wedding and corporate movement plans." },
               ].map((item) => (
-                <div key={item.title} className="rounded-xl border border-border p-4 bg-muted/30">
-                  <item.icon className="w-5 h-5 text-primary mb-2" />
+                <div key={item.title} className="rounded-xl border border-border p-4 bg-muted/30 hover:bg-muted/50 transition-colors">
+                  <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-2">
+                    <item.icon className="w-5 h-5" />
+                  </div>
                   <p className="font-semibold text-foreground">{item.title}</p>
                   <p className="text-sm text-muted-foreground mt-1">{item.text}</p>
                 </div>
@@ -227,6 +252,31 @@ function AboutPage() {
                   {COMPANY.contactEmail}
                 </a>
               </p>
+              <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                <a href={`tel:+91${COMPANY.contactPhone}`} className="sm:flex-1">
+                  <Button variant="secondary" className="w-full gap-2">
+                    <Phone className="w-4 h-4" />
+                    Call now
+                  </Button>
+                </a>
+                <a
+                  href={`https://wa.me/${COMPANY.whatsappE164}?text=${encodeURIComponent("Hi, I need bus rental support.")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="sm:flex-1"
+                >
+                  <Button variant="outline" className="w-full gap-2">
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp
+                  </Button>
+                </a>
+                <Link to="/book" className="sm:flex-1">
+                  <Button className="w-full gap-2">
+                    <Users className="w-4 h-4" />
+                    Get quotes
+                  </Button>
+                </Link>
+              </div>
               <p className="text-sm text-muted-foreground pt-3">
                 <Link to="/policies/refund-cancellation" className="text-primary hover:underline">
                   Refund &amp; cancellation policy

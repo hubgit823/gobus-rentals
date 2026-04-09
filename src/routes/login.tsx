@@ -20,7 +20,7 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
   head: () => ({
     meta: [
-      { title: "Login — LuxuryBusRental" },
+      { title: "Login — Luxury Bus Rental" },
       { name: "description", content: "Login as a customer, vendor, or admin." },
     ],
   }),
@@ -108,7 +108,7 @@ function LoginPage() {
           <div className="text-center mb-6">
             <img
               src="/images/logo.png"
-              alt="LuxuryBusRental"
+              alt="Luxury Bus Rental"
               className="h-[4.5rem] sm:h-[5.25rem] w-auto mx-auto mb-4 object-contain"
               width={884}
               height={458}

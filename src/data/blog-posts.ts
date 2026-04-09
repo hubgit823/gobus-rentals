@@ -14,7 +14,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "bus-rental-price-delhi-2026-guide",
     title: "Bus Rental Price in Delhi (2026 Guide)",
     description:
-      "Complete 2026 guide to bus rental prices in Delhi: AC vs non-AC, Volvo vs sleeper, wedding and corporate rates, GST, and how to compare quotes on LuxuryBusRental.in.",
+      "Complete 2026 guide to bus rental prices in Delhi: AC vs non-AC, Volvo vs sleeper, wedding and corporate rates, GST, and how to compare quotes on Luxury Bus Rental.",
     keywords:
       "bus rental price Delhi, bus hire Delhi rates, luxury bus rental Delhi, Volvo bus price Delhi, wedding bus Delhi cost, corporate bus hire Delhi",
     datePublished: "2026-01-15",
@@ -23,9 +23,9 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         h2: "How bus rental pricing works in Delhi NCR",
         paragraphs: [
-          "Delhi National Capital Region is one of India’s busiest markets for group transport. Whether you are planning a wedding in West Delhi, a corporate offsite in Gurugram, a school trip to Agra, or a pilgrimage charter to Haridwar, the way operators quote bus hire in Delhi depends on distance, duration, bus type, season, and tolls. In 2026, transparent marketplaces like LuxuryBusRental.in help you compare multiple verified operators instead of calling dozens of vendors individually.",
+          "Delhi National Capital Region is one of India’s busiest markets for group transport. Whether you are planning a wedding in West Delhi, a corporate offsite in Gurugram, a school trip to Agra, or a pilgrimage charter to Haridwar, the way operators quote bus hire in Delhi depends on distance, duration, bus type, season, and tolls. In 2026, transparent marketplaces like Luxury Bus Rental help you compare multiple verified operators instead of calling dozens of vendors individually.",
           "Most Delhi bus rental quotes start with a **per-day or per-kilometre** structure for local and outstation trips. A **12–17 seater tempo traveller** is typically positioned for smaller groups and airport transfers, while **26–35 seater** buses suit schools and mid-size corporates. **40–52 seater luxury coaches** and **Volvo buses** are preferred for weddings, large conferences, and long highway routes where comfort and luggage space matter. **Sleeper buses** are chosen for overnight intercity routes where passengers need berths instead of recliner seats.",
-          "GST is applied on the taxable value of the rental service. On LuxuryBusRental.in, checkout shows **GST breakdown** (currently 18% where applicable) so customers see the **total with GST** before they confirm. Always confirm whether parking, interstate taxes, driver allowance, and night halt charges are included in the quote or billed separately—reputable operators document this clearly once you accept a formal quote.",
+          "GST is applied on the taxable value of the rental service. On Luxury Bus Rental, checkout shows **GST breakdown** (currently 18% where applicable) so customers see the **total with GST** before they confirm. Always confirm whether parking, interstate taxes, driver allowance, and night halt charges are included in the quote or billed separately—reputable operators document this clearly once you accept a formal quote.",
         ],
       },
       {
@@ -47,7 +47,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         h2: "How to book and save without sacrificing safety",
         paragraphs: [
-          "Start with a clear **itinerary**: pickup points in Delhi or satellite towns, drop, dates, approximate hours, and passenger count. Uploading this to **LuxuryBusRental.in** triggers quotes from active operators who cover your route.",
+          "Start with a clear **itinerary**: pickup points in Delhi or satellite towns, drop, dates, approximate hours, and passenger count. Uploading this to **Luxury Bus Rental** triggers quotes from active operators who cover your route.",
           "Compare **inclusions**: fuel, driver, tolls, state permits, and GST treatment. The lowest headline price is not always the lowest **landed cost**.",
           "Verify operator credentials: commercial permit, insurance, and driver compliance. Kartar Travels Private Limited powers a marketplace experience focused on **safe, reliable, premium travel** across North India; operators remain responsible for on-road service delivery.",
           "For **luxury bus rental in Delhi**, book **advance payment** to confirm as per platform policy, settle balance before trip start, and keep a single point of contact for day-of coordination.",
@@ -64,7 +64,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         question: "What is the average bus rental price in Delhi in 2026?",
         answer:
-          "Prices vary by bus type, season, and itinerary. Local full-day AC 40-seater charters often start in a higher band than tempo travellers; outstation multi-day trips add km, driver allowance, and tolls. Compare multiple quotes on LuxuryBusRental.in for your exact dates.",
+          "Prices vary by bus type, season, and itinerary. Local full-day AC 40-seater charters often start in a higher band than tempo travellers; outstation multi-day trips add km, driver allowance, and tolls. Compare multiple quotes on Luxury Bus Rental for your exact dates.",
       },
       {
         question: "Is GST included in Delhi bus hire quotes?",
@@ -82,7 +82,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: "how-to-book-bus-for-wedding-india",
     title: "How to Book a Bus for a Wedding in India (Step-by-Step)",
     description:
-      "Practical checklist for wedding bus rental in India: baraat timing, multiple pickups, decor rules, contracts, and how to use LuxuryBusRental.in to compare luxury coaches.",
+      "Practical checklist for wedding bus rental in India: baraat timing, multiple pickups, decor rules, contracts, and how to use Luxury Bus Rental to compare luxury coaches.",
     keywords:
       "wedding bus rental India, book bus for wedding, baraat bus hire, luxury coach wedding, guest transport wedding, group travel wedding",
     datePublished: "2026-02-01",
@@ -110,7 +110,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         h2: "Step 3: Request quotes on a marketplace",
         paragraphs: [
-          "Instead of negotiating one vendor at a time, submit your itinerary on **LuxuryBusRental.in**. Operators respond with structured quotes; you compare price, inclusions, and fleet notes. Accepting a quote creates a booking path with **advance and balance** payments aligned to platform policy and **refund & cancellation** rules.",
+          "Instead of negotiating one vendor at a time, submit your itinerary on **Luxury Bus Rental**. Operators respond with structured quotes; you compare price, inclusions, and fleet notes. Accepting a quote creates a booking path with **advance and balance** payments aligned to platform policy and **refund & cancellation** rules.",
         ],
       },
       {
@@ -180,7 +180,7 @@ export const BLOG_POSTS: BlogPost[] = [
         h2: "Decision matrix",
         paragraphs: [
           "Choose a **Volvo-style seater** for: same-day corporate events, airport–resort transfers, school/college excursions with supervision, and weddings with multiple short hops. Choose a **sleeper** for: overnight point-to-point relocation of staff, budget-conscious tourist groups maximizing night travel, and long single-leg journeys where hotel cost avoidance matters.",
-          "Still unsure? Post both options in your **LuxuryBusRental.in** requirement and let operators propose the best-fit configuration.",
+          "Still unsure? Post both options in your **Luxury Bus Rental** requirement and let operators propose the best-fit configuration.",
         ],
       },
     ],
