@@ -149,8 +149,8 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  to="/bus-rental/$citySlug"
-                  params={{ citySlug: "delhi" }}
+                  to="/$seoSlug"
+                  params={{ seoSlug: "bus-rental-in-delhi" }}
                   className="hover:text-primary-foreground transition-colors"
                 >
                   Bus rental Delhi
@@ -158,8 +158,8 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  to="/bus-rental/$citySlug"
-                  params={{ citySlug: "mumbai" }}
+                  to="/$seoSlug"
+                  params={{ seoSlug: "bus-rental-in-mumbai" }}
                   className="hover:text-primary-foreground transition-colors"
                 >
                   Bus rental Mumbai
@@ -167,8 +167,8 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  to="/bus-rental/$citySlug"
-                  params={{ citySlug: "chandigarh" }}
+                  to="/$seoSlug"
+                  params={{ seoSlug: "bus-rental-in-chandigarh" }}
                   className="hover:text-primary-foreground transition-colors"
                 >
                   Bus rental Chandigarh

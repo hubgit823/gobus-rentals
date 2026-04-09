@@ -7,36 +7,9 @@ import { COMPANY } from "@/lib/company";
 import { buildPageMeta } from "@/lib/seo/buildMeta";
 import { faqPageSchema, productBusMarketplaceSchema } from "@/lib/seo/schemas";
 import { fleetImages } from "@/lib/media";
+import { VEHICLE_CATALOG } from "@/lib/vehicle-catalog";
 import { Badge } from "@/components/ui/badge";
 import { Bus, Snowflake, Users, RouteIcon } from "lucide-react";
-
-const types = [
-  {
-    name: "Mini bus & tempo traveller (12–17 seater)",
-    desc: "Ideal for airport transfers, small weddings, and city shuttles. Often compared in tempo traveller vs bus decisions for narrow lanes.",
-    image: fleetImages.vanUrbaniaFront,
-  },
-  {
-    name: "Mid-size AC bus (26–35 seater)",
-    desc: "School trips, college excursions, and SME corporate outings. Strong value for group travel bus booking per seat.",
-    image: fleetImages.vanInteriorAisle,
-  },
-  {
-    name: "Luxury coach (40–52 seater)",
-    desc: "Wedding guest transport, large conferences, and interstate tours. Common choice for luxury bus rental in metro cities.",
-    image: fleetImages.coachDepotLine,
-  },
-  {
-    name: "Volvo / premium highway coach",
-    desc: "Long-distance comfort, reclining seats, luggage bays. Popular for corporate bus hire and premium tourism circuits.",
-    image: fleetImages.coachSeatsReclining,
-  },
-  {
-    name: "Sleeper bus",
-    desc: "Overnight routes where passengers need berths. Compare with seated Volvo in our Volvo vs sleeper guide.",
-    image: fleetImages.coachInteriorSemiSleeper,
-  },
-];
 
 const faqs = [
   {
@@ -47,6 +20,33 @@ const faqs = [
     question: "Do you list non-AC buses?",
     answer: "Operators may offer non-AC for budget charters. Specify your preference when posting requirements on LuxuryBusRental.in.",
   },
+];
+
+const typeGallery = [
+  fleetImages.vanUrbaniaFront,
+  fleetImages.vanInteriorAisle,
+  fleetImages.coachDepotLine,
+  fleetImages.coachSeatsReclining,
+  fleetImages.coachInteriorSemiSleeper,
+];
+
+const servicePageLongForm = [
+  "Bus types are the foundation of successful group transport planning in India. Travelers comparing bus rental options often search with practical intent keywords such as bus types for hire, 12 seater bus rental, 26 seater AC bus, 45 seater coach booking, 52 seater luxury bus, and 66 seater group transport. This service page is built to answer that complete journey. Instead of limiting selection to a few generic categories, we provide clear guidance from 12 seater to 66 seater options so customers can match real passenger requirements with the right vehicle class before requesting quotes.",
+  "For customers researching luxury bus rental, the first decision should be mobility context: city-only movement, mixed city-highway itinerary, long-distance intercity transfer, or overnight routes. Each scenario changes the ideal bus type. A compact 12 seater or 14 seater may outperform larger buses for narrow-entry locations, while 45 to 52 seater coaches are better for centralized movement from hotels to venues. The best bus rental outcome is not achieved by maximum capacity alone; it comes from the balance of seat count, route access, comfort target, luggage profile, and reporting discipline.",
+  "The 12 to 17 seater range is frequently selected for premium family mobility, wedding VIP transfers, airport movement, artist transport, and short-format business travel. These vehicles reduce boarding friction and support faster repositioning in dense areas. For planners working with multiple pickup points, smaller classes can increase punctuality because dispatch can run parallel batches. In SEO terms, this segment covers high-intent searches like tempo traveller booking, mini bus rental near me, and small group bus hire, all of which represent conversion-focused demand.",
+  "The 20 to 35 seater range is usually the operational sweet spot for institutions, schools, colleges, clubs, and medium-sized corporate groups. These buses can deliver stable per-seat economics while preserving easier route maneuverability compared to full-size coaches. Event coordinators booking this class should verify AC quality, aisle layout, and expected stoppage frequency. A 26 seater may be enough for compact itineraries, while a 32 or 35 seater may perform better when guest count is variable. This segment strongly aligns with keywords such as mid-size AC bus rental and group transport bus booking.",
+  "For weddings, large conventions, and destination celebrations, 40 to 52 seater buses remain the most requested categories. Organizers prefer these classes because they simplify dispatch planning and reduce the number of vehicles required. A full-size 52 seater luxury coach can move larger clusters in one cycle, which helps maintain event timelines when venues are time-sensitive. Customers searching wedding bus rental, luxury coach booking, or corporate bus hire in India generally compare this range first, making clear capacity descriptions and transparent quote terms essential for trust and conversion.",
+  "The 56 to 66 seater segment is selected for very high-volume operations where fewer, bigger vehicles improve management efficiency. These classes are useful for institutional movement, pilgrimage groups, election duty movement, festival logistics, and mega event transport. However, they require route suitability checks because access roads, parking lanes, and venue gates may limit large-wheelbase operation. Good transport planning includes a pre-check of entry constraints, turning radius challenges, and waiting zones. This practical clarity protects both service quality and cost control on travel day.",
+  "Another major planning area is comfort class selection. Standard AC buses serve many city and short intercity plans, but premium travelers often prefer luxury coaches with better suspension response, cleaner cabin finishes, and improved long-duration comfort. For overnight routes, sleeper configurations can be considered when berth travel is more practical than seated travel. Customers evaluating Volvo vs sleeper should map their choice to passenger profile rather than trend preference. Families with seniors may choose seater comfort and lower movement complexity, while youth groups may accept sleeper tradeoffs for overnight savings.",
+  "Pricing for bus rental should always be interpreted as total trip economics rather than base fare. Operators may quote differently on fuel inclusion, toll treatment, parking, state entry taxes, driver allowance, waiting windows, and overtime slabs. A lower visible fare can become expensive if commercial assumptions are not aligned to the actual itinerary. High-quality service pages therefore include procurement guidance, not just fleet names. On LuxuryBusRental.in, users can compare quote structures across categories and select based on transparent all-in understanding instead of incomplete headline numbers.",
+  "From a business perspective, repeat corporate and institutional customers benefit from standard operating templates. A simple planning format with passenger count, baggage notes, route map, reporting timeline, stoppage matrix, and contingency logic makes bus booking faster and more predictable. Teams can also score operators on punctuality, communication speed, vehicle hygiene, and escalation handling. This process elevates bus rental from transactional purchase to reliable service procurement. Over time, buyers gain better on-time performance and lower complaint rates because expectations are defined before booking confirmation.",
+  "For wedding logistics, transport quality influences guest satisfaction directly. Delayed pickups, poor AC performance, and mismatched seat counts create visible event friction. Best practice is to split movement by guest clusters, schedule staggered pickup windows, and allocate standby flexibility for late program changes. Planners commonly combine 12 to 17 seater vehicles for VIP families with 40 to 52 seater coaches for larger guest batches. This mix improves loading efficiency and reduces confusion at hotels and venues, especially in multi-function wedding schedules.",
+  "Educational and youth movement requires stronger safety orientation. Schools and colleges should prioritize operator verification, route discipline, teacher allocation by bus, and departure-return control points. Medium and large seater classes usually perform better when attendance is high, but vehicle category should still reflect destination roads and parking feasibility. The right bus type in this segment protects supervision quality and trip timing, while clear pre-boarding communication reduces delays. Safety-led planning is a major signal of responsible charter management and supports long-term trust with parent communities.",
+  "For pilgrimage and cultural circuits, planning should include halt comfort, washroom stop cadence, early morning dispatch readiness, and passenger age mix. A capacity-optimized bus may not be ideal if boarding is difficult for senior travelers. In these scenarios, comfort-first fleet selection can produce a better overall experience even when fare is slightly higher. Service quality in group travel is measured by predictability: on-time pickup, calm boarding, smooth drive behavior, and clear arrival management. The correct vehicle category is therefore both a cost and experience decision.",
+  "SEO-focused service pages must answer user intent depth, not just publish a list of vehicle names. Searchers looking for 12 seater bus hire, 30 seater AC coach, or 66 seater bus booking want guidance on use cases, limitations, and decision criteria. Rich page structure with descriptive paragraphs, route strategy tips, and transparent planning advice helps users make better choices and helps search engines understand topical authority. This page is intentionally comprehensive so it can support research-driven visitors at every stage of fleet selection.",
+  "When comparing options from 12 to 66 seats, buyers should also evaluate dispatch control and communication workflow. A responsive operations contact, clear reporting protocol, and day-of-trip escalation path are often more important than small fare differences. For large events, coordinators should request assignment details in advance and verify trip sheets before departure. Structured coordination significantly reduces execution risk and improves passenger confidence. In large-scale mobility, operational reliability is the true premium feature, and fleet category selection works best when paired with strong process discipline.",
+  "The future of bus rental growth in India will continue to be driven by organized demand across weddings, business travel, education, tourism, and regional events. As customers become more informed, they increasingly prefer transparent marketplaces and operator comparison models over one-off informal bookings. Comprehensive service pages that explain bus types, pricing logic, use-case fit, and planning best practices are essential in this environment. They help users decide faster, reduce booking mistakes, and improve fulfillment outcomes for both travelers and operators.",
+  "If you are selecting a vehicle today, begin with passenger count and route profile, then choose the nearest practical category in the 12 to 66 seater spectrum. Validate inclusions, confirm reporting timelines, and ask for a contingency path before final payment. This method consistently improves outcomes for both premium and value bookings. Whether you need compact mobility or ultra high-capacity transport, a structured approach to bus type selection produces reliable, comfortable, and cost-aware travel execution.",
 ];
 
 export const Route = createFileRoute("/bus-types")({
@@ -97,10 +97,10 @@ function BusTypesPage() {
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
                 {[
-                  { label: "Seat range", value: "12-52", icon: Users },
+                  { label: "Seat range", value: "12-66", icon: Users },
                   { label: "AC options", value: "Yes", icon: Snowflake },
                   { label: "Use cases", value: "City + Highway", icon: RouteIcon },
-                  { label: "Fleet classes", value: "5", icon: Bus },
+                  { label: "Fleet classes", value: String(VEHICLE_CATALOG.length), icon: Bus },
                 ].map((k) => (
                   <div key={k.label} className="rounded-lg border border-border bg-muted/30 p-3">
                     <k.icon className="w-4 h-4 text-primary mb-1" />
@@ -113,22 +113,38 @@ function BusTypesPage() {
           </section>
 
           <ul className="space-y-6">
-            {types.map((t) => (
-              <li key={t.name} className="rounded-xl border border-border bg-card overflow-hidden">
+            {VEHICLE_CATALOG.map((t, idx) => (
+              <li key={t.seats} className="rounded-xl border border-border bg-card overflow-hidden">
                 <img
-                  src={t.image}
-                  alt={t.name}
+                  src={typeGallery[idx % typeGallery.length]}
+                  alt={`${t.seats} ${t.title}`}
                   className="w-full h-44 sm:h-52 object-contain bg-muted/30"
                   width={1100}
                   height={620}
                 />
                 <div className="p-5">
-                  <h2 className="font-display text-lg font-semibold text-foreground mb-2">{t.name}</h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
+                  <h2 className="font-display text-lg font-semibold text-foreground mb-2">
+                    {t.seats} - {t.title}
+                  </h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t.description}</p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Best for: <span className="text-foreground/90">{t.bestFor}</span>
+                  </p>
                 </div>
               </li>
             ))}
           </ul>
+
+          <section className="mt-12 rounded-xl border border-border bg-card p-5 sm:p-7">
+            <h2 className="font-display text-xl sm:text-2xl font-semibold text-foreground mb-4">
+              Complete SEO guide: bus types from 12 seater to 66 seater
+            </h2>
+            <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
+              {servicePageLongForm.map((paragraph) => (
+                <p key={paragraph.slice(0, 72)}>{paragraph}</p>
+              ))}
+            </div>
+          </section>
 
           <section className="mt-12 rounded-xl border border-border bg-card p-5 sm:p-6">
             <h2 className="font-display text-xl font-semibold text-foreground mb-3">How to pick the right bus quickly</h2>

@@ -85,8 +85,8 @@ function RoutesHubPage() {
             {featured.map((c) => (
               <Link
                 key={c.slug}
-                to="/bus-rental/$citySlug"
-                params={{ citySlug: c.slug }}
+                to="/$seoSlug"
+                params={{ seoSlug: `bus-rental-in-${c.slug}` }}
                 className="rounded-lg border border-border bg-card px-3 py-2 text-sm text-primary hover:bg-muted transition-colors"
               >
                 Bus rental {c.name}
@@ -101,7 +101,7 @@ function RoutesHubPage() {
           <ul className="columns-2 sm:columns-3 md:columns-4 gap-x-4 text-sm">
             {INDIAN_CITIES.map((c) => (
               <li key={c.slug} className="break-inside-avoid mb-1">
-                <Link to="/bus-rental/$citySlug" params={{ citySlug: c.slug }} className="text-primary hover:underline">
+                <Link to="/$seoSlug" params={{ seoSlug: `bus-rental-in-${c.slug}` }} className="text-primary hover:underline">
                   {c.name}
                 </Link>
                 <span className="text-muted-foreground"> · {c.state}</span>

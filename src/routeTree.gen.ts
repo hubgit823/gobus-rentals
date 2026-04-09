@@ -21,6 +21,7 @@ import { Route as BookRouteImport } from './routes/book'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as SeoSlugRouteImport } from './routes/$seoSlug'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VendorRegisterRouteImport } from './routes/vendor.register'
 import { Route as VendorQuotesRouteImport } from './routes/vendor.quotes'
@@ -108,6 +109,11 @@ const AdminRoute = AdminRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeoSlugRoute = SeoSlugRouteImport.update({
+  id: '/$seoSlug',
+  path: '/$seoSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -254,6 +260,7 @@ const AdminBookingsRoute = AdminBookingsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$seoSlug': typeof SeoSlugRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
@@ -296,6 +303,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$seoSlug': typeof SeoSlugRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
@@ -339,6 +347,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/$seoSlug': typeof SeoSlugRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
@@ -383,6 +392,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$seoSlug'
     | '/about'
     | '/admin'
     | '/blog'
@@ -425,6 +435,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$seoSlug'
     | '/about'
     | '/admin'
     | '/blog'
@@ -467,6 +478,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/$seoSlug'
     | '/about'
     | '/admin'
     | '/blog'
@@ -510,6 +522,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SeoSlugRoute: typeof SeoSlugRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   BlogRoute: typeof BlogRouteWithChildren
@@ -610,6 +623,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$seoSlug': {
+      id: '/$seoSlug'
+      path: '/$seoSlug'
+      fullPath: '/$seoSlug'
+      preLoaderRoute: typeof SeoSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -898,6 +918,7 @@ const VendorRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SeoSlugRoute: SeoSlugRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   BlogRoute: BlogRouteWithChildren,

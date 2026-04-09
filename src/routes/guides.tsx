@@ -141,11 +141,11 @@ function GuidesPage() {
           <h2 className="font-display text-2xl font-semibold mt-10 mb-3">Programmatic city pages</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
             Browse 400+ city landings (e.g.{" "}
-            <Link to="/bus-rental/$citySlug" params={{ citySlug: "delhi" }} className="text-primary hover:underline">
+            <Link to="/$seoSlug" params={{ seoSlug: "bus-rental-in-delhi" }} className="text-primary hover:underline">
               Delhi
             </Link>
             ,{" "}
-            <Link to="/bus-rental/$citySlug" params={{ citySlug: "mumbai" }} className="text-primary hover:underline">
+            <Link to="/$seoSlug" params={{ seoSlug: "bus-rental-in-mumbai" }} className="text-primary hover:underline">
               Mumbai
             </Link>
             ) from our <Link to="/routes" className="text-primary hover:underline">popular routes</Link> hub.

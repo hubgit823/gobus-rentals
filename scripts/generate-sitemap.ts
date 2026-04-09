@@ -22,7 +22,7 @@ const staticPaths: { path: string; changefreq: string; priority: string }[] = [
 ];
 
 function esc(s: string) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  return s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;");
 }
 
 let body = "";
@@ -30,10 +30,12 @@ for (const x of staticPaths) {
   body += `  <url>\n    <loc>${esc(SITE + x.path)}</loc>\n    <changefreq>${x.changefreq}</changefreq>\n    <priority>${x.priority}</priority>\n  </url>\n`;
 }
 for (const c of INDIAN_CITIES) {
-  body += `  <url>\n    <loc>${esc(`${SITE}/bus-rental/${c.slug}`)}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+  const cityPath = `${SITE}/bus-rental-in-${c.slug}`;
+  body += `  <url>\n    <loc>${esc(cityPath)}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
 }
 for (const b of BLOG_POSTS) {
-  body += `  <url>\n    <loc>${esc(`${SITE}/blog/${b.slug}`)}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
+  const blogPath = `${SITE}/blog/${b.slug}`;
+  body += `  <url>\n    <loc>${esc(blogPath)}</loc>\n    <changefreq>monthly</changefreq>\n    <priority>0.7</priority>\n  </url>\n`;
 }
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
