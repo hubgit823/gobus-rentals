@@ -32,12 +32,15 @@ function Index() {
           <p className="mt-3 text-sm text-[#777]">
             Our gateway is responding, but the origin service is temporarily unavailable.
           </p>
+          <p className="mt-2 text-sm text-[#777]">
+            Cloudfare maintenance window is currently active.
+          </p>
         </section>
 
         <section className="mt-3 rounded-sm border border-[#dfdfdf] bg-[#ededed] px-4 py-8 md:px-10 md:py-10">
           <div className="grid grid-cols-1 gap-10 text-center sm:grid-cols-3">
             <StatusCard title="You" subtitle="Browser" state="Working" stateClass="text-[#76b82a]" icon="browser" iconState="ok" />
-            <StatusCard title={COMPANY.platformBrand} subtitle="Gateway" state="Working" stateClass="text-[#76b82a]" icon="cloud" iconState="ok" />
+            <StatusCard title="Cloudfare Gateway" subtitle="Gateway" state="Working" stateClass="text-[#76b82a]" icon="cloud" iconState="ok" />
             <StatusCard title={COMPANY.legalName} subtitle="Host" state="Error" stateClass="text-[#d33]" icon="server" iconState="error" />
           </div>
 
