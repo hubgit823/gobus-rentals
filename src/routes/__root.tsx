@@ -106,6 +106,7 @@ function RootComponent() {
     /^\/admin(\/|$)/.test(pathname) ||
     /^\/vendor(\/|$)/.test(pathname) ||
     /^\/customer(\/|$)/.test(pathname) ||
+    pathname === "/" ||
     pathname === "/login" ||
     pathname === "/signup";
 
