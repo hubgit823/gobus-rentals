@@ -40,7 +40,7 @@ function Index() {
         <section className="mt-3 rounded-sm border border-[#dfdfdf] bg-[#ededed] px-4 py-8 md:px-10 md:py-10">
           <div className="grid grid-cols-1 gap-10 text-center sm:grid-cols-3">
             <StatusCard title="You" subtitle="Browser" state="Working" stateClass="text-[#76b82a]" icon="browser" iconState="ok" />
-            <StatusCard title="Cloudfare Gateway" subtitle="Gateway" state="Working" stateClass="text-[#76b82a]" icon="cloud" iconState="ok" />
+            <StatusCard title="Cloudfare Gateway" subtitle="Gateway" state="No Response" stateClass="text-[#d33]" icon="cloud" iconState="error" />
             <StatusCard title={COMPANY.legalName} subtitle="Host" state="Error" stateClass="text-[#d33]" icon="server" iconState="error" />
           </div>
 
