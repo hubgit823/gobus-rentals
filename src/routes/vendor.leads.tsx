@@ -79,6 +79,7 @@ function VendorLeads() {
   });
 
   const statusColor: Record<string, string> = {
+    Open: "bg-primary/20 text-primary",
     New: "bg-primary/20 text-primary",
     Quoted: "bg-chart-4/20 text-chart-4",
     Accepted: "bg-chart-2/20 text-chart-2",
@@ -120,7 +121,7 @@ function VendorLeads() {
                 </div>
                 <div className="flex gap-2 flex-wrap">
                   <Button variant="outline" size="sm" className="gap-1" type="button" onClick={() => setViewLead(l)}><Eye className="w-3.5 h-3.5" /> View</Button>
-                  {l.status === "New" && (
+                  {(l.status === "New" || l.status === "Open") && (
                     <>
                       <Button size="sm" className="gap-1" type="button" onClick={() => setQuoteLead(l)}><MessageSquareQuote className="w-3.5 h-3.5" /> Send Quote</Button>
                       <Button variant="outline" size="sm" className="gap-1 text-destructive" type="button" disabled={rejectMut.isPending} onClick={() => rejectMut.mutate(l.id)}><X className="w-3.5 h-3.5" /> Reject</Button>
@@ -141,7 +142,44 @@ function VendorLeads() {
           <DialogHeader>
             <DialogTitle>Lead details</DialogTitle>
           </DialogHeader>
-          {viewLead ? <pre className="text-xs bg-muted p-3 rounded-md overflow-auto">{JSON.stringify(viewLead, null, 2)}</pre> : null}
+          {viewLead ? (
+            <div className="space-y-4">
+              <div className="rounded-lg border border-border bg-muted/30 p-3">
+                <p className="text-xs text-muted-foreground">Lead ID</p>
+                <p className="font-mono text-sm text-foreground">{viewLead.id}</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-xs text-muted-foreground">Customer</p>
+                  <p className="text-sm font-medium text-foreground">{viewLead.customer || "—"}</p>
+                </div>
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-xs text-muted-foreground">Status</p>
+                  <p className="text-sm font-medium text-foreground">{viewLead.status || "New"}</p>
+                </div>
+                <div className="rounded-lg border border-border p-3 sm:col-span-2">
+                  <p className="text-xs text-muted-foreground">Route</p>
+                  <p className="text-sm font-medium text-foreground">{viewLead.from} → {viewLead.to}</p>
+                </div>
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-xs text-muted-foreground">Journey Date</p>
+                  <p className="text-sm text-foreground">{viewLead.date || "—"}</p>
+                </div>
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-xs text-muted-foreground">Passengers</p>
+                  <p className="text-sm text-foreground">{viewLead.passengers || 0}</p>
+                </div>
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-xs text-muted-foreground">Bus Type</p>
+                  <p className="text-sm text-foreground">{viewLead.bus || "—"}</p>
+                </div>
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-xs text-muted-foreground">Purpose</p>
+                  <p className="text-sm text-foreground">{viewLead.purpose || "—"}</p>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </DialogContent>
       </Dialog>
 

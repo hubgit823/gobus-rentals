@@ -24,6 +24,7 @@ export const Route = createFileRoute("/vendor/fleet")({
 type BusRow = {
   id: string;
   name: string;
+  registrationNumber: string;
   type: string;
   capacity: number;
   ac: boolean;
@@ -41,6 +42,7 @@ function VendorFleet() {
   const [editBus, setEditBus] = useState<BusRow | null>(null);
 
   const [name, setName] = useState("");
+  const [registrationNumber, setRegistrationNumber] = useState("");
   const [busType, setBusType] = useState("seater");
   const [capacity, setCapacity] = useState("");
   const [ac, setAc] = useState("ac");
@@ -49,11 +51,28 @@ function VendorFleet() {
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["vendor-buses"],
-    queryFn: () => api<Res>("/api/vendor/buses"),
+    queryFn: async () => {
+      const raw = await api<{ buses?: any[] } | any[]>("/api/vendor/buses");
+      const list = Array.isArray(raw) ? raw : raw?.buses ?? [];
+      const buses: BusRow[] = list.map((b: any) => ({
+        id: String(b.id || b._id || ""),
+        name: b.name || b.busType || "Bus",
+        registrationNumber: b.registrationNumber || "",
+        type: b.type || b.busType || "seater",
+        capacity: Number(b.capacity ?? b.seats ?? 0),
+        ac: Boolean(b.ac),
+        pricePerKm: Number(b.pricePerKm ?? b.pricingPerKm ?? 0),
+        pricePerDay: Number(b.pricePerDay ?? b.pricingPerDay ?? 0),
+        status: b.status || b.availability || "Available",
+        rawStatus: b.rawStatus || b.availability || "available",
+      }));
+      return { buses };
+    },
   });
 
   const resetForm = () => {
     setName("");
+    setRegistrationNumber("");
     setBusType("seater");
     setCapacity("");
     setAc("ac");
@@ -66,12 +85,12 @@ function VendorFleet() {
       api("/api/vendor/buses", {
         method: "POST",
         body: JSON.stringify({
-          name,
+          registrationNumber,
           busType,
-          capacity: Number(capacity),
+          seats: Number(capacity),
           ac: ac === "ac",
-          pricePerKm: Number(pricePerKm) || 0,
-          pricePerDay: Number(pricePerDay) || 0,
+          pricingPerKm: Number(pricePerKm) || 0,
+          pricingPerDay: Number(pricePerDay) || 0,
         }),
       }),
     onSuccess: () => {
@@ -88,12 +107,12 @@ function VendorFleet() {
       api("/api/vendor/buses/" + editBus!.id, {
         method: "PATCH",
         body: JSON.stringify({
-          name,
+          registrationNumber,
           busType,
-          capacity: Number(capacity),
+          seats: Number(capacity),
           ac: ac === "ac",
-          pricePerKm: Number(pricePerKm) || 0,
-          pricePerDay: Number(pricePerDay) || 0,
+          pricingPerKm: Number(pricePerKm) || 0,
+          pricingPerDay: Number(pricePerDay) || 0,
         }),
       }),
     onSuccess: () => {
@@ -117,6 +136,7 @@ function VendorFleet() {
   const openEdit = (b: BusRow) => {
     setEditBus(b);
     setName(b.name);
+    setRegistrationNumber(b.registrationNumber);
     setBusType(b.type === "Sleeper" ? "sleeper" : "seater");
     setCapacity(String(b.capacity));
     setAc(b.ac ? "ac" : "non-ac");
@@ -154,6 +174,10 @@ function VendorFleet() {
             <div className="space-y-2">
               <Label>Bus Name/Model</Label>
               <Input placeholder="e.g. Volvo 9400" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+            <div className="space-y-2">
+              <Label>Registration Number</Label>
+              <Input placeholder="e.g. CH01AB1234" value={registrationNumber} onChange={(e) => setRegistrationNumber(e.target.value)} required />
             </div>
             <div className="space-y-2">
               <Label>Type</Label>
@@ -235,6 +259,10 @@ function VendorFleet() {
             <div className="space-y-2">
               <Label>Name</Label>
               <Input value={name} onChange={(e) => setName(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label>Registration Number</Label>
+              <Input value={registrationNumber} onChange={(e) => setRegistrationNumber(e.target.value)} />
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-2">

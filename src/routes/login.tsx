@@ -33,6 +33,38 @@ export const Route = createFileRoute("/login")({
 
 type LoginRes = { token: string; user: StoredUser };
 type AccountRole = "customer" | "vendor" | "admin";
+const GOOGLE_IDENTITY_SCRIPT = "https://accounts.google.com/gsi/client";
+let googleScriptPromise: Promise<void> | null = null;
+let googleInitializedClientId: string | null = null;
+
+function ensureGoogleScript() {
+  if (globalThis.window === undefined) return Promise.resolve();
+  if ((globalThis.window as any).google?.accounts?.id) return Promise.resolve();
+  if (googleScriptPromise) return googleScriptPromise;
+  googleScriptPromise = new Promise<void>((resolve, reject) => {
+    const existing = document.querySelector<HTMLScriptElement>(`script[src="${GOOGLE_IDENTITY_SCRIPT}"]`);
+    if (existing) {
+      // If script is already loaded, resolve immediately instead of waiting on a past load event.
+      if ((globalThis.window as any).google?.accounts?.id) {
+        resolve();
+        return;
+      }
+      existing.addEventListener("load", () => resolve(), { once: true });
+      existing.addEventListener("error", () => reject(new Error("Failed to load Google Identity script")), {
+        once: true,
+      });
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = GOOGLE_IDENTITY_SCRIPT;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("Failed to load Google Identity script"));
+    document.head.appendChild(script);
+  });
+  return googleScriptPromise;
+}
 
 const roleLabels: Record<AccountRole, { title: string; description: string }> = {
   customer: { title: "Customer", description: "Book buses, quotes & trips" },
@@ -67,6 +99,23 @@ function LoginPage() {
   const [otpSent, setOtpSent] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [vendorCompanyName, setVendorCompanyName] = useState("");
+  const [isGooglePrompting, setIsGooglePrompting] = useState(false);
+  const googleClientId =
+    typeof import.meta.env.VITE_GOOGLE_CLIENT_ID === "string" ? import.meta.env.VITE_GOOGLE_CLIENT_ID.trim() : "";
+
+  useEffect(() => {
+    return () => {
+      const google = (globalThis.window as any)?.google;
+      if (google?.accounts?.id && typeof google.accounts.id.cancel === "function") {
+        try {
+          google.accounts.id.cancel();
+        } catch {
+          // Ignore cleanup races from third-party widgets.
+        }
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (roleFromUrl === "vendor" || roleFromUrl === "admin" || roleFromUrl === "customer") {
@@ -126,6 +175,160 @@ function LoginPage() {
     },
     onError: (e: Error) => toast.error(e.message || "Login failed"),
   });
+  const googleMut = useMutation({
+    mutationFn: (idToken: string) =>
+      api<LoginRes>("/api/auth/google", {
+        method: "POST",
+        body: JSON.stringify({ idToken }),
+      }),
+    onSuccess: (data) => {
+      const role = data.user.role;
+      if (accountRole === "customer" && role !== "customer") {
+        toast.error("This Google account is not a customer account. Choose Vendor or Admin above.");
+        return;
+      }
+      if (accountRole === "vendor" && role !== "vendor") {
+        toast.error("This Google account is not registered as a vendor.");
+        return;
+      }
+      if (accountRole === "admin" && role !== "admin") {
+        toast.error("Administrator access only. This Google account is not an admin.");
+        return;
+      }
+      setAuth(data.token, data.user);
+      toast.success("Signed in with Google");
+      if (role === "vendor") {
+        navigate({ to: "/vendor/dashboard" });
+        return;
+      }
+      if (role === "admin") {
+        navigate({ to: "/admin/dashboard" });
+        return;
+      }
+      navigate({ to: "/customer/dashboard" });
+    },
+    onError: (e: Error) => toast.error(e.message || "Google login failed"),
+  });
+  const googleVendorRegisterMut = useMutation({
+    mutationFn: ({ idToken, companyName }: { idToken: string; companyName: string }) =>
+      api<LoginRes>("/api/auth/google/vendor/register", {
+        method: "POST",
+        body: JSON.stringify({ idToken, companyName }),
+      }),
+    onSuccess: (data) => {
+      setAuth(data.token, data.user);
+      toast.success("Vendor account created with Google");
+      navigate({ to: "/vendor/dashboard" });
+    },
+    onError: (e: Error) => toast.error(e.message || "Vendor Google registration failed"),
+  });
+  const googleAdminRegisterMut = useMutation({
+    mutationFn: (idToken: string) =>
+      api<LoginRes>("/api/auth/google/admin/register", {
+        method: "POST",
+        body: JSON.stringify({ idToken }),
+      }),
+    onSuccess: (data) => {
+      setAuth(data.token, data.user);
+      toast.success("Admin account created with Google");
+      navigate({ to: "/admin/dashboard" });
+    },
+    onError: (e: Error) => toast.error(e.message || "Admin Google registration failed"),
+  });
+
+  const handleGoogleLogin = async () => {
+    if (!googleClientId) {
+      toast.error("Missing VITE_GOOGLE_CLIENT_ID in frontend .env");
+      return;
+    }
+    if (!import.meta.env.VITE_API_URL?.trim()) {
+      toast.error("Missing VITE_API_URL in frontend .env");
+      return;
+    }
+    try {
+      await ensureGoogleScript();
+      const google = (globalThis.window as any).google;
+      if (!google?.accounts?.id) throw new Error("Google Identity Services not available");
+      if (googleInitializedClientId !== googleClientId) {
+        google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: ({ credential }: { credential?: string }) => {
+            setIsGooglePrompting(false);
+            if (!credential) {
+              toast.error("Google did not return a credential");
+              return;
+            }
+            googleMut.mutate(credential);
+          },
+        });
+        googleInitializedClientId = googleClientId;
+      }
+      setIsGooglePrompting(true);
+      // Cancel any stale pending prompt before opening a new one.
+      if (typeof google.accounts.id.cancel === "function") {
+        google.accounts.id.cancel();
+      }
+      google.accounts.id.prompt(() => {
+        setIsGooglePrompting(false);
+      });
+    } catch (e) {
+      setIsGooglePrompting(false);
+      const msg = e instanceof Error ? e.message : "Google login setup failed";
+      toast.error(msg);
+    }
+  };
+  const handleGoogleRegister = async () => {
+    if (!googleClientId) {
+      toast.error("Missing VITE_GOOGLE_CLIENT_ID in frontend .env");
+      return;
+    }
+    if (!import.meta.env.VITE_API_URL?.trim()) {
+      toast.error("Missing VITE_API_URL in frontend .env");
+      return;
+    }
+    try {
+      await ensureGoogleScript();
+      const google = (globalThis.window as any).google;
+      if (!google?.accounts?.id) throw new Error("Google Identity Services not available");
+      if (googleInitializedClientId !== googleClientId) {
+        google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: ({ credential }: { credential?: string }) => {
+            setIsGooglePrompting(false);
+            if (!credential) {
+              toast.error("Google did not return a credential");
+              return;
+            }
+            if (accountRole === "vendor") {
+              if (!vendorCompanyName || vendorCompanyName.trim().length < 2) {
+                toast.error("Company name is required for vendor registration");
+                return;
+              }
+              googleVendorRegisterMut.mutate({ idToken: credential, companyName: vendorCompanyName.trim() });
+              return;
+            }
+            if (accountRole === "admin") {
+              googleAdminRegisterMut.mutate(credential);
+              return;
+            }
+            googleMut.mutate(credential);
+          },
+        });
+        googleInitializedClientId = googleClientId;
+      }
+      setIsGooglePrompting(true);
+      if (typeof google.accounts.id.cancel === "function") {
+        google.accounts.id.cancel();
+      }
+      google.accounts.id.prompt(() => {
+        setIsGooglePrompting(false);
+      });
+    } catch (e) {
+      setIsGooglePrompting(false);
+      const msg = e instanceof Error ? e.message : "Google registration setup failed";
+      toast.error(msg);
+    }
+  };
 
   const subtitle =
     accountRole === "customer"
@@ -311,11 +514,8 @@ function LoginPage() {
                   variant="outline"
                   className="mt-4 w-full gap-2"
                   size="lg"
-                  onClick={() =>
-                    toast.message("Google sign-in", {
-                      description: "Configure OAuth client ID and backend callback to enable Google login.",
-                    })
-                  }
+                  onClick={handleGoogleLogin}
+                  disabled={googleMut.isPending || isGooglePrompting}
                 >
                   <svg className="h-5 w-5" viewBox="0 0 24 24">
                     <path
@@ -335,8 +535,36 @@ function LoginPage() {
                       fill="#EA4335"
                     />
                   </svg>
-                  Sign in with Google
+                  {googleMut.isPending || isGooglePrompting ? "Signing in with Google..." : "Sign in with Google"}
                 </Button>
+                {(accountRole === "vendor" || accountRole === "admin") ? (
+                  <>
+                    {accountRole === "vendor" ? (
+                      <div className="mt-3 space-y-2">
+                        <Label htmlFor="vendor-google-company" className="text-xs text-muted-foreground">
+                          Company name (required for vendor registration)
+                        </Label>
+                        <Input
+                          id="vendor-google-company"
+                          placeholder="Enter company name"
+                          value={vendorCompanyName}
+                          onChange={(e) => setVendorCompanyName(e.target.value)}
+                        />
+                      </div>
+                    ) : null}
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      className="mt-3 w-full"
+                      onClick={handleGoogleRegister}
+                      disabled={isGooglePrompting || googleVendorRegisterMut.isPending || googleAdminRegisterMut.isPending}
+                    >
+                      {accountRole === "vendor"
+                        ? (googleVendorRegisterMut.isPending ? "Registering Vendor..." : "Register as Vendor with Google")
+                        : (googleAdminRegisterMut.isPending ? "Registering Admin..." : "Register as Admin with Google")}
+                    </Button>
+                  </>
+                ) : null}
 
                 {accountRole === "customer" ? (
                   <p className="mt-6 text-center text-sm text-muted-foreground">

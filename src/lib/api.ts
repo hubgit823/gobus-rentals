@@ -1,4 +1,4 @@
-import { getToken } from "./auth-storage";
+import { clearAuth, getToken } from "./auth-storage";
 import { localApiRequest } from "./local-api";
 
 /** Origin of your API (no trailing slash), e.g. http://localhost:4000 — set in `.env` as VITE_API_URL */
@@ -27,11 +27,27 @@ export async function api<T = unknown>(path: string, init: RequestInit = {}): Pr
     headers.set("Content-Type", "application/json");
   }
   const t = getToken();
+  const hasLegacyMockToken = typeof t === "string" && t.startsWith("mock.");
+  if (hasLegacyMockToken && path.startsWith("/api/")) {
+    clearAuth();
+    throw new ApiError("Session expired after backend sync. Please login again.", 401);
+  }
   if (t) headers.set("Authorization", `Bearer ${t}`);
 
-  /** Razorpay order/verify must hit a real server (secret never in the browser bundle). */
-  const isRazorpayPath = path === "/api/payments/razorpay/order" || path === "/api/payments/razorpay/verify";
-  if (typeof globalThis.window !== "undefined" && isRazorpayPath && base) {
+  /** Authenticated app APIs should consistently use real backend. */
+  const isBackendAppPath =
+    path.startsWith("/api/auth") ||
+    path.startsWith("/api/customer") ||
+    path.startsWith("/api/vendor") ||
+    path.startsWith("/api/admin") ||
+    path.startsWith("/api/leads") ||
+    path.startsWith("/api/payments");
+  const isRemoteRequiredPath =
+    path === "/api/payments/razorpay/order" ||
+    path === "/api/payments/razorpay/verify" ||
+    path === "/api/auth/google" ||
+    isBackendAppPath;
+  if (globalThis.window !== undefined && isRemoteRequiredPath && base) {
     const res = await fetch(`${base}${path}`, { ...init, headers });
     const text = await res.text();
     let data: unknown = {};
@@ -47,12 +63,13 @@ export async function api<T = unknown>(path: string, init: RequestInit = {}): Pr
         typeof data === "object" && data && "error" in data
           ? String((data as { error: string }).error)
           : res.statusText;
+      if (res.status === 401) clearAuth();
       throw new ApiError(msg || "Request failed", res.status, data);
     }
     return data as T;
   }
 
-  if (typeof globalThis.window !== "undefined" && useLocalApi && path.startsWith("/api/")) {
+  if (globalThis.window !== undefined && useLocalApi && path.startsWith("/api/")) {
     try {
       return (await localApiRequest(path, { ...init, headers })) as T;
     } catch (e) {
@@ -76,6 +93,7 @@ export async function api<T = unknown>(path: string, init: RequestInit = {}): Pr
       typeof data === "object" && data && "error" in data
         ? String((data as { error: string }).error)
         : res.statusText;
+    if (res.status === 401) clearAuth();
     throw new ApiError(msg || "Request failed", res.status, data);
   }
   return data as T;

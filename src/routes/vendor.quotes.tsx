@@ -76,7 +76,28 @@ function VendorQuotes() {
           <DialogHeader>
             <DialogTitle>Quote detail</DialogTitle>
           </DialogHeader>
-          {view ? <pre className="text-xs bg-muted p-3 rounded-md overflow-auto">{JSON.stringify(view, null, 2)}</pre> : null}
+          {view ? (
+            <div className="space-y-4">
+              <div className="rounded-lg border border-border bg-muted/30 p-3">
+                <p className="text-xs text-muted-foreground">Quote ID</p>
+                <p className="font-mono text-sm text-foreground">{view.id}</p>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="rounded-lg border border-border p-3 sm:col-span-2">
+                  <p className="text-xs text-muted-foreground">Route</p>
+                  <p className="text-sm font-medium text-foreground">{view.lead || "—"}</p>
+                </div>
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-xs text-muted-foreground">Quoted Price</p>
+                  <p className="text-sm font-semibold text-primary">{view.amount || "—"}</p>
+                </div>
+                <div className="rounded-lg border border-border p-3">
+                  <p className="text-xs text-muted-foreground">Status</p>
+                  <p className="text-sm font-medium text-foreground capitalize">{view.status || "pending"}</p>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </DialogContent>
       </Dialog>
     </div>

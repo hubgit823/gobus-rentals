@@ -22,7 +22,7 @@ export type PageMetaInput = {
 };
 
 /**
- * TanStack Router head() meta + links (canonical, hreflang, OG, Twitter).
+ * TanStack Router head() meta + links (canonical, hrefLang, OG, Twitter).
  * See: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data
  */
 export function buildPageMeta(input: PageMetaInput) {
@@ -56,10 +56,10 @@ export function buildPageMeta(input: PageMetaInput) {
     { name: "twitter:image", content: ogImage },
   ];
 
-  const links: Array<{ rel: string; href: string; hreflang?: string }> = [
+  const links: Array<{ rel: string; href: string; hrefLang?: string }> = [
     { rel: "canonical", href: url },
-    { rel: "alternate", hreflang: "en-IN", href: url },
-    { rel: "alternate", hreflang: "x-default", href: url },
+    { rel: "alternate", hrefLang: "en-IN", href: url },
+    { rel: "alternate", hrefLang: "x-default", href: url },
   ];
 
   return { meta, links };

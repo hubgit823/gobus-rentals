@@ -1,5 +1,6 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
 import { queryClient } from "@/lib/query-client";
@@ -83,10 +84,11 @@ export const Route = createRootRoute({
   }),
   shellComponent: RootShell,
   component: RootComponent,
+  errorComponent: RootErrorComponent,
   notFoundComponent: NotFoundComponent,
 });
 
-function RootShell({ children }: { children: React.ReactNode }) {
+function RootShell({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <head>
@@ -118,5 +120,42 @@ function RootComponent() {
       {!hideSticky ? <StickyLeadBar /> : null}
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
+  );
+}
+
+function RootErrorComponent({ error }: Readonly<{ error: Error }>) {
+  const msg = error?.message || "Unexpected application error";
+  const isDomRemoveChildRace = msg.includes("removeChild") && msg.includes("not a child of this node");
+
+  useEffect(() => {
+    if (globalThis.window === undefined || !isDomRemoveChildRace) return;
+    const key = "__lbr_removeChild_recovered__";
+    const alreadyRecovered = sessionStorage.getItem(key) === "1";
+    if (!alreadyRecovered) {
+      sessionStorage.setItem(key, "1");
+      globalThis.window.setTimeout(() => globalThis.window.location.reload(), 50);
+    }
+  }, [isDomRemoveChildRace]);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="max-w-md text-center">
+        <h2 className="text-xl font-semibold text-foreground">Page recovery in progress</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isDomRemoveChildRace
+            ? "A temporary UI race condition was detected. The app has been refreshed."
+            : msg}
+        </p>
+        <div className="mt-5">
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            onClick={() => globalThis.window.location.reload()}
+          >
+            Reload now
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
