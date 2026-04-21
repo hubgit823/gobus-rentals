@@ -29,6 +29,29 @@ export async function api<T = unknown>(path: string, init: RequestInit = {}): Pr
   const t = getToken();
   if (t) headers.set("Authorization", `Bearer ${t}`);
 
+  /** Razorpay order/verify must hit a real server (secret never in the browser bundle). */
+  const isRazorpayPath = path === "/api/payments/razorpay/order" || path === "/api/payments/razorpay/verify";
+  if (typeof globalThis.window !== "undefined" && isRazorpayPath && base) {
+    const res = await fetch(`${base}${path}`, { ...init, headers });
+    const text = await res.text();
+    let data: unknown = {};
+    if (text) {
+      try {
+        data = JSON.parse(text) as unknown;
+      } catch {
+        data = { raw: text };
+      }
+    }
+    if (!res.ok) {
+      const msg =
+        typeof data === "object" && data && "error" in data
+          ? String((data as { error: string }).error)
+          : res.statusText;
+      throw new ApiError(msg || "Request failed", res.status, data);
+    }
+    return data as T;
+  }
+
   if (typeof globalThis.window !== "undefined" && useLocalApi && path.startsWith("/api/")) {
     try {
       return (await localApiRequest(path, { ...init, headers })) as T;

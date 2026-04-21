@@ -13,6 +13,7 @@ import { Download, Eye, X, CreditCard } from "lucide-react";
 import { api } from "@/lib/api";
 import { COMPANY } from "@/lib/company";
 import { panelPage, panelStatePadding } from "@/lib/panel-page";
+import { RazorpayBookingPayButton } from "@/components/payments/RazorpayBookingPayButton";
 
 export const Route = createFileRoute("/customer/bookings")({
   component: CustomerBookings,
@@ -40,6 +41,8 @@ type BookingRow = {
 };
 
 type Res = { bookings: BookingRow[] };
+
+const useRazorpayRemote = Boolean(import.meta.env.VITE_API_URL?.trim());
 
 function CustomerBookings() {
   const qc = useQueryClient();
@@ -131,6 +134,17 @@ function CustomerBookings() {
         <Link to="/policies/refund-cancellation" className="text-primary hover:underline">
           Policy
         </Link>
+        {useRazorpayRemote ? (
+          <span className="block mt-2 text-chart-4">
+            Online checkout uses Razorpay (configure <code className="rounded bg-muted px-1">RAZORPAY_*</code> on the API
+            server).
+          </span>
+        ) : (
+          <span className="block mt-2">
+            Demo mode: payments record instantly. For Razorpay, set <code className="rounded bg-muted px-1">VITE_API_URL</code>{" "}
+            to your mock API and add Razorpay keys there — see <code className="rounded bg-muted px-1">.env.example</code>.
+          </span>
+        )}
       </p>
 
       {bookings.length === 0 ? (
@@ -169,40 +183,58 @@ function CustomerBookings() {
                   <td className="px-5 py-3">
                     <div className="flex flex-col gap-1">
                       {b.rawStatus !== "cancelled" && b.paymentStatus === "Unpaid" && b.paymentType === "advance" && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="h-7 text-xs gap-1"
-                          type="button"
-                          disabled={payAdvanceMut.isPending}
-                          onClick={() => payAdvanceMut.mutate(b.id)}
-                        >
-                          <CreditCard className="w-3 h-3" /> Advance
-                        </Button>
+                        useRazorpayRemote ? (
+                          <RazorpayBookingPayButton bookingId={b.id} purpose="advance">
+                            Pay advance (Razorpay)
+                          </RazorpayBookingPayButton>
+                        ) : (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 gap-1 text-xs"
+                            type="button"
+                            disabled={payAdvanceMut.isPending}
+                            onClick={() => payAdvanceMut.mutate(b.id)}
+                          >
+                            <CreditCard className="h-3 w-3" /> Advance
+                          </Button>
+                        )
                       )}
                       {b.rawStatus !== "cancelled" && b.paymentStatus === "Unpaid" && b.paymentType === "full" && (
-                        <Button
-                          variant="default"
-                          size="sm"
-                          className="h-7 text-xs gap-1"
-                          type="button"
-                          disabled={payFullMut.isPending}
-                          onClick={() => payFullMut.mutate(b.id)}
-                        >
-                          <CreditCard className="w-3 h-3" /> Pay full
-                        </Button>
+                        useRazorpayRemote ? (
+                          <RazorpayBookingPayButton bookingId={b.id} purpose="full">
+                            Pay full (Razorpay)
+                          </RazorpayBookingPayButton>
+                        ) : (
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className="h-7 gap-1 text-xs"
+                            type="button"
+                            disabled={payFullMut.isPending}
+                            onClick={() => payFullMut.mutate(b.id)}
+                          >
+                            <CreditCard className="h-3 w-3" /> Pay full
+                          </Button>
+                        )
                       )}
                       {b.rawStatus !== "cancelled" && b.paymentStatus === "Partial" && (
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          className="h-7 text-xs gap-1"
-                          type="button"
-                          disabled={payBalanceMut.isPending}
-                          onClick={() => payBalanceMut.mutate(b.id)}
-                        >
-                          <CreditCard className="w-3 h-3" /> Balance
-                        </Button>
+                        useRazorpayRemote ? (
+                          <RazorpayBookingPayButton bookingId={b.id} purpose="balance">
+                            Pay balance (Razorpay)
+                          </RazorpayBookingPayButton>
+                        ) : (
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="h-7 gap-1 text-xs"
+                            type="button"
+                            disabled={payBalanceMut.isPending}
+                            onClick={() => payBalanceMut.mutate(b.id)}
+                          >
+                            <CreditCard className="h-3 w-3" /> Balance
+                          </Button>
+                        )
                       )}
                     </div>
                   </td>

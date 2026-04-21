@@ -22,7 +22,7 @@ function CustomerMobileLogin() {
   if (showLogin !== true) return null;
 
   return (
-    <Link to="/login">
+    <Link to="/login" search={{ role: "customer" }}>
       <Button type="button" size="sm" variant="secondary" className="h-9 gap-1 px-3 text-xs">
         <LogIn className="w-3.5 h-3.5" />
         Login

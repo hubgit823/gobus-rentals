@@ -1,5 +1,7 @@
 import { COMPANY } from "@/lib/company";
 import { SITE_URL, SITE_NAME, absoluteUrl } from "@/lib/site";
+
+const logoUrl = () => absoluteUrl("/images/logo.png");
 import type { CityRecord } from "@/data/indian-cities";
 
 export function organizationSchema() {
@@ -9,6 +11,7 @@ export function organizationSchema() {
     name: COMPANY.legalName,
     alternateName: SITE_NAME,
     url: SITE_URL,
+    logo: logoUrl(),
     description: COMPANY.about,
     email: COMPANY.contactEmail,
     telephone: `+91-${COMPANY.contactPhone}`,
@@ -25,15 +28,8 @@ export function websiteSchema() {
     "@type": "WebSite",
     name: SITE_NAME,
     url: SITE_URL,
+    inLanguage: "en-IN",
     publisher: { "@type": "Organization", name: COMPANY.legalName },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: {
-        "@type": "EntryPoint",
-        urlTemplate: `${SITE_URL}/book?q={search_term_string}`,
-      },
-      "query-input": "required name=search_term_string",
-    },
   };
 }
 

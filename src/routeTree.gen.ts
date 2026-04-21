@@ -17,6 +17,7 @@ import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BusTypesRouteImport } from './routes/bus-types'
+import { Route as BusRentalRouteImport } from './routes/bus-rental'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as BlogRouteImport } from './routes/blog'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -32,10 +33,12 @@ import { Route as VendorFleetRouteImport } from './routes/vendor.fleet'
 import { Route as VendorEarningsRouteImport } from './routes/vendor.earnings'
 import { Route as VendorDashboardRouteImport } from './routes/vendor.dashboard'
 import { Route as VendorBookingsRouteImport } from './routes/vendor.bookings'
+import { Route as ServiceCityCitySlugRouteImport } from './routes/service-city.$citySlug'
 import { Route as PoliciesRefundCancellationRouteImport } from './routes/policies.refund-cancellation'
 import { Route as CustomerReviewsRouteImport } from './routes/customer.reviews'
 import { Route as CustomerQuotesRouteImport } from './routes/customer.quotes'
 import { Route as CustomerProfileRouteImport } from './routes/customer.profile'
+import { Route as CustomerLoginRouteImport } from './routes/customer.login'
 import { Route as CustomerDashboardRouteImport } from './routes/customer.dashboard'
 import { Route as CustomerBookingsRouteImport } from './routes/customer.bookings'
 import { Route as BusRentalCitySlugRouteImport } from './routes/bus-rental.$citySlug'
@@ -89,6 +92,11 @@ const ContactRoute = ContactRouteImport.update({
 const BusTypesRoute = BusTypesRouteImport.update({
   id: '/bus-types',
   path: '/bus-types',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusRentalRoute = BusRentalRouteImport.update({
+  id: '/bus-rental',
+  path: '/bus-rental',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BookRoute = BookRouteImport.update({
@@ -166,6 +174,11 @@ const VendorBookingsRoute = VendorBookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => VendorRoute,
 } as any)
+const ServiceCityCitySlugRoute = ServiceCityCitySlugRouteImport.update({
+  id: '/service-city/$citySlug',
+  path: '/service-city/$citySlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PoliciesRefundCancellationRoute =
   PoliciesRefundCancellationRouteImport.update({
     id: '/policies/refund-cancellation',
@@ -187,6 +200,11 @@ const CustomerProfileRoute = CustomerProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => CustomerRoute,
 } as any)
+const CustomerLoginRoute = CustomerLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => CustomerRoute,
+} as any)
 const CustomerDashboardRoute = CustomerDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -198,9 +216,9 @@ const CustomerBookingsRoute = CustomerBookingsRouteImport.update({
   getParentRoute: () => CustomerRoute,
 } as any)
 const BusRentalCitySlugRoute = BusRentalCitySlugRouteImport.update({
-  id: '/bus-rental/$citySlug',
-  path: '/bus-rental/$citySlug',
-  getParentRoute: () => rootRouteImport,
+  id: '/$citySlug',
+  path: '/$citySlug',
+  getParentRoute: () => BusRentalRoute,
 } as any)
 const BlogSlugRoute = BlogSlugRouteImport.update({
   id: '/$slug',
@@ -265,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
+  '/bus-rental': typeof BusRentalRouteWithChildren
   '/bus-types': typeof BusTypesRoute
   '/contact': typeof ContactRoute
   '/customer': typeof CustomerRouteWithChildren
@@ -287,10 +306,12 @@ export interface FileRoutesByFullPath {
   '/bus-rental/$citySlug': typeof BusRentalCitySlugRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
+  '/customer/login': typeof CustomerLoginRoute
   '/customer/profile': typeof CustomerProfileRoute
   '/customer/quotes': typeof CustomerQuotesRoute
   '/customer/reviews': typeof CustomerReviewsRoute
   '/policies/refund-cancellation': typeof PoliciesRefundCancellationRoute
+  '/service-city/$citySlug': typeof ServiceCityCitySlugRoute
   '/vendor/bookings': typeof VendorBookingsRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendor/earnings': typeof VendorEarningsRoute
@@ -308,6 +329,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
+  '/bus-rental': typeof BusRentalRouteWithChildren
   '/bus-types': typeof BusTypesRoute
   '/contact': typeof ContactRoute
   '/customer': typeof CustomerRouteWithChildren
@@ -330,10 +352,12 @@ export interface FileRoutesByTo {
   '/bus-rental/$citySlug': typeof BusRentalCitySlugRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
+  '/customer/login': typeof CustomerLoginRoute
   '/customer/profile': typeof CustomerProfileRoute
   '/customer/quotes': typeof CustomerQuotesRoute
   '/customer/reviews': typeof CustomerReviewsRoute
   '/policies/refund-cancellation': typeof PoliciesRefundCancellationRoute
+  '/service-city/$citySlug': typeof ServiceCityCitySlugRoute
   '/vendor/bookings': typeof VendorBookingsRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendor/earnings': typeof VendorEarningsRoute
@@ -352,6 +376,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
+  '/bus-rental': typeof BusRentalRouteWithChildren
   '/bus-types': typeof BusTypesRoute
   '/contact': typeof ContactRoute
   '/customer': typeof CustomerRouteWithChildren
@@ -374,10 +399,12 @@ export interface FileRoutesById {
   '/bus-rental/$citySlug': typeof BusRentalCitySlugRoute
   '/customer/bookings': typeof CustomerBookingsRoute
   '/customer/dashboard': typeof CustomerDashboardRoute
+  '/customer/login': typeof CustomerLoginRoute
   '/customer/profile': typeof CustomerProfileRoute
   '/customer/quotes': typeof CustomerQuotesRoute
   '/customer/reviews': typeof CustomerReviewsRoute
   '/policies/refund-cancellation': typeof PoliciesRefundCancellationRoute
+  '/service-city/$citySlug': typeof ServiceCityCitySlugRoute
   '/vendor/bookings': typeof VendorBookingsRoute
   '/vendor/dashboard': typeof VendorDashboardRoute
   '/vendor/earnings': typeof VendorEarningsRoute
@@ -397,6 +424,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/book'
+    | '/bus-rental'
     | '/bus-types'
     | '/contact'
     | '/customer'
@@ -419,10 +447,12 @@ export interface FileRouteTypes {
     | '/bus-rental/$citySlug'
     | '/customer/bookings'
     | '/customer/dashboard'
+    | '/customer/login'
     | '/customer/profile'
     | '/customer/quotes'
     | '/customer/reviews'
     | '/policies/refund-cancellation'
+    | '/service-city/$citySlug'
     | '/vendor/bookings'
     | '/vendor/dashboard'
     | '/vendor/earnings'
@@ -440,6 +470,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/book'
+    | '/bus-rental'
     | '/bus-types'
     | '/contact'
     | '/customer'
@@ -462,10 +493,12 @@ export interface FileRouteTypes {
     | '/bus-rental/$citySlug'
     | '/customer/bookings'
     | '/customer/dashboard'
+    | '/customer/login'
     | '/customer/profile'
     | '/customer/quotes'
     | '/customer/reviews'
     | '/policies/refund-cancellation'
+    | '/service-city/$citySlug'
     | '/vendor/bookings'
     | '/vendor/dashboard'
     | '/vendor/earnings'
@@ -483,6 +516,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/blog'
     | '/book'
+    | '/bus-rental'
     | '/bus-types'
     | '/contact'
     | '/customer'
@@ -505,10 +539,12 @@ export interface FileRouteTypes {
     | '/bus-rental/$citySlug'
     | '/customer/bookings'
     | '/customer/dashboard'
+    | '/customer/login'
     | '/customer/profile'
     | '/customer/quotes'
     | '/customer/reviews'
     | '/policies/refund-cancellation'
+    | '/service-city/$citySlug'
     | '/vendor/bookings'
     | '/vendor/dashboard'
     | '/vendor/earnings'
@@ -527,6 +563,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   BlogRoute: typeof BlogRouteWithChildren
   BookRoute: typeof BookRoute
+  BusRentalRoute: typeof BusRentalRouteWithChildren
   BusTypesRoute: typeof BusTypesRoute
   ContactRoute: typeof ContactRoute
   CustomerRoute: typeof CustomerRouteWithChildren
@@ -535,8 +572,8 @@ export interface RootRouteChildren {
   RoutesRoute: typeof RoutesRoute
   SignupRoute: typeof SignupRoute
   VendorRoute: typeof VendorRouteWithChildren
-  BusRentalCitySlugRoute: typeof BusRentalCitySlugRoute
   PoliciesRefundCancellationRoute: typeof PoliciesRefundCancellationRoute
+  ServiceCityCitySlugRoute: typeof ServiceCityCitySlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -595,6 +632,13 @@ declare module '@tanstack/react-router' {
       path: '/bus-types'
       fullPath: '/bus-types'
       preLoaderRoute: typeof BusTypesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bus-rental': {
+      id: '/bus-rental'
+      path: '/bus-rental'
+      fullPath: '/bus-rental'
+      preLoaderRoute: typeof BusRentalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/book': {
@@ -702,6 +746,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VendorBookingsRouteImport
       parentRoute: typeof VendorRoute
     }
+    '/service-city/$citySlug': {
+      id: '/service-city/$citySlug'
+      path: '/service-city/$citySlug'
+      fullPath: '/service-city/$citySlug'
+      preLoaderRoute: typeof ServiceCityCitySlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/policies/refund-cancellation': {
       id: '/policies/refund-cancellation'
       path: '/policies/refund-cancellation'
@@ -730,6 +781,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CustomerProfileRouteImport
       parentRoute: typeof CustomerRoute
     }
+    '/customer/login': {
+      id: '/customer/login'
+      path: '/login'
+      fullPath: '/customer/login'
+      preLoaderRoute: typeof CustomerLoginRouteImport
+      parentRoute: typeof CustomerRoute
+    }
     '/customer/dashboard': {
       id: '/customer/dashboard'
       path: '/dashboard'
@@ -746,10 +804,10 @@ declare module '@tanstack/react-router' {
     }
     '/bus-rental/$citySlug': {
       id: '/bus-rental/$citySlug'
-      path: '/bus-rental/$citySlug'
+      path: '/$citySlug'
       fullPath: '/bus-rental/$citySlug'
       preLoaderRoute: typeof BusRentalCitySlugRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof BusRentalRoute
     }
     '/blog/$slug': {
       id: '/blog/$slug'
@@ -869,9 +927,22 @@ const BlogRouteChildren: BlogRouteChildren = {
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
+interface BusRentalRouteChildren {
+  BusRentalCitySlugRoute: typeof BusRentalCitySlugRoute
+}
+
+const BusRentalRouteChildren: BusRentalRouteChildren = {
+  BusRentalCitySlugRoute: BusRentalCitySlugRoute,
+}
+
+const BusRentalRouteWithChildren = BusRentalRoute._addFileChildren(
+  BusRentalRouteChildren,
+)
+
 interface CustomerRouteChildren {
   CustomerBookingsRoute: typeof CustomerBookingsRoute
   CustomerDashboardRoute: typeof CustomerDashboardRoute
+  CustomerLoginRoute: typeof CustomerLoginRoute
   CustomerProfileRoute: typeof CustomerProfileRoute
   CustomerQuotesRoute: typeof CustomerQuotesRoute
   CustomerReviewsRoute: typeof CustomerReviewsRoute
@@ -880,6 +951,7 @@ interface CustomerRouteChildren {
 const CustomerRouteChildren: CustomerRouteChildren = {
   CustomerBookingsRoute: CustomerBookingsRoute,
   CustomerDashboardRoute: CustomerDashboardRoute,
+  CustomerLoginRoute: CustomerLoginRoute,
   CustomerProfileRoute: CustomerProfileRoute,
   CustomerQuotesRoute: CustomerQuotesRoute,
   CustomerReviewsRoute: CustomerReviewsRoute,
@@ -923,6 +995,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   BlogRoute: BlogRouteWithChildren,
   BookRoute: BookRoute,
+  BusRentalRoute: BusRentalRouteWithChildren,
   BusTypesRoute: BusTypesRoute,
   ContactRoute: ContactRoute,
   CustomerRoute: CustomerRouteWithChildren,
@@ -931,8 +1004,8 @@ const rootRouteChildren: RootRouteChildren = {
   RoutesRoute: RoutesRoute,
   SignupRoute: SignupRoute,
   VendorRoute: VendorRouteWithChildren,
-  BusRentalCitySlugRoute: BusRentalCitySlugRoute,
   PoliciesRefundCancellationRoute: PoliciesRefundCancellationRoute,
+  ServiceCityCitySlugRoute: ServiceCityCitySlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -148,7 +148,7 @@ function GuidesPage() {
             <Link to="/$seoSlug" params={{ seoSlug: "bus-rental-in-mumbai" }} className="text-primary hover:underline">
               Mumbai
             </Link>
-            ) from our <Link to="/routes" className="text-primary hover:underline">popular routes</Link> hub.
+            ) from our <Link to="/bus-rental" className="text-primary hover:underline">bus rental cities</Link> hub.
           </p>
 
           <h2 className="font-display text-2xl font-semibold mt-10 mb-4">FAQs</h2>

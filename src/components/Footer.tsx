@@ -8,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
 function whatsappChatHref() {
   const text = encodeURIComponent(
     `Hi ${COMPANY.platformBrand}, I'd like to enquire about bus rental.`,
@@ -142,37 +141,10 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  to="/routes"
+                  to="/bus-rental"
                   className="hover:text-primary-foreground transition-colors"
                 >
-                  City / routes hub
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/$seoSlug"
-                  params={{ seoSlug: "bus-rental-in-delhi" }}
-                  className="hover:text-primary-foreground transition-colors"
-                >
-                  Bus rental Delhi
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/$seoSlug"
-                  params={{ seoSlug: "bus-rental-in-mumbai" }}
-                  className="hover:text-primary-foreground transition-colors"
-                >
-                  Bus rental Mumbai
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/$seoSlug"
-                  params={{ seoSlug: "bus-rental-in-chandigarh" }}
-                  className="hover:text-primary-foreground transition-colors"
-                >
-                  Bus rental Chandigarh
+                  Bus rental — cities hub
                 </Link>
               </li>
             </ul>

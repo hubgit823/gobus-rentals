@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { IndianRupee, TrendingUp, Clock, Percent } from "lucide-react";
+import { IndianRupee, TrendingUp, Clock, Percent, ClipboardList } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
@@ -63,8 +64,14 @@ function VendorEarnings() {
       </div>
 
       <div className="bg-card rounded-xl border border-border overflow-x-auto">
-        <div className="p-5 border-b border-border">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-5 border-b border-border">
           <h2 className="font-display font-semibold text-foreground">Payment records</h2>
+          <Link to="/vendor/bookings" className="shrink-0">
+            <Button variant="outline" size="sm" type="button" className="gap-1.5 w-full sm:w-auto">
+              <ClipboardList className="w-3.5 h-3.5" />
+              Update booking statuses
+            </Button>
+          </Link>
         </div>
         {transactions.length === 0 ? (
           <p className="p-5 text-sm text-muted-foreground">No completed trips yet. After you mark a booking completed (and the customer has paid in full), payout rows appear here.</p>

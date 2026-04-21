@@ -17,3 +17,13 @@ export const fleetImages = {
   vanTravellerSide: premiumImage("UguKo19QCfg", 1280, 960),
   vanInteriorAisle: premiumImage("07k9_DUujBw", 1280, 960),
 } as const;
+
+/** Hero background clips under `public/videos/` — played in order, then repeat from the first. */
+export const heroBackgroundVideos: readonly string[] = [
+  "/videos/hero-bus.mp4",
+  "/videos/Himachal_Mountain_Bus_A_white_bus_navigates_a_winding_mountain_road_Gc1huKcH.mp4",
+  "/videos/Himachal_Mountain_Bus_A_white_bus_with_black_and_red_accents_travels_cDm4sMD-.mp4",
+  "/videos/Himachal_Mountain_Bus_A_white_bus_with_red_and_black_accents_drives_RMrQjzSz.mp4",
+  "/videos/Himachal_Mountain_Bus_A_white_bus_with_red_and_gold_accents_drives_QXwff6fD.mp4",
+  "/videos/Himachal_Mountain_Bus_In_a_cinematic_style_a_white_and_black_tour_bus_YngFtq2N.mp4",
+];

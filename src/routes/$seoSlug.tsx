@@ -117,7 +117,7 @@ function CityBusRentalPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Breadcrumbs
             items={[
-              { label: "Bus rental", to: "/routes" },
+              { label: "Bus rental", to: "/bus-rental" },
               { label: city.name },
             ]}
           />

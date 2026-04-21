@@ -8,9 +8,17 @@
  *   commissionDeducted, payoutStatus, payoutOverride, payoutAmount, payoutAt, rawStatus, displayStatus
  */
 import http from "node:http";
-import { randomUUID } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
 
 const PORT = parseInt(String(process.env.MOCK_API_PORT || process.env.PORT || 3001), 10);
+
+/** Razorpay live/test keys — set in `.env` (never commit secrets). */
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || "";
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || "";
+const razorpayEnabled = Boolean(RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET);
+
+/** @type {Map<string, { bookingId: string; purpose: string; amountPaise: number; customerId: string }>} */
+const pendingRzpOrders = new Map();
 
 /** @type {Map<string, any>} */
 const users = new Map();
@@ -115,6 +123,70 @@ function assertFullSettlementBeforeTrip(book) {
 
 function rupee(n) {
   return `₹${Number(n).toLocaleString("en-IN")}`;
+}
+
+function rupeesToPaise(n) {
+  const p = Math.round(Number(n) * 100);
+  if (p < 100) throw new Error("Nothing to pay or amount below ₹1 minimum");
+  return p;
+}
+
+function razorpayVerifySignature(orderId, paymentId, signature) {
+  const body = `${orderId}|${paymentId}`;
+  const expected = createHmac("sha256", RAZORPAY_KEY_SECRET).update(body).digest("hex");
+  return expected === signature;
+}
+
+async function razorpayCreateOrder(amountPaise, receipt) {
+  const auth = Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString("base64");
+  const res = await fetch("https://api.razorpay.com/v1/orders", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Basic ${auth}`,
+    },
+    body: JSON.stringify({
+      amount: amountPaise,
+      currency: "INR",
+      receipt: String(receipt).replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 40),
+      payment_capture: 1,
+    }),
+  });
+  const data = await res.json();
+  if (!res.ok) {
+    const msg = data.error?.description || data.error?.code || JSON.stringify(data);
+    throw new Error(msg);
+  }
+  return data;
+}
+
+function computeRzpAmountPaise(b, purpose) {
+  if (purpose === "advance") {
+    if (b.paymentType !== "advance") throw new Error("Not an advance booking");
+    const due = round2(Math.max(0, b.advanceRequired - b.amountPaid));
+    if (due < 0.01) throw new Error("Advance already paid");
+    return rupeesToPaise(due);
+  }
+  if (purpose === "full") {
+    if (b.paymentType !== "full") throw new Error("Not a full-payment booking");
+    const due = round2(Math.max(0, b.totalWithGst - b.amountPaid));
+    if (due < 0.01) throw new Error("Already paid");
+    return rupeesToPaise(due);
+  }
+  if (purpose === "balance") {
+    const due = round2(Math.max(0, b.totalWithGst - b.amountPaid));
+    if (due < 0.01) throw new Error("No balance due");
+    return rupeesToPaise(due);
+  }
+  throw new Error("Invalid purpose");
+}
+
+function applyPurposePayment(b, purpose) {
+  if (purpose === "advance") {
+    applyCustomerPayment(b, Math.max(b.amountPaid, b.advanceRequired));
+  } else {
+    applyCustomerPayment(b, b.totalWithGst);
+  }
 }
 
 function tokenFor(userId, role, vendorId) {
@@ -451,6 +523,78 @@ async function handle(req, res) {
       if (b.paymentType !== "full") return json(res, 400, { error: "This booking is on advance plan. Use advance/balance payments." });
       if (b.rawStatus === "cancelled") return json(res, 400, { error: "Booking is cancelled" });
       applyCustomerPayment(b, b.totalWithGst);
+      return json(res, 200, { ok: true, paymentStatus: paymentLabel(b) });
+    }
+
+    /* ---------- Razorpay (server-side; requires RAZORPAY_KEY_ID + RAZORPAY_KEY_SECRET) ---------- */
+    if (method === "POST" && path === "/api/payments/razorpay/order") {
+      if (!razorpayEnabled) {
+        return json(res, 503, {
+          error: "Razorpay is not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in the API environment.",
+        });
+      }
+      const s = userFromAuth(req);
+      if (!s || s.user.role !== "customer") return json(res, 403, { error: "Forbidden" });
+      const body = await readBody(req);
+      const bookingId = body.bookingId;
+      const purpose = body.purpose;
+      if (!bookingId || !["advance", "balance", "full"].includes(purpose)) {
+        return json(res, 400, { error: "bookingId and purpose (advance|balance|full) required" });
+      }
+      const b = bookings.find((x) => x.id === bookingId && x.customerId === s.user.id);
+      if (!b) return json(res, 404, { error: "Booking not found" });
+      if (b.rawStatus === "cancelled") return json(res, 400, { error: "Booking is cancelled" });
+      let amountPaise;
+      try {
+        amountPaise = computeRzpAmountPaise(b, purpose);
+      } catch (e) {
+        return json(res, 400, { error: e.message || "Invalid payment" });
+      }
+      if (b.amountPaid >= b.totalWithGst - 0.01) {
+        return json(res, 400, { error: "Already paid in full" });
+      }
+      try {
+        const order = await razorpayCreateOrder(amountPaise, `bkg_${bookingId.slice(0, 12)}`);
+        pendingRzpOrders.set(order.id, {
+          bookingId: b.id,
+          purpose,
+          amountPaise,
+          customerId: s.user.id,
+        });
+        return json(res, 200, {
+          id: order.id,
+          amount: order.amount,
+          currency: order.currency || "INR",
+          keyId: RAZORPAY_KEY_ID,
+        });
+      } catch (e) {
+        return json(res, 502, { error: e.message || "Razorpay order failed" });
+      }
+    }
+
+    if (method === "POST" && path === "/api/payments/razorpay/verify") {
+      if (!razorpayEnabled) {
+        return json(res, 503, { error: "Razorpay is not configured on the server." });
+      }
+      const s = userFromAuth(req);
+      if (!s || s.user.role !== "customer") return json(res, 403, { error: "Forbidden" });
+      const body = await readBody(req);
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = body;
+      if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+        return json(res, 400, { error: "Missing Razorpay response fields" });
+      }
+      if (!razorpayVerifySignature(razorpay_order_id, razorpay_payment_id, razorpay_signature)) {
+        return json(res, 400, { error: "Invalid payment signature" });
+      }
+      const pend = pendingRzpOrders.get(razorpay_order_id);
+      if (!pend || pend.customerId !== s.user.id) {
+        return json(res, 400, { error: "Unknown or expired order" });
+      }
+      const b = bookings.find((x) => x.id === pend.bookingId && x.customerId === s.user.id);
+      if (!b) return json(res, 404, { error: "Booking not found" });
+      if (b.rawStatus === "cancelled") return json(res, 400, { error: "Booking is cancelled" });
+      pendingRzpOrders.delete(razorpay_order_id);
+      applyPurposePayment(b, pend.purpose);
       return json(res, 200, { ok: true, paymentStatus: paymentLabel(b) });
     }
 
@@ -1170,4 +1314,9 @@ http
   })
   .listen(PORT, () => {
     console.log(`[mock-api] http://127.0.0.1:${PORT} (in-memory; dev only)`);
+    if (razorpayEnabled) {
+      console.log("[mock-api] Razorpay: order + verify endpoints enabled (live or test keys from env)");
+    } else {
+      console.log("[mock-api] Razorpay: disabled — set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to enable");
+    }
   });

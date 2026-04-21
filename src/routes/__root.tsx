@@ -5,7 +5,7 @@ import appCss from "../styles.css?url";
 import { queryClient } from "@/lib/query-client";
 import { Toaster } from "@/components/ui/sonner";
 import { StickyLeadBar } from "@/components/seo/StickyLeadBar";
-import { DEFAULT_OG_IMAGE, absoluteUrl } from "@/lib/site";
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_TWITTER_HANDLE, absoluteUrl } from "@/lib/site";
 import { organizationSchema, websiteSchema } from "@/lib/seo/schemas";
 
 function NotFoundComponent() {
@@ -37,7 +37,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Kartar Travels — Luxury bus rental across North India | Luxury Bus Rental" },
+      { title: `Kartar Travels — Luxury bus rental across North India | ${SITE_NAME}` },
       {
         name: "description",
         content:
@@ -60,7 +60,7 @@ export const Route = createRootRoute({
       { property: "og:image", content: DEFAULT_OG_IMAGE },
       { property: "og:locale", content: "en_IN" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@LuxuryBusRental" },
+      { name: "twitter:site", content: SITE_TWITTER_HANDLE },
       { name: "twitter:image", content: DEFAULT_OG_IMAGE },
       { "script:ld+json": organizationSchema() },
       { "script:ld+json": websiteSchema() },

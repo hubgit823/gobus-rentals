@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/button";
 import { COMPANY } from "@/lib/company";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -58,6 +59,18 @@ function ContactPage() {
               </div>
             </li>
           </ul>
+
+          <div className="mt-10 rounded-xl border border-border bg-muted/30 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <p className="font-semibold text-foreground">Need a quote?</p>
+              <p className="text-sm text-muted-foreground mt-1">Submit your trip online — operators respond with GST-clear pricing.</p>
+            </div>
+            <Link to="/book" className="shrink-0">
+              <Button size="lg" className="gap-2 w-full sm:w-auto">
+                Get bus quotes <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </main>
       <Footer />

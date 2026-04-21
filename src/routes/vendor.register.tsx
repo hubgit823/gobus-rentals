@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Building2, User, FileText, CreditCard, Bus, ArrowRight } from "lucide-react";
 import { api } from "@/lib/api";
+import { COMPANY } from "@/lib/company";
 import { setAuth, type StoredUser } from "@/lib/auth-storage";
 
 export const Route = createFileRoute("/vendor/register")({
@@ -185,12 +186,38 @@ function VendorRegisterPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>GST Certificate</Label>
-                    <Input type="file" accept=".pdf,.jpg,.png" disabled className="cursor-not-allowed opacity-70" />
-                    <p className="text-xs text-muted-foreground">Upload wiring can connect to S3 / Cloudflare R2.</p>
+                    <Input
+                      type="file"
+                      accept=".pdf,.jpg,.png"
+                      className="cursor-pointer"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        e.target.value = "";
+                        toast.info(
+                          file
+                            ? `"${file.name}" selected — cloud upload is not live yet. You can email KYC to ${COMPANY.contactEmail} or attach after admin contacts you.`
+                            : "Choose a PDF or image if you want to prepare files for verification.",
+                        );
+                      }}
+                    />
+                    <p className="text-xs text-muted-foreground">Files are not uploaded yet; this confirms your picker works. Connect S3 / R2 on the backend when ready.</p>
                   </div>
                   <div className="space-y-2">
                     <Label>PAN Card</Label>
-                    <Input type="file" accept=".pdf,.jpg,.png" disabled className="cursor-not-allowed opacity-70" />
+                    <Input
+                      type="file"
+                      accept=".pdf,.jpg,.png"
+                      className="cursor-pointer"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        e.target.value = "";
+                        toast.info(
+                          file
+                            ? `"${file.name}" selected — same as GST: upload API pending. Email ${COMPANY.contactEmail} if you need to send PAN now.`
+                            : "Choose a PDF or image for PAN.",
+                        );
+                      }}
+                    />
                   </div>
                 </div>
               </div>

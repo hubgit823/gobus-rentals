@@ -3,11 +3,19 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { BookingForm } from "@/components/BookingForm";
 import { COMPANY } from "@/lib/company";
+import { BOOKING_BUS_TYPES } from "@/data/booking-bus-types";
 import { buildPageMeta } from "@/lib/seo/buildMeta";
 import { Button } from "@/components/ui/button";
 import { Check, MessageCircle, Phone, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/book")({
+  validateSearch: (search: Record<string, unknown>) => {
+    const raw = search.busType;
+    if (typeof raw !== "string" || !(BOOKING_BUS_TYPES as readonly string[]).includes(raw)) {
+      return {};
+    }
+    return { busType: raw };
+  },
   component: BookPage,
   head: () =>
     buildPageMeta({
@@ -26,6 +34,7 @@ const perks = [
 ];
 
 function BookPage() {
+  const { busType: busTypeFromUrl } = Route.useSearch();
   const wa = `https://wa.me/${COMPANY.whatsappE164}?text=${encodeURIComponent("Hi, I want the best bus rental quotes.")}`;
 
   return (
@@ -46,7 +55,7 @@ function BookPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
             {/* Booking panel first: full width on mobile, dominant column on desktop */}
             <div className="lg:col-span-7 xl:col-span-7 order-1 min-w-0">
-              <BookingForm />
+              <BookingForm initialBusType={busTypeFromUrl} />
             </div>
 
             <aside className="lg:col-span-5 xl:col-span-5 order-2 space-y-5 lg:sticky lg:top-24 lg:self-start">
@@ -93,7 +102,7 @@ function BookPage() {
 
               <p className="text-sm text-muted-foreground">
                 Browsing cities?{" "}
-                <Link to="/routes" className="text-primary font-medium underline-offset-2 hover:underline">
+                <Link to="/bus-rental" className="text-primary font-medium underline-offset-2 hover:underline">
                   See all bus rental cities
                 </Link>
               </p>

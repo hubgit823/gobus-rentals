@@ -1,26 +1,31 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MapPin, ArrowRight } from "lucide-react";
 import { COMPANY } from "@/lib/company";
-import { fleetImages } from "@/lib/media";
-import { BookingForm } from "@/components/BookingForm";
+import { fleetImages, heroBackgroundVideos } from "@/lib/media";
 
 export function HeroSection() {
+  const [clipIndex, setClipIndex] = useState(0);
+  const src = heroBackgroundVideos[clipIndex] ?? heroBackgroundVideos[0];
+
   return (
-    <section className="relative min-h-[min(92vh,56rem)] flex flex-col justify-start overflow-hidden">
-      {/* Background video */}
-      <div className="absolute inset-0">
+    <section className="relative flex min-h-dvh flex-col justify-start overflow-hidden">
+      {/* Background video: full-screen cover + playlist (all clips in heroBackgroundVideos, one after another). */}
+      <div className="absolute inset-0 bg-black">
         <video
-          className="w-full h-full object-cover"
+          key={src}
+          className="absolute inset-0 h-full w-full object-cover object-center"
+          src={src}
           autoPlay
           muted
-          loop
           playsInline
-          preload="metadata"
+          preload="auto"
           poster={fleetImages.coachFrontMountain}
-        >
-          <source src="/videos/hero-bus.mp4" type="video/mp4" />
-        </video>
+          onEnded={() =>
+            setClipIndex((i) => (heroBackgroundVideos.length ? (i + 1) % heroBackgroundVideos.length : 0))
+          }
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-foreground/85 via-foreground/60 to-foreground/30" />
       </div>
 
@@ -35,13 +40,11 @@ export function HeroSection() {
             <span className="block text-accent mt-1">Volvo · Mercedes · Sleeper</span>
           </h1>
 
-          <p className="text-primary-foreground/85 text-sm sm:text-base font-medium mb-4 max-w-xl">
+          <p className="text-primary-foreground/85 text-sm sm:text-base font-medium mb-6 max-w-xl">
             Enter your route and date — compare verified operators in one place.
           </p>
 
-          <BookingForm compact />
-
-          <p className="text-primary-foreground/75 text-sm sm:text-base mt-6 mb-3 leading-relaxed max-w-2xl">
+          <p className="text-primary-foreground/75 text-sm sm:text-base mb-3 leading-relaxed max-w-2xl">
             {COMPANY.about.slice(0, 140)}…
           </p>
           <p className="text-primary-foreground/65 text-xs sm:text-sm mb-6 flex flex-wrap items-center gap-2 max-w-2xl">

@@ -1,9 +1,9 @@
 User-agent: *
 Allow: /
 
-# App areas (optional: reduce crawl budget — uncomment if you prefer)
-# Disallow: /admin/
-# Disallow: /vendor/
-# Disallow: /customer/
+# Logged-in app surfaces — not useful as search landing pages; saves crawl budget.
+Disallow: /admin/
+Disallow: /vendor/
+Disallow: /customer/
 
 Sitemap: https://luxurybusrental.in/sitemap.xml

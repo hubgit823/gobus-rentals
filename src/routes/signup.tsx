@@ -10,15 +10,17 @@ import { Label } from "@/components/ui/label";
 import { Mail, Lock, Phone, User, ArrowRight } from "lucide-react";
 import { api } from "@/lib/api";
 import { setAuth, type StoredUser } from "@/lib/auth-storage";
+import { buildPageMeta } from "@/lib/seo/buildMeta";
 
 export const Route = createFileRoute("/signup")({
   component: SignupPage,
-  head: () => ({
-    meta: [
-      { title: "Sign Up — Luxury Bus Rental" },
-      { name: "description", content: "Create your Luxury Bus Rental account." },
-    ],
-  }),
+  head: () =>
+    buildPageMeta({
+      title: "Sign up",
+      description: "Create your Luxury Bus Rental customer account.",
+      path: "/signup",
+      noindex: true,
+    }),
 });
 
 type RegRes = { token: string; user: StoredUser };
@@ -101,7 +103,9 @@ function SignupPage() {
 
             <p className="text-center text-sm text-muted-foreground mt-6">
               Already have an account?{" "}
-              <Link to="/login" className="text-primary font-medium hover:underline">Login</Link>
+              <Link to="/login" search={{ role: "customer" }} className="text-primary font-medium hover:underline">
+                Login
+              </Link>
             </p>
 
             <p className="text-center text-sm text-muted-foreground mt-2">

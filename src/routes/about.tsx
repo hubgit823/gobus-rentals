@@ -1,15 +1,13 @@
-import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { AboutCoverageMap } from "@/components/AboutCoverageMap";
 import { COMPANY } from "@/lib/company";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { INDIAN_CITIES } from "@/data/indian-cities";
 import { fleetImages } from "@/lib/media";
 import { Building2, CalendarRange, CheckCircle2, Headset, MapPin, MessageCircle, Phone, ShieldCheck, Users } from "lucide-react";
-import { CircleMarker, MapContainer, TileLayer, Tooltip } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 
 export const Route = createFileRoute("/about")({
   component: AboutPage,
@@ -52,25 +50,6 @@ function AboutPage() {
     },
   ];
 
-  const [mapReady, setMapReady] = useState(false);
-  const mapCities = [
-    { name: "Delhi", lat: 28.6139, lng: 77.209 },
-    { name: "Chandigarh", lat: 30.7333, lng: 76.7794 },
-    { name: "Jaipur", lat: 26.9124, lng: 75.7873 },
-    { name: "Ahmedabad", lat: 23.0225, lng: 72.5714 },
-    { name: "Mumbai", lat: 19.076, lng: 72.8777 },
-    { name: "Pune", lat: 18.5204, lng: 73.8567 },
-    { name: "Lucknow", lat: 26.8467, lng: 80.9462 },
-    { name: "Patna", lat: 25.5941, lng: 85.1376 },
-    { name: "Kolkata", lat: 22.5726, lng: 88.3639 },
-    { name: "Hyderabad", lat: 17.385, lng: 78.4867 },
-    { name: "Bengaluru", lat: 12.9716, lng: 77.5946 },
-    { name: "Chennai", lat: 13.0827, lng: 80.2707 },
-  ];
-
-  useEffect(() => {
-    setMapReady(true);
-  }, []);
   const gstText = COMPANY.gstEnabled ? `${COMPANY.gstPercentage}%` : "as applicable";
 
   return (
@@ -156,40 +135,10 @@ function AboutPage() {
             </div>
 
             <div className="relative rounded-2xl border border-border bg-muted/20 h-[420px] sm:h-[500px] overflow-hidden">
-              <div className="absolute top-3 right-3 z-[500] text-[10px] sm:text-xs text-muted-foreground bg-background/90 rounded px-2 py-1">
+              <div className="absolute top-3 right-3 z-[500] text-[10px] sm:text-xs text-muted-foreground bg-background/90 rounded px-2 py-1 pointer-events-none">
                 Live route coverage map
               </div>
-              {mapReady ? (
-                <MapContainer
-                  center={[22.9734, 78.6569]}
-                  zoom={5}
-                  minZoom={4}
-                  maxZoom={9}
-                  className="h-full w-full"
-                  scrollWheelZoom={false}
-                >
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
-                  {mapCities.map((city) => (
-                    <CircleMarker
-                      key={city.name}
-                      center={[city.lat, city.lng]}
-                      radius={6}
-                      pathOptions={{ color: "#2563eb", fillColor: "#2563eb", fillOpacity: 0.8, weight: 2 }}
-                    >
-                      <Tooltip direction="top" offset={[0, -4]} opacity={1}>
-                        {city.name}
-                      </Tooltip>
-                    </CircleMarker>
-                  ))}
-                </MapContainer>
-              ) : (
-                <div className="h-full w-full grid place-items-center text-sm text-muted-foreground">
-                  Loading India map...
-                </div>
-              )}
+              <AboutCoverageMap />
             </div>
 
             <p className="text-sm text-muted-foreground mt-4">

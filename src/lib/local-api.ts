@@ -345,6 +345,13 @@ export async function localApiRequest(path: string, init: RequestInit = {}): Pro
   const headers = new Headers(init.headers);
 
   try {
+    if (path === "/api/payments/razorpay/order" || path === "/api/payments/razorpay/verify") {
+      throw new LocalApiError(
+        503,
+        "Online payments are not available in pure in-browser demo mode. Run the mock API with Razorpay env vars and set VITE_API_URL to that server (see .env.example).",
+      );
+    }
+
     // Auth
     if (method === "POST" && path === "/api/auth/register") {
       if (!body.email || !body.password || !body.name) throw new LocalApiError(400, "Missing required fields");

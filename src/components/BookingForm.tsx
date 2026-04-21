@@ -5,20 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Link } from "@tanstack/react-router";
-import { Bot, Bus, Calendar, CheckCircle2, MapPin, MessageSquare, Users } from "lucide-react";
+import { Bot, Bus, Calendar, CheckCircle2, MapPin, Users } from "lucide-react";
 import { api } from "@/lib/api";
 import { COMPANY } from "@/lib/company";
-
-const busTypes = [
-  "12 Seater Mini Bus",
-  "17 Seater Mini Bus",
-  "26 Seater Bus",
-  "32 Seater Bus",
-  "40 Seater Bus",
-  "49 Seater Bus",
-  "52 Seater Bus",
-  "Sleeper Bus",
-];
+import { BOOKING_BUS_TYPES } from "@/data/booking-bus-types";
 
 const purposes = ["Wedding", "Corporate", "Tour", "School/College", "Pilgrimage", "Airport Transfer", "Other"];
 
@@ -150,7 +140,7 @@ function StepInput({
     case "busType":
       return (
         <div className="flex flex-wrap gap-2">
-          {busTypes.map((t) => (
+          {BOOKING_BUS_TYPES.map((t) => (
             <button
               key={t}
               type="button"
@@ -241,9 +231,14 @@ function StepInput({
   }
 }
 
-export function BookingForm({ compact = false }: Readonly<{ compact?: boolean }>) {
+export function BookingForm({
+  compact = false,
+  initialBusType,
+}: Readonly<{ compact?: boolean; initialBusType?: string }>) {
   const [submitted, setSubmitted] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
+  const prefilledBusType =
+    initialBusType && (BOOKING_BUS_TYPES as readonly string[]).includes(initialBusType) ? initialBusType : "";
   const [form, setForm] = useState<FormState>({
     pickup: "",
     drop: "",
@@ -251,7 +246,7 @@ export function BookingForm({ compact = false }: Readonly<{ compact?: boolean }>
     journeyTime: "",
     returnDate: "",
     passengers: "",
-    busType: "",
+    busType: prefilledBusType,
     acPreference: "",
     purpose: "",
     guestName: "",
@@ -329,16 +324,6 @@ export function BookingForm({ compact = false }: Readonly<{ compact?: boolean }>
 
   return (
     <section className="bg-card rounded-2xl shadow-xl border border-border ring-1 ring-primary/10 overflow-hidden">
-      <div className="px-5 py-4 sm:px-6 sm:py-5 border-b border-border bg-gradient-to-r from-primary/12 via-primary/5 to-transparent">
-        <p className="font-display text-lg sm:text-xl font-bold text-foreground flex items-center gap-2">
-          <MessageSquare className="w-5 h-5 text-primary" />
-          AI-style quote assistant
-        </p>
-        <p className="text-sm text-muted-foreground mt-1">
-          Chat with our booking bot: answer one question at a time and schedule your journey quickly.
-        </p>
-      </div>
-
       <div className={`p-4 sm:p-6 ${compact ? "space-y-4" : "space-y-5"}`}>
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span>

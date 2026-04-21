@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Bus, ClipboardList, IndianRupee, Star, TrendingUp, Users } from "lucide-react";
+import { Bus, ClipboardList, IndianRupee, Star, TrendingUp, Users, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
@@ -75,8 +76,20 @@ function VendorDashboard() {
       </div>
 
       <div className="bg-card rounded-xl border border-border">
-        <div className="p-5 border-b border-border">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-5 border-b border-border">
           <h2 className="font-display font-semibold text-foreground">Recent Leads</h2>
+          <div className="flex flex-wrap gap-2 shrink-0">
+            <Link to="/vendor/leads">
+              <Button variant="default" size="sm" className="gap-1">
+                Manage leads <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
+            </Link>
+            <Link to="/vendor/bookings">
+              <Button variant="outline" size="sm" className="gap-1">
+                Bookings
+              </Button>
+            </Link>
+          </div>
         </div>
         <div className="overflow-x-auto">
           {recentLeads.length === 0 ? (
@@ -91,6 +104,7 @@ function VendorDashboard() {
                   <th className="text-left px-5 py-3 font-medium">Date</th>
                   <th className="text-left px-5 py-3 font-medium">Bus Type</th>
                   <th className="text-left px-5 py-3 font-medium">Status</th>
+                  <th className="text-right px-5 py-3 font-medium">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -102,6 +116,13 @@ function VendorDashboard() {
                     <td className="px-5 py-3 text-muted-foreground">{l.date}</td>
                     <td className="px-5 py-3 text-muted-foreground">{l.bus}</td>
                     <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${l.status === "New" ? "bg-primary/20 text-primary" : "bg-chart-4/20 text-chart-4"}`}>{l.status}</span></td>
+                    <td className="px-5 py-3 text-right">
+                      <Link to="/vendor/leads">
+                        <Button variant="outline" size="sm" type="button" className="text-xs h-7">
+                          Open
+                        </Button>
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

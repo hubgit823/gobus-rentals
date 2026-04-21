@@ -1,4 +1,11 @@
-import { SITE_NAME, SITE_URL, DEFAULT_OG_IMAGE, absoluteUrl } from "@/lib/site";
+import {
+  SITE_NAME,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_OG_IMAGE_WIDTH,
+  DEFAULT_OG_IMAGE_HEIGHT,
+  SITE_TWITTER_HANDLE,
+  absoluteUrl,
+} from "@/lib/site";
 
 export type PageMetaInput = {
   title: string;
@@ -6,16 +13,25 @@ export type PageMetaInput = {
   path: string;
   keywords?: string;
   ogImage?: string;
+  /** When `ogImage` is custom, set dimensions so OG tags stay accurate. Defaults match `DEFAULT_OG_IMAGE`. */
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  ogImageAlt?: string;
   ogType?: "website" | "article";
   noindex?: boolean;
 };
 
 /**
- * TanStack Router head() meta + links (canonical, OG, Twitter).
+ * TanStack Router head() meta + links (canonical, hreflang, OG, Twitter).
+ * See: https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data
  */
 export function buildPageMeta(input: PageMetaInput) {
   const url = absoluteUrl(input.path);
   const ogImage = input.ogImage || DEFAULT_OG_IMAGE;
+  const usingDefaultOg = !input.ogImage || input.ogImage === DEFAULT_OG_IMAGE;
+  const ogW = input.ogImageWidth ?? (usingDefaultOg ? DEFAULT_OG_IMAGE_WIDTH : undefined);
+  const ogH = input.ogImageHeight ?? (usingDefaultOg ? DEFAULT_OG_IMAGE_HEIGHT : undefined);
+  const ogAlt = input.ogImageAlt ?? `${SITE_NAME} — luxury bus and coach rental in India`;
   const titleFull = input.title.includes(SITE_NAME) ? input.title : `${input.title} | ${SITE_NAME}`;
 
   const meta: Array<Record<string, string> | { title: string }> = [
@@ -28,15 +44,23 @@ export function buildPageMeta(input: PageMetaInput) {
     { property: "og:url", content: url },
     { property: "og:type", content: input.ogType || "website" },
     { property: "og:image", content: ogImage },
+    ...(ogW != null ? [{ property: "og:image:width", content: String(ogW) }] : []),
+    ...(ogH != null ? [{ property: "og:image:height", content: String(ogH) }] : []),
+    { property: "og:image:alt", content: ogAlt },
     { property: "og:site_name", content: SITE_NAME },
     { property: "og:locale", content: "en_IN" },
     { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:site", content: SITE_TWITTER_HANDLE },
     { name: "twitter:title", content: titleFull },
     { name: "twitter:description", content: input.description },
     { name: "twitter:image", content: ogImage },
   ];
 
-  const links = [{ rel: "canonical", href: url }];
+  const links: Array<{ rel: string; href: string; hreflang?: string }> = [
+    { rel: "canonical", href: url },
+    { rel: "alternate", hreflang: "en-IN", href: url },
+    { rel: "alternate", hreflang: "x-default", href: url },
+  ];
 
   return { meta, links };
 }

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BookOpen, Clock, Star, Bus, ArrowRight } from "lucide-react";
+import { BookOpen, Clock, Star, Bus, ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { panelPage } from "@/lib/panel-page";
@@ -96,6 +96,7 @@ function CustomerDashboard() {
                   <th className="text-left px-5 py-3 font-medium">Bus</th>
                   <th className="text-left px-5 py-3 font-medium">Status</th>
                   <th className="text-left px-5 py-3 font-medium">Amount</th>
+                  <th className="text-right px-5 py-3 font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,6 +110,13 @@ function CustomerDashboard() {
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor[b.status] ?? "bg-muted"}`}>{b.status}</span>
                     </td>
                     <td className="px-5 py-3 font-medium text-foreground">{b.amount}</td>
+                    <td className="px-5 py-3 text-right">
+                      <Link to="/customer/bookings">
+                        <Button variant="outline" size="sm" type="button" className="text-xs h-7 gap-1">
+                          Pay / details <ExternalLink className="w-3 h-3" />
+                        </Button>
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

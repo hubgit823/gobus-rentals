@@ -1,6 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Users, Building2, BookOpen, IndianRupee, TrendingUp, Bus } from "lucide-react";
+import { Users, Building2, BookOpen, IndianRupee, TrendingUp, Bus, ArrowRight, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api";
 import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
@@ -96,8 +97,13 @@ function AdminDashboard() {
       </div>
 
       <div className="bg-card rounded-xl border border-border">
-        <div className="p-5 border-b border-border">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between p-5 border-b border-border">
           <h2 className="font-display font-semibold text-foreground">Recent Bookings</h2>
+          <Link to="/admin/bookings" className="shrink-0">
+            <Button variant="ghost" size="sm" className="gap-1 text-primary w-full sm:w-auto">
+              View all <ArrowRight className="w-3.5 h-3.5" />
+            </Button>
+          </Link>
         </div>
         <div className="overflow-x-auto">
           {bookQ.isLoading ? (
@@ -114,6 +120,7 @@ function AdminDashboard() {
                   <th className="text-left px-5 py-3 font-medium">Route</th>
                   <th className="text-left px-5 py-3 font-medium">Amount</th>
                   <th className="text-left px-5 py-3 font-medium">Status</th>
+                  <th className="text-right px-5 py-3 font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,6 +133,13 @@ function AdminDashboard() {
                     <td className="px-5 py-3 font-medium text-primary">{b.amount}</td>
                     <td className="px-5 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor[b.status] ?? "bg-muted"}`}>{labelStatus(b.status)}</span>
+                    </td>
+                    <td className="px-5 py-3 text-right">
+                      <Link to="/admin/bookings">
+                        <Button variant="outline" size="sm" type="button" className="text-xs h-7 gap-1">
+                          Manage <ExternalLink className="w-3 h-3" />
+                        </Button>
+                      </Link>
                     </td>
                   </tr>
                 ))}
