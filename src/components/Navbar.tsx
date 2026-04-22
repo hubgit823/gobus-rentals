@@ -19,10 +19,10 @@ const navDropdownRowClass =
 
 /** Same row height as plain nav links — no extra bottom border/padding (avoids “floating” dropdown labels). */
 const navCenterLinkClass =
-  "inline-flex h-9 shrink-0 items-center whitespace-nowrap text-sm font-medium text-foreground transition-colors hover:text-primary";
+  "inline-flex h-10 shrink-0 items-center whitespace-nowrap text-[0.9rem] font-medium text-foreground transition-colors hover:text-primary";
 
 const navDropdownTriggerClass =
-  "inline-flex h-9 shrink-0 items-center gap-1 whitespace-nowrap border-0 bg-transparent p-0 text-sm font-medium text-foreground outline-none transition-colors hover:text-amber-400 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
+  "inline-flex h-10 shrink-0 items-center gap-1 whitespace-nowrap border-0 bg-transparent p-0 text-[0.9rem] font-medium text-foreground outline-none transition-colors hover:text-amber-400 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
 const navDropdownTriggerOpenClass = "text-amber-400";
 
@@ -189,7 +189,7 @@ export function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 overflow-visible bg-card/95 backdrop-blur-md border-b border-border shadow-sm">
-      <nav className="mx-auto flex min-h-16 max-w-7xl items-center justify-between gap-3 px-4 py-2 sm:px-6 lg:px-8 md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-4 md:py-0 lg:gap-6">
+      <nav className="mx-auto flex min-h-[72px] max-w-7xl items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-8 md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-6 md:py-0 lg:gap-10">
         <Link to="/" className="flex shrink-0 items-center gap-2 overflow-hidden">
           <img
             src="/images/logo.png"
@@ -201,7 +201,7 @@ export function Navbar() {
           />
         </Link>
 
-        <div className="hidden min-w-0 items-center justify-end gap-x-2 overflow-visible md:flex md:flex-nowrap lg:gap-x-4 xl:gap-x-5">
+        <div className="hidden min-w-0 items-center justify-end gap-x-5 overflow-visible md:flex md:flex-nowrap lg:gap-x-7 xl:gap-x-8">
           <Link to="/" className={navCenterLinkClass} activeProps={{ className: `${navCenterLinkClass} text-primary` }}>
             Home
           </Link>
@@ -221,7 +221,7 @@ export function Navbar() {
           </Link>
         </div>
 
-        <div className="hidden shrink-0 items-center gap-2 md:flex lg:gap-3 xl:gap-4">
+        <div className="hidden shrink-0 items-center gap-3 md:flex lg:gap-4 xl:gap-5">
           <Link to="/book" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
             Book
           </Link>

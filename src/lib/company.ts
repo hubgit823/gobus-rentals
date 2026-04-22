@@ -4,9 +4,9 @@ export const COMPANY = {
   platformBrand: "Luxury Bus Rental – Powered by Kartar Travels Private Limited",
   serviceBillingTagline: "All Services, Billing & GST Invoicing Managed by Kartar Travels Pvt Ltd.",
   about:
-    "Kartar Travels Private Limited is a trusted luxury bus rental service provider since 2018, offering Volvo, Mercedes-Benz, seater and sleeper buses for comfortable journeys. We are committed to delivering safe, reliable, and premium travel experiences across North India at the best prices.",
+    "Kartar Travels Private Limited is a trusted luxury bus rental service provider since 2018, offering Volvo, Mercedes-Benz, seater and sleeper buses for comfortable journeys. We are committed to delivering safe, reliable, and premium travel experiences across all major cities in India at the best prices.",
   operatingLocations:
-    "Chandigarh, Mohali, Panchkula, Delhi, Punjab, Haryana, Himachal Pradesh & North regions",
+    "Delhi, Mumbai, Bengaluru, Hyderabad, Pune, Jaipur, Chandigarh & 400+ cities across India",
   contactPhone: "7380027102",
   contactPhoneDisplay: "+91 73800 27102",
   whatsappE164: "917380027102",

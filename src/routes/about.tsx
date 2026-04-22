@@ -33,8 +33,8 @@ function AboutPage() {
     },
     {
       year: "2020",
-      title: "North India expansion",
-      detail: "Expanded to high-demand intercity and event routes across Punjab, Haryana, Himachal, and Delhi NCR.",
+      title: "Pan-India expansion",
+      detail: "Expanded to high-demand intercity and event routes across Delhi NCR, Mumbai, Bengaluru, Jaipur, Hyderabad, Pune and 400+ cities across India.",
       icon: MapPin,
     },
     {

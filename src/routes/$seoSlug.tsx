@@ -42,9 +42,9 @@ export const Route = createFileRoute("/$seoSlug")({
   },
   head: ({ params }) => {
     const citySlug = extractCitySlug(params.seoSlug);
-    if (citySlug) {
-      const city = getCityBySlug(citySlug);
-      if (!city) throw notFound();
+    const city = citySlug ? getCityBySlug(citySlug) : null;
+    if (citySlug && city) {
+      // city page head
       const title = `Bus Rental in ${city.name} | Luxury Bus Hire at Best Price`;
       const description = `Book luxury buses in ${city.name} with ${COMPANY.legalName}. AC, Volvo, sleeper buses at best prices. Compare quotes on ${COMPANY.platformBrand}.`;
       const path = `/${city.slug}-bus-rental`;
@@ -220,7 +220,7 @@ function busTypeFaqs(page: BusTypePage) {
 function SeoSlugPage() {
   const { seoSlug } = Route.useParams();
   const citySlug = extractCitySlug(seoSlug);
-  if (citySlug) return <CityBusRentalPage citySlug={citySlug} />;
+  if (citySlug && getCityBySlug(citySlug)) return <CityBusRentalPage citySlug={citySlug} />;
   const busTypePage = getBusTypePageBySlug(seoSlug);
   if (busTypePage) return <BusTypeRentalPage page={busTypePage} />;
   const scSlug = extractServiceCitySlug(seoSlug);
@@ -276,7 +276,7 @@ function CityBusRentalPage({ citySlug }: Readonly<{ citySlug: string }>) {
             <h2 className="font-display text-2xl font-semibold text-foreground mt-12 mb-3">Why choose us for bus rental in {city.name}</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
               {COMPANY.legalName} has served travellers since 2018 with Volvo, Mercedes-Benz, seater, and sleeper buses across
-              North India. Our marketplace connects you with operators who know local permits, popular routes from{" "}
+              India. Our marketplace connects you with operators who know local permits, popular routes from{" "}
               {city.name}, and event-day logistics for <strong>wedding bus rental</strong> and <strong>corporate bus hire</strong>.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-4">
