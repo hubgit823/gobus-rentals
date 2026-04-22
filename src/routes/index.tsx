@@ -21,7 +21,7 @@ const homeFaqs = [
   {
     question: "Do you cover all India for bus rental?",
     answer:
-      "We publish 400+ city landing pages for bus rental intent. Operators respond based on their service areas; North India is a core strength for Kartar Travels.",
+      "Yes. We serve 400+ cities across all of India — North, South, East, and West. Submit your trip details and verified operators in your region will respond with quotes.",
   },
 ];
 

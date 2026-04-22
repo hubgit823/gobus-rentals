@@ -20,7 +20,7 @@ export function HomeGallerySection() {
             Journeys we love to power
           </h2>
           <p className="text-muted-foreground mt-3 max-w-2xl mx-auto text-sm sm:text-base">
-            Weddings, corporate runs, school trips, and hill routes across North India — real moments from the kind
+            Weddings, corporate runs, school trips, and hill routes across India — real moments from the kind
             of trips {COMPANY.legalName} supports every day.
           </p>
         </div>
