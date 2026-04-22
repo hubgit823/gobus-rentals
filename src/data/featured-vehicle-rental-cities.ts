@@ -1,5 +1,5 @@
 /**
- * Featured city links (footer + /bus-rental hub). Each line links to `bus-rental-in-{slug}`.
+ * Featured city links (footer + /bus-rental hub). Each line links to `/{slug}-bus-rental`.
  * Display strings follow common India rental site patterns; slugs match `indian-cities` SEO routes.
  * (Goa → Panaji hub; Gurugram → Gurgaon slug in dataset.)
  */

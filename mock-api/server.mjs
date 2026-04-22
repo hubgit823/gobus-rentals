@@ -45,7 +45,7 @@ let companySettings = {
   operatingLocations:
     "Chandigarh, Mohali, Panchkula, Delhi, Punjab, Haryana, Himachal Pradesh & North regions",
   contactPhone: "7380027102",
-  contactEmail: "support@luxurybusrental.in",
+  contactEmail: "kartartravelsltd@gmail.com",
   gstNumber: "GSTIN on invoice — configure in Admin Settings",
   gstEnabled: true,
   gstPercentage: 18,

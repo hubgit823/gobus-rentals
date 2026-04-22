@@ -157,9 +157,8 @@ function BusTypesDesktopMenu() {
         >
           {NAVBAR_BUS_TYPE_LINKS.map((row) => (
             <Link
-              key={row.busType}
-              to="/book"
-              search={{ busType: row.busType }}
+              key={row.to}
+              to={row.to as any}
               role="menuitem"
               className={cn(
                 navDropdownRowClass,
@@ -172,7 +171,7 @@ function BusTypesDesktopMenu() {
           ))}
           <div className="my-1 h-px bg-white/10" role="separator" />
           <Link
-            to="/bus-types"
+            to="/bus-types-for-hire"
             role="menuitem"
             className={cn(navDropdownRowClass, "block w-full text-left text-white/90 no-underline")}
             onClick={() => setOpen(false)}
@@ -214,7 +213,7 @@ export function Navbar() {
           </Link>
           <CityWiseDesktopMenu />
           <BusTypesDesktopMenu />
-          <Link to="/guides" className={navCenterLinkClass}>
+          <Link to="/bus-rental-guides" className={navCenterLinkClass}>
             Guides
           </Link>
           <Link to="/contact" className={navCenterLinkClass}>
@@ -280,9 +279,8 @@ export function Navbar() {
             <div className="max-h-[55vh] overflow-y-auto border-t border-border px-1 py-1">
               {NAVBAR_BUS_TYPE_LINKS.map((row) => (
                 <Link
-                  key={row.busType}
-                  to="/book"
-                  search={{ busType: row.busType }}
+                  key={row.to}
+                  to={row.to as any}
                   className="block rounded-md px-3 py-2 text-sm text-foreground hover:bg-amber-400 hover:text-neutral-950"
                   onClick={() => setMobileOpen(false)}
                 >
@@ -290,7 +288,7 @@ export function Navbar() {
                 </Link>
               ))}
               <Link
-                to="/bus-types"
+                to="/bus-types-for-hire"
                 className="block rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground"
                 onClick={() => setMobileOpen(false)}
               >
@@ -298,7 +296,7 @@ export function Navbar() {
               </Link>
             </div>
           </details>
-          <Link to="/guides" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Guides</Link>
+          <Link to="/bus-rental-guides" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Guides</Link>
           <Link to="/contact" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>Contact</Link>
           <Link to="/book" className="block py-2 text-sm font-medium text-foreground" onClick={() => setMobileOpen(false)}>
             Book

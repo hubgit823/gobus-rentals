@@ -37,7 +37,7 @@ export function HeroSection() {
 
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary-foreground leading-[1.15] mb-3 sm:mb-4">
             Luxury buses across North India{" "}
-            <span className="block text-accent mt-1">Volvo · Mercedes · Sleeper</span>
+            <span className="block text-accent mt-1">Compare. Choose. Book Instantly</span>
           </h1>
 
           <p className="text-primary-foreground/85 text-sm sm:text-base font-medium mb-6 max-w-xl">

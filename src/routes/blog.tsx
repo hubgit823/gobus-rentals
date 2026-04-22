@@ -140,7 +140,7 @@ function BlogIndex() {
                 <Link
                   key={c.slug}
                   to="/$seoSlug"
-                  params={{ seoSlug: `bus-rental-in-${c.slug}` }}
+                  params={{ seoSlug: `${c.slug}-bus-rental` }}
                   className="rounded-full border border-border px-3 py-1 text-sm text-primary hover:bg-muted"
                 >
                   Bus rental {c.name}

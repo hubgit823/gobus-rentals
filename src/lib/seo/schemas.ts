@@ -39,7 +39,7 @@ export function localBusinessSchemaForCity(city: CityRecord) {
     "@type": "LocalBusiness",
     name: `${COMPANY.legalName} — Bus rental in ${city.name}`,
     description: `Luxury and AC bus hire in ${city.name}, ${city.state}. Volvo, Mercedes-Benz, sleeper and seater buses via ${SITE_NAME}.`,
-    url: absoluteUrl(`/bus-rental-in-${city.slug}`),
+    url: absoluteUrl(`/${city.slug}-bus-rental`),
     telephone: `+91-${COMPANY.contactPhone}`,
     email: COMPANY.contactEmail,
     areaServed: {

@@ -8,7 +8,7 @@ export const Route = createFileRoute("/bus-rental/$citySlug")({
     }
     throw redirect({
       to: "/$seoSlug",
-      params: { seoSlug: `bus-rental-in-${params.citySlug}` },
+      params: { seoSlug: `${params.citySlug}-bus-rental` },
       replace: true,
     });
   },

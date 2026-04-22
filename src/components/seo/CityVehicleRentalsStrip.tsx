@@ -29,7 +29,7 @@ export function CityVehicleRentalsStrip({ variant }: Readonly<{ variant: Variant
         >
           <Link
             to="/$seoSlug"
-            params={{ seoSlug: `bus-rental-in-${row.slug}` }}
+            params={{ seoSlug: `${row.slug}-bus-rental` }}
             className={cn(
               "block px-3 py-2.5 font-medium transition-colors",
               isFooter

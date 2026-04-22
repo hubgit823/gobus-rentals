@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
@@ -9,56 +10,145 @@ import { absoluteUrl } from "@/lib/site";
 import { buildPageMeta } from "@/lib/seo/buildMeta";
 import { faqPageSchema, localBusinessSchemaForCity, productBusMarketplaceSchema } from "@/lib/seo/schemas";
 import { VEHICLE_CATALOG } from "@/lib/vehicle-catalog";
+import { getBusTypePageBySlug, type BusTypePage } from "@/data/bus-type-pages";
+import { getServiceCityPage, listServiceCitySlugs, serviceCityImageUrl } from "@/data/service-city-pages";
+import { fleetImages } from "@/lib/media";
+import { CheckCircle2, Users, MapPin, Star } from "lucide-react";
 
-const PREFIX = "bus-rental-in-";
+const CITY_SUFFIX = "-bus-rental";
+const SERVICE_CITY_SUFFIX = "-bus-rental-guide";
 
 function extractCitySlug(seoSlug: string) {
-  if (!seoSlug.startsWith(PREFIX)) return null;
-  const citySlug = seoSlug.slice(PREFIX.length).trim();
+  // Must end with "-bus-rental" but NOT "-bus-rental-guide"
+  if (!seoSlug.endsWith(CITY_SUFFIX) || seoSlug.endsWith(SERVICE_CITY_SUFFIX)) return null;
+  const citySlug = seoSlug.slice(0, seoSlug.length - CITY_SUFFIX.length).trim();
+  return citySlug || null;
+}
+
+function extractServiceCitySlug(seoSlug: string) {
+  if (!seoSlug.endsWith(SERVICE_CITY_SUFFIX)) return null;
+  const citySlug = seoSlug.slice(0, seoSlug.length - SERVICE_CITY_SUFFIX.length).trim();
   return citySlug || null;
 }
 
 export const Route = createFileRoute("/$seoSlug")({
   beforeLoad: ({ params }) => {
     const citySlug = extractCitySlug(params.seoSlug);
-    if (!citySlug || !getCityBySlug(citySlug)) throw notFound();
+    if (citySlug && getCityBySlug(citySlug)) return;
+    if (getBusTypePageBySlug(params.seoSlug)) return;
+    const scSlug = extractServiceCitySlug(params.seoSlug);
+    if (scSlug && getServiceCityPage(scSlug)) return;
+    throw notFound();
   },
   head: ({ params }) => {
     const citySlug = extractCitySlug(params.seoSlug);
-    if (!citySlug) throw notFound();
-    const city = getCityBySlug(citySlug)!;
-    const title = `Bus Rental in ${city.name} | Luxury Bus Hire at Best Price`;
-    const description = `Book luxury buses in ${city.name} with ${COMPANY.legalName}. AC, Volvo, sleeper buses at best prices. Compare quotes on ${COMPANY.platformBrand}.`;
-    const path = `/bus-rental-in-${city.slug}`;
-    const { meta, links } = buildPageMeta({
-      title,
-      description,
-      path,
-      keywords: `bus rental in ${city.name}, bus hire in ${city.name}, luxury bus rental in ${city.name}, Volvo bus ${city.name}, wedding bus rental ${city.name}, corporate bus hire ${city.name}`,
-    });
-    const faqs = cityPageFaqs(city.name, city.state);
-    return {
-      meta: [
-        ...meta,
-        { "script:ld+json": localBusinessSchemaForCity(city) },
-        { "script:ld+json": productBusMarketplaceSchema() },
-        { "script:ld+json": faqPageSchema(faqs) },
-        {
-          "script:ld+json": {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-              { "@type": "ListItem", position: 2, name: `Bus rental ${city.name}`, item: absoluteUrl(path) },
-            ],
+    if (citySlug) {
+      const city = getCityBySlug(citySlug);
+      if (!city) throw notFound();
+      const title = `Bus Rental in ${city.name} | Luxury Bus Hire at Best Price`;
+      const description = `Book luxury buses in ${city.name} with ${COMPANY.legalName}. AC, Volvo, sleeper buses at best prices. Compare quotes on ${COMPANY.platformBrand}.`;
+      const path = `/${city.slug}-bus-rental`;
+      const { meta, links } = buildPageMeta({
+        title,
+        description,
+        path,
+        keywords: `bus rental in ${city.name}, bus hire in ${city.name}, luxury bus rental in ${city.name}, Volvo bus ${city.name}, wedding bus rental ${city.name}, corporate bus hire ${city.name}`,
+      });
+      const faqs = cityPageFaqs(city.name, city.state);
+      return {
+        meta: [
+          ...meta,
+          { "script:ld+json": localBusinessSchemaForCity(city) },
+          { "script:ld+json": productBusMarketplaceSchema() },
+          { "script:ld+json": faqPageSchema(faqs) },
+          {
+            "script:ld+json": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+                { "@type": "ListItem", position: 2, name: `Bus rental ${city.name}`, item: absoluteUrl(path) },
+              ],
+            },
           },
+        ],
+        links,
+      };
+    }
+
+    const busTypePage = getBusTypePageBySlug(params.seoSlug);
+    if (busTypePage) {
+      const path = `/${busTypePage.slug}`;
+      const { meta, links } = buildPageMeta({
+        title: busTypePage.title,
+        description: busTypePage.description,
+        path,
+        keywords: busTypePage.keywords,
+      });
+      return {
+        meta: [
+          ...meta,
+          { "script:ld+json": productBusMarketplaceSchema() },
+          {
+            "script:ld+json": faqPageSchema(
+              busTypeFaqs(busTypePage).map((f) => ({ question: f.question, answer: f.answer })),
+            ),
+          },
+          {
+            "script:ld+json": {
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+                { "@type": "ListItem", position: 2, name: "Bus Types For Hire", item: absoluteUrl("/bus-types-for-hire") },
+                { "@type": "ListItem", position: 3, name: busTypePage.h1, item: absoluteUrl(path) },
+              ],
+            },
+          },
+        ],
+        links,
+      };
+    }
+
+    const scSlug = extractServiceCitySlug(params.seoSlug);
+    if (scSlug) {
+      const page = getServiceCityPage(scSlug);
+      if (!page) throw notFound();
+      const path = `/${scSlug}-bus-rental-guide`;
+      const ogImagePath = `/images/service-cities/${page.imageFile}`;
+      const { meta, links } = buildPageMeta({
+        title: page.pageTitle,
+        description: page.metaDescription,
+        path,
+        keywords: page.keywords,
+        ogImage: absoluteUrl(ogImagePath),
+        ogType: "article",
+      });
+      const faqs = [
+        {
+          question: `How do I book luxury bus rental in ${page.cityName}?`,
+          answer: `Use the Book flow on ${COMPANY.platformBrand}, or call ${COMPANY.contactPhoneDisplay}. Compare quotes for Volvo, Mercedes-Benz class coaches, and tempo travellers with GST-transparent totals managed by ${COMPANY.legalName}.`,
         },
-      ],
-      links,
-    };
+        {
+          question: `Is GST shown for bus hire in ${page.cityName}?`,
+          answer: `Yes. Confirmed bookings show rental value and applicable GST (${COMPANY.gstPercentage}% where enabled) before you pay, consistent with ${COMPANY.serviceBillingTagline}.`,
+        },
+      ];
+      return {
+        meta: [
+          ...meta,
+          { "script:ld+json": faqPageSchema(faqs.map((f) => ({ question: f.question, answer: f.answer }))) },
+        ],
+        links,
+      };
+    }
+
+    throw notFound();
   },
-  component: CityBusRentalPage,
+  component: SeoSlugPage,
 });
+
+// ─── City page helpers ────────────────────────────────────────────────────────
 
 function cityPageFaqs(cityName: string, state: string) {
   return [
@@ -102,10 +192,45 @@ function citySeoLongForm(cityName: string, state: string) {
   ];
 }
 
-function CityBusRentalPage() {
+// ─── Bus type page helpers ────────────────────────────────────────────────────
+
+function busTypeFaqs(page: BusTypePage) {
+  return [
+    {
+      question: `How do I book a ${page.busType} in India?`,
+      answer: `Submit your trip details on ${COMPANY.platformBrand} — pickup, drop, date, and passenger count. Select "${page.busType}" as your bus type. Verified operators send quotes that you can compare and confirm with advance payment.`,
+    },
+    {
+      question: `What is the price of ${page.busType} rental in India?`,
+      answer: `Prices vary by city, route, duration, and operator. On ${COMPANY.platformBrand} you receive itemised quotes from multiple operators so you can compare real all-in costs before committing.`,
+    },
+    {
+      question: `Is AC available in ${page.busType} rental?`,
+      answer: `Yes, most ${page.busType} options on ${COMPANY.platformBrand} are fully air-conditioned. Specify AC requirement when submitting your trip details to receive matching quotes.`,
+    },
+    {
+      question: `Can I book a ${page.busType} for outstation travel?`,
+      answer: `Absolutely. Operators cover both city contracts and long-distance outstation routes. Provide your complete route when requesting quotes so operators can include tolls, permits, and driver allowance in the estimate.`,
+    },
+  ];
+}
+
+// ─── Root page component ──────────────────────────────────────────────────────
+
+function SeoSlugPage() {
   const { seoSlug } = Route.useParams();
   const citySlug = extractCitySlug(seoSlug);
-  if (!citySlug) throw notFound();
+  if (citySlug) return <CityBusRentalPage citySlug={citySlug} />;
+  const busTypePage = getBusTypePageBySlug(seoSlug);
+  if (busTypePage) return <BusTypeRentalPage page={busTypePage} />;
+  const scSlug = extractServiceCitySlug(seoSlug);
+  if (scSlug) return <ServiceCityGuidePage citySlug={scSlug} />;
+  throw notFound();
+}
+
+// ─── City landing page ────────────────────────────────────────────────────────
+
+function CityBusRentalPage({ citySlug }: Readonly<{ citySlug: string }>) {
   const city = getCityBySlug(citySlug)!;
   const related = getRelatedCities(city, 10);
   const mapQuery = encodeURIComponent(`${city.name} ${city.state} India bus stand`);
@@ -183,7 +308,7 @@ function CityBusRentalPage() {
               For inspiration, read our guides on{" "}
               <Link to="/blog/how-to-book-bus-for-wedding-india" className="text-primary hover:underline">wedding bus booking</Link>,{" "}
               <Link to="/blog/volvo-bus-vs-sleeper-bus-india" className="text-primary hover:underline">Volvo vs sleeper buses</Link>, and{" "}
-              <Link to="/bus-types" className="text-primary hover:underline">bus types</Link>.
+              <Link to="/bus-types-for-hire" className="text-primary hover:underline">bus types</Link>.
             </p>
             <h2 className="font-display text-2xl font-semibold text-foreground mt-10 mb-3">FAQs - bus hire in {city.name}</h2>
             <dl className="space-y-4">
@@ -211,7 +336,7 @@ function CityBusRentalPage() {
                 <li key={c.slug}>
                   <Link
                     to="/$seoSlug"
-                    params={{ seoSlug: `bus-rental-in-${c.slug}` }}
+                    params={{ seoSlug: `${c.slug}-bus-rental` }}
                     className="inline-block rounded-full border border-border bg-card px-3 py-1 text-sm text-primary hover:bg-muted transition-colors"
                   >
                     {c.name}
@@ -219,6 +344,244 @@ function CityBusRentalPage() {
                 </li>
               ))}
             </ul>
+          </article>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+// ─── Bus type landing page ────────────────────────────────────────────────────
+
+function BusTypeRentalPage({ page }: Readonly<{ page: BusTypePage }>) {
+  const faqs = busTypeFaqs(page);
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="pt-20 pb-24 md:pb-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: "Bus types", to: "/bus-types" },
+              { label: page.h1 },
+            ]}
+          />
+          <article>
+            <h1 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
+              {page.h1}
+            </h1>
+            <p className="text-lg text-muted-foreground mb-8">{page.intro}</p>
+
+            <div className="flex flex-wrap gap-3 mb-10">
+              <Link to="/book" search={{ busType: page.busType }}>
+                <Button size="lg" className="font-semibold">Get quotes for {page.busType}</Button>
+              </Link>
+              <a href={`https://wa.me/${COMPANY.whatsappE164}`} target="_blank" rel="noreferrer">
+                <Button size="lg" variant="outline">WhatsApp {COMPANY.contactPhoneDisplay}</Button>
+              </a>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-6 mb-10">
+              <section className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Star className="w-4 h-4 text-primary" />
+                  <h2 className="font-display text-lg font-semibold text-foreground">Key features</h2>
+                </div>
+                <ul className="space-y-2">
+                  {page.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+
+              <section className="rounded-xl border border-border bg-card p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Users className="w-4 h-4 text-primary" />
+                  <h2 className="font-display text-lg font-semibold text-foreground">Best use cases</h2>
+                </div>
+                <ul className="space-y-2">
+                  {page.useCases.map((u) => (
+                    <li key={u} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <MapPin className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                      {u}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+
+            <section className="rounded-xl border border-border bg-card p-5 sm:p-7 mb-10">
+              <h2 className="font-display text-2xl font-semibold text-foreground mb-4">
+                Complete guide: {page.h1.toLowerCase()}
+              </h2>
+              <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
+                {page.longForm.map((paragraph, idx) => (
+                  <p key={`${page.slug}-lf-${idx}`}>{paragraph}</p>
+                ))}
+              </div>
+            </section>
+
+            <h2 className="font-display text-2xl font-semibold text-foreground mt-10 mb-3">
+              Available fleet sizes
+            </h2>
+            <div className="grid gap-3 mb-8">
+              {VEHICLE_CATALOG.map((vehicle) => (
+                <div key={vehicle.seats} className="rounded-xl border border-border bg-card p-4 sm:p-5">
+                  <h3 className="font-semibold text-foreground">
+                    {vehicle.seats} - {vehicle.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1">{vehicle.description}</p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Best for: <span className="text-foreground/90">{vehicle.bestFor}</span>
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <h2 className="font-display text-2xl font-semibold text-foreground mt-10 mb-3">
+              FAQs — {page.busType} rental
+            </h2>
+            <dl className="space-y-4 mb-10">
+              {faqs.map((f) => (
+                <div key={f.question} className="border-b border-border pb-4">
+                  <dt className="font-medium text-foreground">{f.question}</dt>
+                  <dd className="text-sm text-muted-foreground mt-1">{f.answer}</dd>
+                </div>
+              ))}
+            </dl>
+
+            <h2 className="font-display text-xl font-semibold mb-3">Explore other bus types</h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              <Link to="/bus-types-for-hire" className="text-primary hover:underline">All bus types guide</Link>
+              {" · "}
+              <Link to="/blog/volvo-bus-vs-sleeper-bus-india" className="text-primary hover:underline">Volvo vs sleeper bus</Link>
+              {" · "}
+              <Link to="/blog/how-to-book-bus-for-wedding-india" className="text-primary hover:underline">Wedding bus rental guide</Link>
+            </p>
+
+            <Link to="/book" search={{ busType: page.busType }}>
+              <Button size="lg">Compare quotes for {page.busType}</Button>
+            </Link>
+          </article>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+// ─── Service city guide page ──────────────────────────────────────────────────
+
+function HeroImage({ src, alt }: Readonly<{ src: string; alt: string }>) {
+  const [useFallback, setUseFallback] = useState(false);
+  return (
+    <div className="relative aspect-[21/9] w-full overflow-hidden rounded-xl border border-border bg-muted md:aspect-[24/9]">
+      <img
+        src={useFallback ? fleetImages.coachFrontMountain : src}
+        alt={alt}
+        width={1200}
+        height={514}
+        className="h-full w-full object-cover object-center"
+        loading="eager"
+        decoding="async"
+        onError={() => setUseFallback(true)}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+    </div>
+  );
+}
+
+function ServiceCityGuidePage({ citySlug }: Readonly<{ citySlug: string }>) {
+  const page = getServiceCityPage(citySlug)!;
+  const imgUrl = serviceCityImageUrl(page.slug);
+  const standardCityUrl = `/${page.slug}-bus-rental` as const;
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="pb-24 pt-20 md:pb-16">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: "Bus rental", to: "/bus-rental" },
+              { label: "City guides" },
+              { label: page.cityName },
+            ]}
+          />
+          <article className="mt-6">
+            <p className="text-xs font-medium uppercase tracking-wide text-primary">
+              {COMPANY.legalName} · {page.state}
+            </p>
+            <h1 className="font-display mb-4 text-3xl font-bold text-foreground sm:text-4xl md:text-5xl">{page.h1}</h1>
+            <p className="mb-6 text-lg text-muted-foreground">
+              In-depth guide and booking context for{" "}
+              <strong className="text-foreground">luxury bus hire in {page.cityName}</strong> — same fleet standards as{" "}
+              {COMPANY.legalName}.
+            </p>
+
+            <HeroImage src={imgUrl} alt={page.imageAlt} />
+            <p className="mt-2 text-xs text-muted-foreground">
+              Image:{" "}
+              <code className="rounded bg-muted px-1.5 py-0.5 text-foreground">
+                public/images/service-cities/{page.imageFile}
+              </code>{" "}
+              (replace with your photography; falls back if missing).
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/book">
+                <Button size="lg" className="font-semibold">Get quotes — {page.cityName}</Button>
+              </Link>
+              <Link to="/$seoSlug" params={{ seoSlug: `${page.slug}-bus-rental` }}>
+                <Button size="lg" variant="outline">City overview page</Button>
+              </Link>
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              Standard city page:{" "}
+              <Link
+                to="/$seoSlug"
+                params={{ seoSlug: `${page.slug}-bus-rental` }}
+                className="text-primary underline-offset-4 hover:underline"
+              >
+                {standardCityUrl}
+              </Link>{" "}
+              — this guide adds long-form content and a branded title.
+            </p>
+
+            <div className="prose prose-neutral mt-12 max-w-none dark:prose-invert prose-headings:font-display prose-a:text-primary">
+              {page.sections.map((sec) => (
+                <section key={sec.id} className="mb-10">
+                  <h2 className="text-2xl font-semibold text-foreground">{sec.heading}</h2>
+                  {sec.paragraphs.map((p, i) => (
+                    <p key={`${sec.id}-${i}`} className="text-muted-foreground leading-relaxed">{p}</p>
+                  ))}
+                </section>
+              ))}
+            </div>
+
+            <section className="mt-14 rounded-xl border border-border bg-card p-6">
+              <h2 className="font-display mb-2 text-xl font-semibold text-foreground">Other city bus rental guides</h2>
+              <ul className="list-inside list-disc text-sm text-primary">
+                {listServiceCitySlugs()
+                  .filter((s) => s !== citySlug)
+                  .map((slug) => (
+                    <li key={slug}>
+                      <Link
+                        to="/$seoSlug"
+                        params={{ seoSlug: `${slug}-bus-rental-guide` }}
+                        className="hover:underline"
+                      >
+                        {slug}-bus-rental-guide
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+            </section>
           </article>
         </div>
       </main>

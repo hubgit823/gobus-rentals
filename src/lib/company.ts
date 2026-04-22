@@ -10,7 +10,7 @@ export const COMPANY = {
   contactPhone: "7380027102",
   contactPhoneDisplay: "+91 73800 27102",
   whatsappE164: "917380027102",
-  contactEmail: "support@luxurybusrental.in",
+  contactEmail: "kartartravelsltd@gmail.com",
   gstNumber: "GSTIN will appear on tax invoice (update in Admin → Settings).",
   gstEnabled: true,
   gstPercentage: 18,

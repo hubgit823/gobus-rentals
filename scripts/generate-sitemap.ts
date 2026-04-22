@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { INDIAN_CITIES } from "../src/data/indian-cities.ts";
 import { BLOG_POSTS } from "../src/data/blog-posts.ts";
 import { listServiceCitySlugs } from "../src/data/service-city-pages.ts";
+import { listBusTypeSlugs } from "../src/data/bus-type-pages.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
@@ -19,8 +20,8 @@ const staticPaths: { path: string; changefreq: string; priority: string }[] = [
   { path: "/about", changefreq: "monthly", priority: "0.8" },
   { path: "/contact", changefreq: "monthly", priority: "0.8" },
   { path: "/blog", changefreq: "weekly", priority: "0.85" },
-  { path: "/guides", changefreq: "monthly", priority: "0.75" },
-  { path: "/bus-types", changefreq: "monthly", priority: "0.75" },
+  { path: "/bus-rental-guides", changefreq: "monthly", priority: "0.8" },
+  { path: "/bus-types-for-hire", changefreq: "monthly", priority: "0.8" },
   { path: "/bus-rental", changefreq: "weekly", priority: "0.75" },
   { path: "/policies/refund-cancellation", changefreq: "yearly", priority: "0.5" },
 ];
@@ -34,12 +35,16 @@ for (const x of staticPaths) {
   body += `  <url>\n    <loc>${esc(SITE + x.path)}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>${x.changefreq}</changefreq>\n    <priority>${x.priority}</priority>\n  </url>\n`;
 }
 for (const c of INDIAN_CITIES) {
-  const cityPath = `${SITE}/bus-rental-in-${c.slug}`;
+  const cityPath = `${SITE}/${c.slug}-bus-rental`;
   body += `  <url>\n    <loc>${esc(cityPath)}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
 }
 for (const slug of listServiceCitySlugs()) {
-  const p = `${SITE}/service-city/${slug}`;
+  const p = `${SITE}/${slug}-bus-rental-guide`;
   body += `  <url>\n    <loc>${esc(p)}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.85</priority>\n  </url>\n`;
+}
+for (const slug of listBusTypeSlugs()) {
+  const p = `${SITE}/${slug}`;
+  body += `  <url>\n    <loc>${esc(p)}</loc>\n    <lastmod>${LASTMOD}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
 }
 for (const b of BLOG_POSTS) {
   const blogPath = `${SITE}/blog/${b.slug}`;
@@ -53,6 +58,7 @@ ${body}</urlset>
 
 writeFileSync(join(root, "public", "sitemap.xml"), xml, "utf8");
 const svc = listServiceCitySlugs().length;
+const busTypes = listBusTypeSlugs().length;
 console.log(
-  `[sitemap] ${SITE} — ${staticPaths.length} static + ${INDIAN_CITIES.length} cities + ${svc} service-city + ${BLOG_POSTS.length} blog → public/sitemap.xml`,
+  `[sitemap] ${SITE} — ${staticPaths.length} static + ${INDIAN_CITIES.length} cities + ${svc} service-city + ${busTypes} bus-types + ${BLOG_POSTS.length} blog → public/sitemap.xml`,
 );

@@ -1,14 +1,15 @@
-import { BOOKING_BUS_TYPES } from "@/data/booking-bus-types";
+import { BUS_TYPE_PAGES } from "@/data/bus-type-pages";
 
 /**
- * Navbar → "Bus types +" menu. Labels mirror the City Wise pattern (`Name -Service`).
+ * Navbar → "Bus types +" menu.
+ * Each entry links to its dedicated SEO landing page (e.g. /mini-bus-rental).
  */
 export type NavbarBusTypeLink = Readonly<{
   label: string;
-  busType: string;
+  to: string;
 }>;
 
-export const NAVBAR_BUS_TYPE_LINKS: readonly NavbarBusTypeLink[] = BOOKING_BUS_TYPES.map((busType) => ({
-  label: `${busType} -Bus hire`,
-  busType,
+export const NAVBAR_BUS_TYPE_LINKS: readonly NavbarBusTypeLink[] = BUS_TYPE_PAGES.map((page) => ({
+  label: `${page.busType} -Bus hire`,
+  to: `/${page.slug}`,
 }));

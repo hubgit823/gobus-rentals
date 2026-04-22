@@ -29,11 +29,11 @@ export const Route = createFileRoute("/")({
   component: Index,
   head: () => {
     const { meta, links } = buildPageMeta({
-      title: "Luxury Bus Rental — Bus Rental India | Compare Luxury Bus Hire Quotes",
-      description: `${COMPANY.about} Book bus rental in India: AC, Volvo, sleeper. GST-transparent checkout on ${COMPANY.platformBrand}.`,
+      title: "Tempo Traveller & Bus Rental in India | Affordable Luxury Bus Hire",
+      description: "Book tempo traveller and luxury bus rental across India. Best price, verified drivers, GST-transparent quotes. Get free bus hire quote now — instant booking!",
       path: "/",
       keywords:
-        "bus rental India, luxury bus hire, Volvo bus rental, Mercedes coach hire, AC bus booking, 12 seater to 66 seater bus, mini bus rental Chandigarh, Delhi NCR coach hire, Himachal Volvo package, wedding bus Punjab, corporate shuttle bus, school bus charter, pilgrimage bus booking, GST bus rental, tempo traveller alternative, interstate bus permit, sleeper bus India, compare bus quotes, Luxury Bus Rental, Kartar Travels",
+        "tempo traveller on rent, bus rental in India, luxury bus rental, mini bus on rent, tempo traveller booking, tempo traveller in Delhi, tempo traveller in Patna, bus rental in Mumbai, bus hire in Bangalore, luxury bus rental in India, bus rental for wedding, bus rental for corporate travel, bus rental for outstation trip, tempo traveller for group travel, cheap tempo traveller, best bus rental service, affordable bus hire, book tempo traveller online, bus rental price per km, Volvo bus rental, AC bus booking, 12 seater to 66 seater bus, wedding bus hire, corporate bus charter",
     });
     return {
       meta: [...meta, { "script:ld+json": faqPageSchema(homeFaqs.map((f) => ({ question: f.question, answer: f.answer }))) }],

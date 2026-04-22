@@ -125,7 +125,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  to="/guides"
+                  to="/bus-rental-guides"
                   className="hover:text-primary-foreground transition-colors"
                 >
                   Guides
@@ -133,7 +133,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  to="/bus-types"
+                  to="/bus-types-for-hire"
                   className="hover:text-primary-foreground transition-colors"
                 >
                   Bus types

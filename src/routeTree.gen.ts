@@ -16,7 +16,9 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as GuidesRouteImport } from './routes/guides'
 import { Route as CustomerRouteImport } from './routes/customer'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BusTypesForHireRouteImport } from './routes/bus-types-for-hire'
 import { Route as BusTypesRouteImport } from './routes/bus-types'
+import { Route as BusRentalGuidesRouteImport } from './routes/bus-rental-guides'
 import { Route as BusRentalRouteImport } from './routes/bus-rental'
 import { Route as BookRouteImport } from './routes/book'
 import { Route as BlogRouteImport } from './routes/blog'
@@ -89,9 +91,19 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BusTypesForHireRoute = BusTypesForHireRouteImport.update({
+  id: '/bus-types-for-hire',
+  path: '/bus-types-for-hire',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BusTypesRoute = BusTypesRouteImport.update({
   id: '/bus-types',
   path: '/bus-types',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BusRentalGuidesRoute = BusRentalGuidesRouteImport.update({
+  id: '/bus-rental-guides',
+  path: '/bus-rental-guides',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BusRentalRoute = BusRentalRouteImport.update({
@@ -284,7 +296,9 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
   '/bus-rental': typeof BusRentalRouteWithChildren
+  '/bus-rental-guides': typeof BusRentalGuidesRoute
   '/bus-types': typeof BusTypesRoute
+  '/bus-types-for-hire': typeof BusTypesForHireRoute
   '/contact': typeof ContactRoute
   '/customer': typeof CustomerRouteWithChildren
   '/guides': typeof GuidesRoute
@@ -330,7 +344,9 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
   '/bus-rental': typeof BusRentalRouteWithChildren
+  '/bus-rental-guides': typeof BusRentalGuidesRoute
   '/bus-types': typeof BusTypesRoute
+  '/bus-types-for-hire': typeof BusTypesForHireRoute
   '/contact': typeof ContactRoute
   '/customer': typeof CustomerRouteWithChildren
   '/guides': typeof GuidesRoute
@@ -377,7 +393,9 @@ export interface FileRoutesById {
   '/blog': typeof BlogRouteWithChildren
   '/book': typeof BookRoute
   '/bus-rental': typeof BusRentalRouteWithChildren
+  '/bus-rental-guides': typeof BusRentalGuidesRoute
   '/bus-types': typeof BusTypesRoute
+  '/bus-types-for-hire': typeof BusTypesForHireRoute
   '/contact': typeof ContactRoute
   '/customer': typeof CustomerRouteWithChildren
   '/guides': typeof GuidesRoute
@@ -425,7 +443,9 @@ export interface FileRouteTypes {
     | '/blog'
     | '/book'
     | '/bus-rental'
+    | '/bus-rental-guides'
     | '/bus-types'
+    | '/bus-types-for-hire'
     | '/contact'
     | '/customer'
     | '/guides'
@@ -471,7 +491,9 @@ export interface FileRouteTypes {
     | '/blog'
     | '/book'
     | '/bus-rental'
+    | '/bus-rental-guides'
     | '/bus-types'
+    | '/bus-types-for-hire'
     | '/contact'
     | '/customer'
     | '/guides'
@@ -517,7 +539,9 @@ export interface FileRouteTypes {
     | '/blog'
     | '/book'
     | '/bus-rental'
+    | '/bus-rental-guides'
     | '/bus-types'
+    | '/bus-types-for-hire'
     | '/contact'
     | '/customer'
     | '/guides'
@@ -564,7 +588,9 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   BookRoute: typeof BookRoute
   BusRentalRoute: typeof BusRentalRouteWithChildren
+  BusRentalGuidesRoute: typeof BusRentalGuidesRoute
   BusTypesRoute: typeof BusTypesRoute
+  BusTypesForHireRoute: typeof BusTypesForHireRoute
   ContactRoute: typeof ContactRoute
   CustomerRoute: typeof CustomerRouteWithChildren
   GuidesRoute: typeof GuidesRoute
@@ -627,11 +653,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bus-types-for-hire': {
+      id: '/bus-types-for-hire'
+      path: '/bus-types-for-hire'
+      fullPath: '/bus-types-for-hire'
+      preLoaderRoute: typeof BusTypesForHireRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bus-types': {
       id: '/bus-types'
       path: '/bus-types'
       fullPath: '/bus-types'
       preLoaderRoute: typeof BusTypesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bus-rental-guides': {
+      id: '/bus-rental-guides'
+      path: '/bus-rental-guides'
+      fullPath: '/bus-rental-guides'
+      preLoaderRoute: typeof BusRentalGuidesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bus-rental': {
@@ -996,7 +1036,9 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   BookRoute: BookRoute,
   BusRentalRoute: BusRentalRouteWithChildren,
+  BusRentalGuidesRoute: BusRentalGuidesRoute,
   BusTypesRoute: BusTypesRoute,
+  BusTypesForHireRoute: BusTypesForHireRoute,
   ContactRoute: ContactRoute,
   CustomerRoute: CustomerRouteWithChildren,
   GuidesRoute: GuidesRoute,

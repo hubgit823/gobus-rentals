@@ -453,7 +453,7 @@ function LoginPage() {
                       </div>
                       <div className="flex justify-end">
                         <a
-                          href="mailto:support@luxurybusrental.com?subject=Password%20reset"
+                          href="mailto:kartartravelsltd@gmail.com?subject=Password%20reset"
                           className="text-xs text-primary hover:underline"
                         >
                           Forgot password?
