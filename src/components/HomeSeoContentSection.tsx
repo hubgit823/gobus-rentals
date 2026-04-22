@@ -18,14 +18,12 @@ export function HomeSeoContentSection() {
     <section id="bus-rental-guide" className="border-t border-border bg-muted/20 py-16 sm:py-24">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <header className="mb-12 text-center sm:text-left">
-          <span className="text-sm font-semibold uppercase tracking-wider text-primary">Guide &amp; fleet sizes</span>
+          <span className="text-sm font-semibold uppercase tracking-wider text-primary">Tempo Traveller &amp; Bus Rental Guide</span>
           <h2 className="font-display mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Bus rental India: in-depth guide &amp; every seater option ({BUS_SEAT_MIN}–{BUS_SEAT_MAX})
+            Bus Rental in India: Complete Guide — Tempo Traveller to {BUS_SEAT_MAX} Seater Luxury Coach
           </h2>
           <p className="mx-auto mt-3 max-w-3xl text-muted-foreground sm:mx-0">
-            Long-form reference for Volvo bus hire, Mercedes coach rental, AC luxury bus booking, wedding and corporate
-            charters across {COMPANY.operatingLocations}. Jump to a capacity band, then scroll detailed copy for each
-            seater count.
+            Compare tempo traveller on rent, mini bus on rent, Volvo bus hire, AC luxury bus booking, and sleeper coaches for weddings, corporate travel, group tours &amp; outstation trips across {COMPANY.operatingLocations}. Jump to a capacity band below.
           </p>
         </header>
 
@@ -57,11 +55,10 @@ export function HomeSeoContentSection() {
 
         <div className="mt-16 rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-10">
           <h3 className="font-display text-2xl font-bold text-foreground">
-            Vehicle &amp; service options: {BUS_SEAT_MIN} seater to {BUS_SEAT_MAX} seater buses
+            All Tempo Traveller &amp; Bus Rental Options: {BUS_SEAT_MIN} Seater to {BUS_SEAT_MAX} Seater
           </h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            Each listing explains typical use cases, comfort expectations, and what to clarify when you request quotes on{" "}
-            {COMPANY.platformBrand}. Availability depends on operator fleet in your route band.
+            From cheap tempo traveller on rent to premium luxury bus hire — each listing explains use cases, comfort expectations, and bus rental price per km. Availability depends on operator fleet in your route. Serving all major cities in India.
           </p>
 
           <ul className="mt-10 divide-y divide-border">
@@ -81,10 +78,10 @@ export function HomeSeoContentSection() {
 
           <div className="mt-10 flex flex-col items-start gap-3 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">
-              Ready to compare live quotes for your route and passenger count?
+              Ready to get the best bus rental quote? Book tempo traveller on rent or luxury bus hire instantly.
             </p>
             <Button asChild size="lg">
-              <Link to="/book">Get free bus hire quotes</Link>
+              <Link to="/book">Book Tempo Traveller &amp; Get Free Bus Quotes</Link>
             </Button>
           </div>
         </div>

@@ -1,10 +1,10 @@
 import { Bus, Users, Star, MapPin } from "lucide-react";
 
 const stats = [
-  { icon: Bus, value: "500+", label: "Bus Operators" },
-  { icon: Users, value: "50,000+", label: "Happy Customers" },
+  { icon: Bus, value: "500+", label: "Verified Bus Operators" },
+  { icon: Users, value: "10,000+", label: "Trusted by Travelers" },
   { icon: Star, value: "4.8/5", label: "Average Rating" },
-  { icon: MapPin, value: "200+", label: "Cities Covered" },
+  { icon: MapPin, value: "400+", label: "Cities Across India" },
 ];
 
 export function StatsSection() {

@@ -8,7 +8,11 @@ import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
   head: () => ({
-    meta: [{ title: `Contact — ${COMPANY.legalName}` }],
+    meta: [
+      { title: `Contact Us | Book Tempo Traveller & Bus Rental — ${COMPANY.legalName}` },
+      { name: "description", content: `Contact ${COMPANY.legalName} to book tempo traveller on rent, luxury bus hire or get a free bus rental quote. Call, WhatsApp or email for the best bus rental service in India.` },
+      { name: "keywords", content: "contact bus rental India, book tempo traveller online, bus hire enquiry, luxury bus rental contact, affordable bus hire India" },
+    ],
   }),
 });
 
@@ -19,9 +23,9 @@ function ContactPage() {
       <Navbar />
       <main className="pt-20 pb-16">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="font-display text-3xl font-bold text-foreground mb-2">Contact us</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground mb-2">Contact Us — Book Tempo Traveller &amp; Bus Rental</h1>
           <p className="text-muted-foreground text-sm mb-8">
-            Reach {COMPANY.legalName} for bookings, quotes, and support.
+            Reach {COMPANY.legalName} for tempo traveller bookings, luxury bus rental quotes &amp; support. Serving all major cities in India.
           </p>
           <ul className="space-y-6">
             <li className="flex gap-4 rounded-xl border border-border bg-card p-5">
@@ -62,8 +66,8 @@ function ContactPage() {
 
           <div className="mt-10 rounded-xl border border-border bg-muted/30 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="font-semibold text-foreground">Need a quote?</p>
-              <p className="text-sm text-muted-foreground mt-1">Submit your trip online — operators respond with GST-clear pricing.</p>
+              <p className="font-semibold text-foreground">Get Best Bus Rental Quote Now</p>
+              <p className="text-sm text-muted-foreground mt-1">Book tempo traveller on rent or luxury bus hire online — operators respond with affordable, GST-clear pricing.</p>
             </div>
             <Link to="/book" className="shrink-0">
               <Button size="lg" className="gap-2 w-full sm:w-auto">

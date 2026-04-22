@@ -3,60 +3,68 @@ import { fleetImages } from "@/lib/media";
 
 const fleetItems = [
   {
-    title: "12 Seater Mini Bus",
+    title: "12 Seater Tempo Traveller",
     seats: "12",
-    desc: "Perfect for small groups & airport transfers",
+    desc: "Best tempo traveller on rent for airport transfers, family tours & small group travel",
     ac: true,
     image: fleetImages.vanUrbaniaFront,
+    alt: "12 seater tempo traveller on rent — AC mini bus for small groups India",
   },
   {
-    title: "17 Seater Mini Bus",
+    title: "17 Seater Mini Bus on Rent",
     seats: "17",
-    desc: "Ideal for family trips & outings",
+    desc: "Affordable mini bus on rent for family outings, pilgrimages & city transfers",
     ac: true,
     image: fleetImages.vanTravellerSide,
+    alt: "17 seater mini bus on rent India — tempo traveller for group travel",
   },
   {
-    title: "26 Seater Bus",
+    title: "26 Seater AC Bus Rental",
     seats: "26",
-    desc: "Great for school trips & office outings",
+    desc: "Ideal for corporate travel, school trips & office outings — best bus rental price per km",
     ac: true,
     image: fleetImages.vanInteriorAisle,
+    alt: "26 seater AC bus rental India — affordable bus hire for corporate travel",
   },
   {
-    title: "32 Seater Bus",
+    title: "32 Seater Bus for Group Travel",
     seats: "32",
-    desc: "Best for medium-sized group tours",
+    desc: "Best bus rental for group travel, medium tours & outstation trips across India",
     ac: true,
     image: fleetImages.busInteriorOverheadRacks,
+    alt: "32 seater bus for group travel — bus rental for outstation trip India",
   },
   {
-    title: "40 Seater Luxury Bus",
+    title: "40 Seater Luxury Bus Rental",
     seats: "40",
-    desc: "Premium comfort for large groups",
+    desc: "Premium luxury bus rental in India for weddings, corporate events & large group tours",
     ac: true,
     image: fleetImages.coachSeatsReclining,
+    alt: "40 seater luxury bus rental India — premium AC coach for weddings and corporate travel",
   },
   {
-    title: "49/52 Seater Coach",
+    title: "49/52 Seater Coach Hire",
     seats: "49-52",
-    desc: "Full-size coach for weddings & events",
+    desc: "Best bus rental for weddings & events — full-size luxury coach hire at best price",
     ac: true,
     image: fleetImages.coachDepotLine,
+    alt: "49 seater bus rental for wedding India — luxury coach hire best price",
   },
   {
-    title: "Sleeper Bus",
+    title: "Sleeper Bus Rental",
     seats: "30-40",
-    desc: "Overnight journeys in comfort",
+    desc: "Comfortable sleeper bus rental for overnight outstation trips across India",
     ac: true,
     image: fleetImages.coachInteriorSemiSleeper,
+    alt: "sleeper bus rental India — overnight AC sleeper coach for outstation travel",
   },
   {
-    title: "Non-AC Bus",
+    title: "Non-AC Bus Hire",
     seats: "40-52",
-    desc: "Budget-friendly option for any trip",
+    desc: "Cheap bus hire option — affordable non-AC bus rental for budget group travel",
     ac: false,
     image: fleetImages.coachMountainRoad,
+    alt: "non-AC bus hire India — cheap affordable bus rental for budget group travel",
   },
 ];
 
@@ -65,12 +73,12 @@ export function FleetSection() {
     <section id="fleet" className="py-20 sm:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <span className="text-primary font-semibold text-sm uppercase tracking-wider">Our Fleet</span>
+          <span className="text-primary font-semibold text-sm uppercase tracking-wider">Types of Vehicles Available</span>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mt-2">
-            Choose Your Perfect Bus
+            Tempo Traveller &amp; Bus Types for Hire in India
           </h2>
           <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-            From compact mini buses to full-size luxury coaches — we have the right bus for every occasion.
+            From 12 seater tempo traveller on rent to 52 seater luxury coaches — best bus rental service for weddings, corporate travel, group tours &amp; outstation trips.
           </p>
         </div>
 
@@ -83,7 +91,7 @@ export function FleetSection() {
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
                   src={item.image}
-                  alt={item.title}
+                  alt={item.alt}
                   width={640}
                   height={400}
                   loading="lazy"

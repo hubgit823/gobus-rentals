@@ -13,11 +13,12 @@ export const Route = createFileRoute("/about")({
   component: AboutPage,
   head: () => ({
     meta: [
-      { title: `About — ${COMPANY.legalName}` },
+      { title: `About ${COMPANY.legalName} | Best Bus Rental Service in India Since 2018` },
       {
         name: "description",
-        content: COMPANY.about.slice(0, 155),
+        content: `${COMPANY.legalName} — trusted tempo traveller & luxury bus rental service since 2018. Verified drivers, sanitized vehicles, affordable bus hire across India. Know our story.`,
       },
+      { name: "keywords", content: "about Kartar Travels, best bus rental service India, luxury bus rental company, tempo traveller service provider, trusted bus hire India" },
     ],
   }),
 });
@@ -61,7 +62,7 @@ function AboutPage() {
             <div>
               <p className="text-sm text-primary font-semibold mb-3">{COMPANY.platformBrand}</p>
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight mb-4">
-                About {COMPANY.legalName}
+                About {COMPANY.legalName} — Best Bus Rental Service in India
               </h1>
               <Badge variant="secondary" className="mb-5">
                 GST {COMPANY.gstEnabled ? `${COMPANY.gstPercentage}% on bookings` : "off"} — shown on invoices
@@ -151,9 +152,9 @@ function AboutPage() {
           <div className="rounded-2xl border border-border bg-card p-5 sm:p-7">
             <div className="flex flex-wrap items-end justify-between gap-4 mb-5">
               <div>
-                <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground">Why travelers choose us</h2>
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground">Why Choose Our Bus Rental Service</h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Trusted operations, transparent billing, and real support from planning to trip completion.
+                  India's trusted tempo traveller &amp; luxury bus rental service — affordable, verified, and reliable from planning to trip completion.
                 </p>
               </div>
               <div className="grid grid-cols-3 gap-2 w-full sm:w-auto sm:min-w-[20rem]">
@@ -174,9 +175,9 @@ function AboutPage() {
 
             <div className="grid md:grid-cols-3 gap-4">
               {[
-                { title: "Verified operators", icon: ShieldCheck, text: "Onboarded partners with profile checks and quality standards." },
-                { title: "Transparent checkout", icon: CheckCircle2, text: `Clear fare with GST ${gstText} before confirmation.` },
-                { title: "Support for all groups", icon: Headset, text: "From small family trips to wedding and corporate movement plans." },
+                { title: "Verified Drivers & Operators", icon: ShieldCheck, text: "Onboarded partners with profile checks, sanitized vehicles & quality standards. Trusted by 10,000+ travelers." },
+                { title: "Best Bus Rental Price", icon: CheckCircle2, text: `Affordable bus hire with clear GST ${gstText} shown before confirmation — no hidden charges.` },
+                { title: "All Group Travel Needs", icon: Headset, text: "Tempo traveller booking, mini bus on rent, luxury bus rental for weddings, corporate travel & outstation trips." },
               ].map((item) => (
                 <div key={item.title} className="rounded-xl border border-border p-4 bg-muted/30 hover:bg-muted/50 transition-colors">
                   <div className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-2">

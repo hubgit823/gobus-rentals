@@ -32,24 +32,24 @@ export function HeroSection() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-14 sm:pb-16 w-full">
         <div className="max-w-5xl">
           <span className="inline-block bg-primary/20 text-primary-foreground border border-primary-foreground/20 rounded-full px-4 py-1.5 text-sm font-medium mb-4 sm:mb-5 backdrop-blur-sm">
-            {COMPANY.legalName}
+            Trusted by 10,000+ Travelers · {COMPANY.legalName}
           </span>
 
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary-foreground leading-[1.15] mb-3 sm:mb-4">
-            Luxury buses across North India{" "}
+            Tempo Traveller &amp; Luxury Bus Rental in India{" "}
             <span className="block text-accent mt-1">Compare. Choose. Book Instantly</span>
           </h1>
 
-          <p className="text-primary-foreground/85 text-sm sm:text-base font-medium mb-6 max-w-xl">
-            Enter your route and date — compare verified operators in one place.
+          <p className="text-primary-foreground/85 text-sm sm:text-base font-medium mb-4 max-w-xl">
+            Book tempo traveller on rent or luxury bus hire across India — verified operators, best price, GST-transparent quotes.
           </p>
 
           <p className="text-primary-foreground/75 text-sm sm:text-base mb-3 leading-relaxed max-w-2xl">
-            {COMPANY.about.slice(0, 140)}…
+            Mini bus on rent, tempo traveller booking, Volvo coaches, sleeper buses — compare all options for group travel, weddings, corporate trips &amp; outstation tours.
           </p>
           <p className="text-primary-foreground/65 text-xs sm:text-sm mb-6 flex flex-wrap items-center gap-2 max-w-2xl">
             <MapPin className="w-4 h-4 shrink-0" />
-            <span>{COMPANY.operatingLocations}</span>
+            <span>Serving all major cities in India — {COMPANY.operatingLocations}</span>
             <span className="text-primary-foreground/45">·</span>
             <span>GST {COMPANY.gstPercentage}% shown at checkout</span>
           </p>
@@ -57,12 +57,12 @@ export function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <Link to="/book">
               <Button variant="hero" size="xl" className="gap-2 bg-primary">
-                Get Free Quotes <ArrowRight className="w-5 h-5" />
+                Book Tempo Traveller Now <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
             <a href={`tel:+91${COMPANY.contactPhone}`}>
               <Button variant="hero-outline" size="xl">
-                Call / WhatsApp: {COMPANY.contactPhoneDisplay}
+                Call for Affordable Bus Hire: {COMPANY.contactPhoneDisplay}
               </Button>
             </a>
           </div>
