@@ -233,11 +233,11 @@ function LoginPage() {
 
   const handleGoogleLogin = async () => {
     if (!googleClientId) {
-      toast.error("Missing VITE_GOOGLE_CLIENT_ID in frontend .env");
+      toast.error("Missing VITE_GOOGLE_CLIENT_ID. Set it in local .env or Vercel Environment Variables.");
       return;
     }
     if (!import.meta.env.VITE_API_URL?.trim()) {
-      toast.error("Missing VITE_API_URL in frontend .env");
+      toast.error("Missing VITE_API_URL. Set it in local .env or Vercel Environment Variables.");
       return;
     }
     try {
@@ -274,11 +274,11 @@ function LoginPage() {
   };
   const handleGoogleRegister = async () => {
     if (!googleClientId) {
-      toast.error("Missing VITE_GOOGLE_CLIENT_ID in frontend .env");
+      toast.error("Missing VITE_GOOGLE_CLIENT_ID. Set it in local .env or Vercel Environment Variables.");
       return;
     }
     if (!import.meta.env.VITE_API_URL?.trim()) {
-      toast.error("Missing VITE_API_URL in frontend .env");
+      toast.error("Missing VITE_API_URL. Set it in local .env or Vercel Environment Variables.");
       return;
     }
     try {
