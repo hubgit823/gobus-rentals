@@ -1,5 +1,4 @@
 import { Users, Snowflake, Moon } from "lucide-react";
-import { fleetImages } from "@/lib/media";
 
 const fleetItems = [
   {
@@ -7,7 +6,7 @@ const fleetItems = [
     seats: "12",
     desc: "Best tempo traveller on rent for airport transfers, family tours & small group travel",
     ac: true,
-    image: fleetImages.vanUrbaniaFront,
+    image: "/images/fleet-12-seater-tempo-traveller.png",
     alt: "12 seater tempo traveller on rent — AC mini bus for small groups India",
   },
   {
@@ -15,7 +14,7 @@ const fleetItems = [
     seats: "17",
     desc: "Affordable mini bus on rent for family outings, pilgrimages & city transfers",
     ac: true,
-    image: fleetImages.vanTravellerSide,
+    image: "/images/fleet-17-seater-mini-bus.png",
     alt: "17 seater mini bus on rent India — tempo traveller for group travel",
   },
   {
@@ -23,7 +22,7 @@ const fleetItems = [
     seats: "26",
     desc: "Ideal for corporate travel, school trips & office outings — best bus rental price per km",
     ac: true,
-    image: fleetImages.vanInteriorAisle,
+    image: "/images/fleet-26-seater-ac-bus.png",
     alt: "26 seater AC bus rental India — affordable bus hire for corporate travel",
   },
   {
@@ -31,7 +30,7 @@ const fleetItems = [
     seats: "32",
     desc: "Best bus rental for group travel, medium tours & outstation trips across India",
     ac: true,
-    image: fleetImages.busInteriorOverheadRacks,
+    image: "/images/fleet-32-seater-bus.png",
     alt: "32 seater bus for group travel — bus rental for outstation trip India",
   },
   {
@@ -39,7 +38,7 @@ const fleetItems = [
     seats: "40",
     desc: "Premium luxury bus rental in India for weddings, corporate events & large group tours",
     ac: true,
-    image: fleetImages.coachSeatsReclining,
+    image: "/images/fleet-40-seater-luxury-bus.png",
     alt: "40 seater luxury bus rental India — premium AC coach for weddings and corporate travel",
   },
   {
@@ -47,7 +46,7 @@ const fleetItems = [
     seats: "49-52",
     desc: "Best bus rental for weddings & events — full-size luxury coach hire at best price",
     ac: true,
-    image: fleetImages.coachDepotLine,
+    image: "/images/fleet-49-52-seater-coach.png",
     alt: "49 seater bus rental for wedding India — luxury coach hire best price",
   },
   {
@@ -55,7 +54,7 @@ const fleetItems = [
     seats: "30-40",
     desc: "Comfortable sleeper bus rental for overnight outstation trips across India",
     ac: true,
-    image: fleetImages.coachInteriorSemiSleeper,
+    image: "/images/fleet-sleeper-bus-rental.png",
     alt: "sleeper bus rental India — overnight AC sleeper coach for outstation travel",
   },
   {
@@ -63,7 +62,7 @@ const fleetItems = [
     seats: "40-52",
     desc: "Cheap bus hire option — affordable non-AC bus rental for budget group travel",
     ac: false,
-    image: fleetImages.coachMountainRoad,
+    image: "/images/fleet-non-ac-bus-hire.png",
     alt: "non-AC bus hire India — cheap affordable bus rental for budget group travel",
   },
 ];

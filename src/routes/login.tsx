@@ -8,10 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail, Lock, Phone, ArrowRight, User, Bus, ShieldCheck, LayoutDashboard } from "lucide-react";
+import { Mail, Lock, ArrowRight, User, Bus, ShieldCheck, LayoutDashboard } from "lucide-react";
 import { api } from "@/lib/api";
 import { setAuth, type StoredUser } from "@/lib/auth-storage";
-import { cn } from "@/lib/utils";
 import { buildPageMeta } from "@/lib/seo/buildMeta";
 
 export const Route = createFileRoute("/login")({
@@ -95,8 +94,6 @@ function LoginPage() {
   const { role: roleFromUrl } = Route.useSearch();
   const [portalTab, setPortalTab] = useState<"signin" | "dashboards">("signin");
   const [accountRole, setAccountRole] = useState<AccountRole>("customer");
-  const [loginMethod, setLoginMethod] = useState<"email" | "otp">("email");
-  const [otpSent, setOtpSent] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [vendorCompanyName, setVendorCompanyName] = useState("");
@@ -120,8 +117,6 @@ function LoginPage() {
   useEffect(() => {
     if (roleFromUrl === "vendor" || roleFromUrl === "admin" || roleFromUrl === "customer") {
       setAccountRole(roleFromUrl);
-      setLoginMethod("email");
-      setOtpSent(false);
     } else {
       setAccountRole("customer");
     }
@@ -375,8 +370,6 @@ function LoginPage() {
                   onValueChange={(v) => {
                     const r = v as AccountRole;
                     setAccountRole(r);
-                    setLoginMethod("email");
-                    setOtpSent(false);
                     setRoleInUrl(r);
                   }}
                 >
@@ -398,107 +391,54 @@ function LoginPage() {
 
                 <p className="mb-4 text-center text-sm text-muted-foreground">{subtitle}</p>
 
-                <Tabs
-                  value={accountRole === "customer" ? loginMethod : "email"}
-                  onValueChange={(v) => {
-                    if (accountRole === "customer") setLoginMethod(v as "email" | "otp");
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    loginMut.mutate();
                   }}
+                  className="space-y-4"
                 >
-                  <TabsList className={cn("mb-6 grid w-full", accountRole === "customer" ? "grid-cols-2" : "grid-cols-1")}>
-                    <TabsTrigger value="email" className="gap-1">
-                      <Mail className="h-3.5 w-3.5" /> Email
-                    </TabsTrigger>
-                    {accountRole === "customer" ? (
-                      <TabsTrigger value="otp" className="gap-1">
-                        <Phone className="h-3.5 w-3.5" /> Mobile OTP
-                      </TabsTrigger>
-                    ) : null}
-                  </TabsList>
-
-                  <TabsContent value="email" className="mt-0">
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        loginMut.mutate();
-                      }}
-                      className="space-y-4"
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="flex items-center gap-1.5">
+                      <Mail className="h-4 w-4 text-primary" /> Email
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      autoComplete="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password" className="flex items-center gap-1.5">
+                      <Lock className="h-4 w-4 text-primary" /> Password
+                    </Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      autoComplete="current-password"
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <a
+                      href="mailto:kartartravelsltd@gmail.com?subject=Password%20reset"
+                      className="text-xs text-primary hover:underline"
                     >
-                      <div className="space-y-2">
-                        <Label htmlFor="email" className="flex items-center gap-1.5">
-                          <Mail className="h-4 w-4 text-primary" /> Email
-                        </Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          autoComplete="email"
-                          placeholder="you@example.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="password" className="flex items-center gap-1.5">
-                          <Lock className="h-4 w-4 text-primary" /> Password
-                        </Label>
-                        <Input
-                          id="password"
-                          type="password"
-                          autoComplete="current-password"
-                          placeholder="••••••••"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          required
-                        />
-                      </div>
-                      <div className="flex justify-end">
-                        <a
-                          href="mailto:kartartravelsltd@gmail.com?subject=Password%20reset"
-                          className="text-xs text-primary hover:underline"
-                        >
-                          Forgot password?
-                        </a>
-                      </div>
-                      <Button className="w-full" size="lg" type="submit" disabled={loginMut.isPending}>
-                        {loginMut.isPending ? "Signing in…" : `Continue as ${roleLabels[accountRole].title}`}{" "}
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
-                    </form>
-                  </TabsContent>
-
-                  {accountRole === "customer" ? (
-                    <TabsContent value="otp" className="mt-0">
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          if (!otpSent) {
-                            setOtpSent(true);
-                            toast.message("Demo mode", {
-                              description: "SMS OTP is not wired. Please use the Email tab with a registered account.",
-                            });
-                          }
-                        }}
-                        className="space-y-4"
-                      >
-                        <div className="space-y-2">
-                          <Label htmlFor="mobile" className="flex items-center gap-1.5">
-                            <Phone className="h-4 w-4 text-primary" /> Mobile Number
-                          </Label>
-                          <Input id="mobile" type="tel" placeholder="+91 98765 43210" />
-                        </div>
-                        {otpSent ? (
-                          <div className="space-y-2">
-                            <Label htmlFor="otp">Enter OTP</Label>
-                            <Input id="otp" placeholder="6-digit OTP" maxLength={6} />
-                          </div>
-                        ) : null}
-                        <Button type="submit" className="w-full" size="lg">
-                          {otpSent ? "Verify (use email login)" : "Send OTP"}
-                        </Button>
-                      </form>
-                    </TabsContent>
-                  ) : null}
-                </Tabs>
+                      Forgot password?
+                    </a>
+                  </div>
+                  <Button className="w-full" size="lg" type="submit" disabled={loginMut.isPending}>
+                    {loginMut.isPending ? "Signing in…" : `Continue as ${roleLabels[accountRole].title}`}{" "}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </form>
 
                 <div className="relative mt-6">
                   <div className="absolute inset-0 flex items-center">
