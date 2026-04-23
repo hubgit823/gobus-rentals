@@ -7,6 +7,7 @@ import { getBlogPost } from "@/data/blog-posts";
 import { buildPageMeta } from "@/lib/seo/buildMeta";
 import { articleSchema, faqPageSchema } from "@/lib/seo/schemas";
 import { COMPANY } from "@/lib/company";
+import { fleetImages, heroBackgroundVideos } from "@/lib/media";
 
 export const Route = createFileRoute("/blog/$slug")({
   beforeLoad: ({ params }) => {
@@ -34,19 +35,54 @@ export const Route = createFileRoute("/blog/$slug")({
   component: BlogArticle,
 });
 
-function BoldInline({ text }: { text: string }) {
-  const parts = text.split(/\*\*(.+?)\*\*/g);
+function BoldInline({ text }: Readonly<{ text: string }>) {
   const out: ReactNode[] = [];
-  parts.forEach((part, i) => {
-    if (i % 2 === 1) out.push(<strong key={i} className="text-foreground">{part}</strong>);
-    else if (part) out.push(part);
-  });
+  const regex = /\*\*(.+?)\*\*/g;
+  let lastIndex = 0;
+
+  for (const match of text.matchAll(regex)) {
+    const full = match[0];
+    const bold = match[1];
+    const start = match.index ?? 0;
+
+    if (start > lastIndex) out.push(text.slice(lastIndex, start));
+    out.push(
+      <strong key={`bold-${start}-${bold}`} className="text-foreground">
+        {bold}
+      </strong>,
+    );
+    lastIndex = start + full.length;
+  }
+
+  if (lastIndex < text.length) out.push(text.slice(lastIndex));
   return <>{out}</>;
 }
+
+const BLOG_MEDIA: Record<string, { image: string; imageAlt: string; video?: string }> = {
+  "bus-rental-price-delhi-2026-guide": {
+    image: fleetImages.coachDepotLine,
+    imageAlt: "Luxury bus lineup for Delhi rental planning guide",
+    video: heroBackgroundVideos[0],
+  },
+  "how-to-book-bus-for-wedding-india": {
+    image: fleetImages.coachGoldenHour,
+    imageAlt: "Wedding-ready luxury coach at golden hour",
+    video: heroBackgroundVideos[1],
+  },
+  "volvo-bus-vs-sleeper-bus-india": {
+    image: fleetImages.coachInteriorSemiSleeper,
+    imageAlt: "Luxury bus interior for Volvo versus sleeper comparison",
+    video: heroBackgroundVideos[2],
+  },
+};
 
 function BlogArticle() {
   const { slug } = Route.useParams();
   const post = getBlogPost(slug)!;
+  const media = BLOG_MEDIA[slug] ?? {
+    image: fleetImages.coachFrontMountain,
+    imageAlt: "Premium coach for bus rental blog",
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,6 +97,32 @@ function BlogArticle() {
               Published {post.datePublished} · {post.readTime} read · {COMPANY.legalName}
             </p>
           </header>
+
+          <section className="mb-10 grid gap-4 lg:grid-cols-2">
+            <div className="overflow-hidden rounded-xl border border-border bg-card">
+              <img
+                src={media.image}
+                alt={media.imageAlt}
+                className="h-full w-full min-h-[220px] object-contain bg-muted/30"
+                width={1200}
+                height={800}
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+            {media.video ? (
+              <div className="overflow-hidden rounded-xl border border-border bg-card">
+                <video
+                  className="h-full w-full min-h-[220px] object-cover bg-muted/30"
+                  src={media.video}
+                  controls
+                  muted
+                  playsInline
+                  preload="metadata"
+                />
+              </div>
+            ) : null}
+          </section>
 
           <div className="prose prose-neutral dark:prose-invert max-w-none">
             {post.sections.map((sec) => (

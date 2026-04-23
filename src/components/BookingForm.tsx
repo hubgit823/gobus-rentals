@@ -41,7 +41,7 @@ type FormState = {
 };
 
 const steps: { key: StepKey; question: string; optional?: boolean }[] = [
-  { key: "pickup", question: "Hi! I am your quote assistant. Where is your pickup city?" },
+  { key: "pickup", question: "Hi! I am Priya, your quote assistant. Where is your pickup city?" },
   { key: "drop", question: "Great. Where should we drop your group?" },
   { key: "journeyDate", question: "When is your journey date?" },
   { key: "journeyTime", question: "What is your preferred pickup time?" },
@@ -345,8 +345,11 @@ export function BookingForm({
             doneSteps.map((s) => (
               <div key={s.key} className="space-y-1">
                 <div className="flex items-start gap-2">
-                  <div className="mt-0.5 w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                    <Bot className="w-3.5 h-3.5" />
+                  <div className="mt-0.5 flex flex-col items-center gap-0.5">
+                    <div className="w-6 h-6 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                      <Bot className="w-3.5 h-3.5" />
+                    </div>
+                    <span className="text-[9px] font-semibold text-primary leading-none">Priya</span>
                   </div>
                   <p className="text-sm text-foreground/90">{s.question}</p>
                 </div>
@@ -362,8 +365,11 @@ export function BookingForm({
 
         <div className="rounded-xl border border-border p-4 sm:p-5 bg-background space-y-3">
           <div className="flex items-start gap-2">
-            <div className="mt-0.5 w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-              <Bot className="w-4 h-4" />
+            <div className="mt-0.5 flex flex-col items-center gap-0.5">
+              <div className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+                <Bot className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-semibold text-primary leading-none">Priya</span>
             </div>
             <div>
               <p className="font-medium text-foreground">{current.question}</p>

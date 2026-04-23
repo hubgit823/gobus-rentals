@@ -1,11 +1,12 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, Outlet, useChildMatches } from "@tanstack/react-router";
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { COMPANY } from "@/lib/company";
-import { getCityBySlug, getRelatedCities } from "@/data/indian-cities";
+import { getCityBySlug, getRelatedCities, type CityRecord } from "@/data/indian-cities";
 import { absoluteUrl } from "@/lib/site";
 import { buildPageMeta } from "@/lib/seo/buildMeta";
 import { faqPageSchema, localBusinessSchemaForCity, productBusMarketplaceSchema } from "@/lib/seo/schemas";
@@ -13,7 +14,8 @@ import { VEHICLE_CATALOG } from "@/lib/vehicle-catalog";
 import { getBusTypePageBySlug, type BusTypePage } from "@/data/bus-type-pages";
 import { getServiceCityPage, listServiceCitySlugs, serviceCityImageUrl } from "@/data/service-city-pages";
 import { fleetImages } from "@/lib/media";
-import { CheckCircle2, Users, MapPin, Star } from "lucide-react";
+import { CheckCircle2, Users, MapPin, Star, Bus, ArrowRight, Phone, MessageCircle } from "lucide-react";
+import { BUS_TYPE_ROUTES } from "@/data/city-bus-type-routes";
 
 const CITY_SUFFIX = "-bus-rental";
 const SERVICE_CITY_SUFFIX = "-bus-rental-guide";
@@ -38,6 +40,8 @@ export const Route = createFileRoute("/$seoSlug")({
     if (getBusTypePageBySlug(params.seoSlug)) return;
     const scSlug = extractServiceCitySlug(params.seoSlug);
     if (scSlug && getServiceCityPage(scSlug)) return;
+    // Plain city slug (no suffix) — powers the /:citySlug bus-type picker page
+    if (getCityBySlug(params.seoSlug)) return;
     throw notFound();
   },
   head: ({ params }) => {
@@ -143,6 +147,18 @@ export const Route = createFileRoute("/$seoSlug")({
       };
     }
 
+    // Plain city slug — minimal but correct meta for the picker page
+    const plainCity = getCityBySlug(params.seoSlug);
+    if (plainCity) {
+      const { meta, links } = buildPageMeta({
+        title: `Bus Rental in ${plainCity.name} — All Bus Types | ${COMPANY.legalName}`,
+        description: `Compare Volvo bus, mini bus, luxury coach, tempo traveller and more in ${plainCity.name}. Get free quotes from verified operators with ${COMPANY.legalName}.`,
+        path: `/${plainCity.slug}`,
+        keywords: `bus rental ${plainCity.name}, volvo bus ${plainCity.name}, mini bus ${plainCity.name}, luxury bus ${plainCity.name}, tempo traveller ${plainCity.name}`,
+      });
+      return { meta, links };
+    }
+
     throw notFound();
   },
   component: SeoSlugPage,
@@ -218,14 +234,133 @@ function busTypeFaqs(page: BusTypePage) {
 // ─── Root page component ──────────────────────────────────────────────────────
 
 function SeoSlugPage() {
+  // When a child route (/:citySlug/:busTypeSlug) is active, delegate rendering to it
+  const childMatches = useChildMatches();
   const { seoSlug } = Route.useParams();
+  if (childMatches.length > 0) return <Outlet />;
   const citySlug = extractCitySlug(seoSlug);
   if (citySlug && getCityBySlug(citySlug)) return <CityBusRentalPage citySlug={citySlug} />;
   const busTypePage = getBusTypePageBySlug(seoSlug);
   if (busTypePage) return <BusTypeRentalPage page={busTypePage} />;
   const scSlug = extractServiceCitySlug(seoSlug);
   if (scSlug) return <ServiceCityGuidePage citySlug={scSlug} />;
+  // Plain city slug → bus-type picker page
+  const plainCity = getCityBySlug(seoSlug);
+  if (plainCity) return <CityBusTypesPickerPage city={plainCity} />;
   throw notFound();
+}
+
+// ─── City bus-type picker page (/citySlug) ────────────────────────────────────
+
+function CityBusTypesPickerPage({ city }: Readonly<{ city: CityRecord }>) {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main className="pt-20 pb-24 md:pb-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Breadcrumbs
+            items={[
+              { label: "Bus rental", to: "/bus-rental" },
+              { label: city.name },
+            ]}
+          />
+
+          {/* Hero */}
+          <div className="mb-10">
+            <div className="flex items-center gap-2 mb-2">
+              <Badge variant="secondary">{city.state}</Badge>
+              <Badge variant="outline">400+ operators</Badge>
+            </div>
+            <h1 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-3">
+              Bus Rental in {city.name}
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl">
+              Choose your bus type below to see availability, pricing, and booking options in{" "}
+              <strong className="text-foreground">{city.name}</strong>.{" "}
+              Verified operators, GST-transparent quotes.
+            </p>
+          </div>
+
+          {/* Quick CTA strip */}
+          <div className="flex flex-wrap gap-3 mb-10">
+            <Link to="/book">
+              <Button size="lg" className="font-semibold gap-2">
+                <Bus className="w-4 h-4" />
+                Get free quotes now
+              </Button>
+            </Link>
+            <a href={`tel:+91${COMPANY.contactPhone}`}>
+              <Button size="lg" variant="outline" className="gap-2">
+                <Phone className="w-4 h-4" />
+                {COMPANY.contactPhoneDisplay}
+              </Button>
+            </a>
+            <a href={`https://wa.me/${COMPANY.whatsappE164}`} target="_blank" rel="noreferrer">
+              <Button size="lg" variant="outline" className="gap-2">
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </Button>
+            </a>
+          </div>
+
+          {/* Bus type grid */}
+          <h2 className="font-display text-xl font-semibold text-foreground mb-5">
+            Available bus types in {city.name}
+          </h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+            {BUS_TYPE_ROUTES.map((bt) => (
+              <Link
+                key={bt.slug}
+                to="/$seoSlug/rental/$busTypeSlug"
+                params={{ seoSlug: city.slug, busTypeSlug: bt.slug }}
+                className="group rounded-2xl border border-border bg-card hover:border-primary/40 hover:shadow-md transition-all p-5 flex flex-col gap-3"
+              >
+                <div className="flex items-start justify-between">
+                  <span className="text-3xl">{bt.emoji}</span>
+                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors mt-1" />
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground text-base">{bt.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{bt.seats}</p>
+                </div>
+                <p className="text-sm text-muted-foreground leading-snug">{bt.tagline}</p>
+                <div className="flex flex-wrap gap-1 mt-auto pt-1">
+                  {bt.features.slice(0, 3).map((f) => (
+                    <span
+                      key={f}
+                      className="text-[11px] bg-muted/60 text-muted-foreground rounded-full px-2 py-0.5"
+                    >
+                      {f}
+                    </span>
+                  ))}
+                </div>
+                <span className="text-xs font-medium text-primary group-hover:underline">
+                  {bt.label} rental in {city.name} →
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Also see full city guide */}
+          <div className="rounded-xl border border-border bg-muted/30 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="font-semibold text-foreground">Full bus rental guide for {city.name}</p>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                Detailed pricing, routes, FAQs, and operator tips for {city.state}.
+              </p>
+            </div>
+            <Link to="/$seoSlug" params={{ seoSlug: `${city.slug}-bus-rental` }} className="shrink-0">
+              <Button variant="secondary" className="gap-2">
+                Read full guide
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
 }
 
 // ─── City landing page ────────────────────────────────────────────────────────
@@ -284,6 +419,26 @@ function CityBusRentalPage({ citySlug }: Readonly<{ citySlug: string }>) {
               and policy-backed payments. Operators compete on service and price - ideal when you are comparing{" "}
               <strong>tempo traveller vs bus</strong> configurations for the same itinerary.
             </p>
+            <h2 className="font-display text-2xl font-semibold text-foreground mt-10 mb-3">
+              All rental vehicles in {city.name}
+            </h2>
+            <p className="text-sm text-muted-foreground mb-4">
+              Explore every rental product category. URL format follows{" "}
+              <code className="rounded bg-muted px-1 py-0.5">/{city.slug}/rental/product</code>.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
+              {BUS_TYPE_ROUTES.map((r) => (
+                <Link
+                  key={r.slug}
+                  to="/$seoSlug/rental/$busTypeSlug"
+                  params={{ seoSlug: city.slug, busTypeSlug: r.slug }}
+                  className="rounded-xl border border-border bg-card p-4 hover:border-primary/40 hover:shadow-sm transition-all"
+                >
+                  <p className="font-semibold text-foreground">{r.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{r.seats}</p>
+                </Link>
+              ))}
+            </div>
             <h2 className="font-display text-2xl font-semibold text-foreground mt-10 mb-3">Available buses (AC, Volvo, sleeper)</h2>
             <div className="grid gap-3 mb-8">
               {VEHICLE_CATALOG.map((vehicle) => (

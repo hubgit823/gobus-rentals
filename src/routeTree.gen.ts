@@ -55,6 +55,8 @@ import { Route as AdminDashboardRouteImport } from './routes/admin.dashboard'
 import { Route as AdminCustomersRouteImport } from './routes/admin.customers'
 import { Route as AdminCmsRouteImport } from './routes/admin.cms'
 import { Route as AdminBookingsRouteImport } from './routes/admin.bookings'
+import { Route as SeoSlugBusTypeSlugRouteImport } from './routes/$seoSlug.$busTypeSlug'
+import { Route as SeoSlugRentalBusTypeSlugRouteImport } from './routes/$seoSlug.rental.$busTypeSlug'
 
 const VendorRoute = VendorRouteImport.update({
   id: '/vendor',
@@ -287,10 +289,21 @@ const AdminBookingsRoute = AdminBookingsRouteImport.update({
   path: '/bookings',
   getParentRoute: () => AdminRoute,
 } as any)
+const SeoSlugBusTypeSlugRoute = SeoSlugBusTypeSlugRouteImport.update({
+  id: '/$busTypeSlug',
+  path: '/$busTypeSlug',
+  getParentRoute: () => SeoSlugRoute,
+} as any)
+const SeoSlugRentalBusTypeSlugRoute =
+  SeoSlugRentalBusTypeSlugRouteImport.update({
+    id: '/rental/$busTypeSlug',
+    path: '/rental/$busTypeSlug',
+    getParentRoute: () => SeoSlugRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/$seoSlug': typeof SeoSlugRoute
+  '/$seoSlug': typeof SeoSlugRouteWithChildren
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
@@ -306,6 +319,7 @@ export interface FileRoutesByFullPath {
   '/routes': typeof RoutesRoute
   '/signup': typeof SignupRoute
   '/vendor': typeof VendorRouteWithChildren
+  '/$seoSlug/$busTypeSlug': typeof SeoSlugBusTypeSlugRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/cms': typeof AdminCmsRoute
   '/admin/customers': typeof AdminCustomersRoute
@@ -335,10 +349,11 @@ export interface FileRoutesByFullPath {
   '/vendor/profile': typeof VendorProfileRoute
   '/vendor/quotes': typeof VendorQuotesRoute
   '/vendor/register': typeof VendorRegisterRoute
+  '/$seoSlug/rental/$busTypeSlug': typeof SeoSlugRentalBusTypeSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/$seoSlug': typeof SeoSlugRoute
+  '/$seoSlug': typeof SeoSlugRouteWithChildren
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
@@ -354,6 +369,7 @@ export interface FileRoutesByTo {
   '/routes': typeof RoutesRoute
   '/signup': typeof SignupRoute
   '/vendor': typeof VendorRouteWithChildren
+  '/$seoSlug/$busTypeSlug': typeof SeoSlugBusTypeSlugRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/cms': typeof AdminCmsRoute
   '/admin/customers': typeof AdminCustomersRoute
@@ -383,11 +399,12 @@ export interface FileRoutesByTo {
   '/vendor/profile': typeof VendorProfileRoute
   '/vendor/quotes': typeof VendorQuotesRoute
   '/vendor/register': typeof VendorRegisterRoute
+  '/$seoSlug/rental/$busTypeSlug': typeof SeoSlugRentalBusTypeSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/$seoSlug': typeof SeoSlugRoute
+  '/$seoSlug': typeof SeoSlugRouteWithChildren
   '/about': typeof AboutRoute
   '/admin': typeof AdminRouteWithChildren
   '/blog': typeof BlogRouteWithChildren
@@ -403,6 +420,7 @@ export interface FileRoutesById {
   '/routes': typeof RoutesRoute
   '/signup': typeof SignupRoute
   '/vendor': typeof VendorRouteWithChildren
+  '/$seoSlug/$busTypeSlug': typeof SeoSlugBusTypeSlugRoute
   '/admin/bookings': typeof AdminBookingsRoute
   '/admin/cms': typeof AdminCmsRoute
   '/admin/customers': typeof AdminCustomersRoute
@@ -432,6 +450,7 @@ export interface FileRoutesById {
   '/vendor/profile': typeof VendorProfileRoute
   '/vendor/quotes': typeof VendorQuotesRoute
   '/vendor/register': typeof VendorRegisterRoute
+  '/$seoSlug/rental/$busTypeSlug': typeof SeoSlugRentalBusTypeSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -453,6 +472,7 @@ export interface FileRouteTypes {
     | '/routes'
     | '/signup'
     | '/vendor'
+    | '/$seoSlug/$busTypeSlug'
     | '/admin/bookings'
     | '/admin/cms'
     | '/admin/customers'
@@ -482,6 +502,7 @@ export interface FileRouteTypes {
     | '/vendor/profile'
     | '/vendor/quotes'
     | '/vendor/register'
+    | '/$seoSlug/rental/$busTypeSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -501,6 +522,7 @@ export interface FileRouteTypes {
     | '/routes'
     | '/signup'
     | '/vendor'
+    | '/$seoSlug/$busTypeSlug'
     | '/admin/bookings'
     | '/admin/cms'
     | '/admin/customers'
@@ -530,6 +552,7 @@ export interface FileRouteTypes {
     | '/vendor/profile'
     | '/vendor/quotes'
     | '/vendor/register'
+    | '/$seoSlug/rental/$busTypeSlug'
   id:
     | '__root__'
     | '/'
@@ -549,6 +572,7 @@ export interface FileRouteTypes {
     | '/routes'
     | '/signup'
     | '/vendor'
+    | '/$seoSlug/$busTypeSlug'
     | '/admin/bookings'
     | '/admin/cms'
     | '/admin/customers'
@@ -578,11 +602,12 @@ export interface FileRouteTypes {
     | '/vendor/profile'
     | '/vendor/quotes'
     | '/vendor/register'
+    | '/$seoSlug/rental/$busTypeSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  SeoSlugRoute: typeof SeoSlugRoute
+  SeoSlugRoute: typeof SeoSlugRouteWithChildren
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRouteWithChildren
   BlogRoute: typeof BlogRouteWithChildren
@@ -926,8 +951,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminBookingsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/$seoSlug/$busTypeSlug': {
+      id: '/$seoSlug/$busTypeSlug'
+      path: '/$busTypeSlug'
+      fullPath: '/$seoSlug/$busTypeSlug'
+      preLoaderRoute: typeof SeoSlugBusTypeSlugRouteImport
+      parentRoute: typeof SeoSlugRoute
+    }
+    '/$seoSlug/rental/$busTypeSlug': {
+      id: '/$seoSlug/rental/$busTypeSlug'
+      path: '/rental/$busTypeSlug'
+      fullPath: '/$seoSlug/rental/$busTypeSlug'
+      preLoaderRoute: typeof SeoSlugRentalBusTypeSlugRouteImport
+      parentRoute: typeof SeoSlugRoute
+    }
   }
 }
+
+interface SeoSlugRouteChildren {
+  SeoSlugBusTypeSlugRoute: typeof SeoSlugBusTypeSlugRoute
+  SeoSlugRentalBusTypeSlugRoute: typeof SeoSlugRentalBusTypeSlugRoute
+}
+
+const SeoSlugRouteChildren: SeoSlugRouteChildren = {
+  SeoSlugBusTypeSlugRoute: SeoSlugBusTypeSlugRoute,
+  SeoSlugRentalBusTypeSlugRoute: SeoSlugRentalBusTypeSlugRoute,
+}
+
+const SeoSlugRouteWithChildren =
+  SeoSlugRoute._addFileChildren(SeoSlugRouteChildren)
 
 interface AdminRouteChildren {
   AdminBookingsRoute: typeof AdminBookingsRoute
@@ -1030,7 +1082,7 @@ const VendorRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SeoSlugRoute: SeoSlugRoute,
+  SeoSlugRoute: SeoSlugRouteWithChildren,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRouteWithChildren,
   BlogRoute: BlogRouteWithChildren,
