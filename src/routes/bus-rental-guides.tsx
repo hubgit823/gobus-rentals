@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { COMPANY } from "@/lib/company";
 import { buildPageMeta } from "@/lib/seo/buildMeta";
 import { faqPageSchema } from "@/lib/seo/schemas";
-import { fleetImages } from "@/lib/media";
 import { Badge } from "@/components/ui/badge";
 import { CheckSquare, Compass, FileText, ShieldCheck } from "lucide-react";
 
@@ -115,30 +114,6 @@ function BusRentalGuidesPage() {
               </Link>
             </li>
           </ul>
-
-          <h2 className="font-display text-2xl font-semibold mt-10 mb-3">Keyword clusters we cover</h2>
-          <p className="text-muted-foreground leading-relaxed mb-4">
-            <strong className="text-foreground">Primary:</strong> bus rental in your city, bus hire in your city, luxury bus
-            rental near you. <strong className="text-foreground">Secondary:</strong> wedding bus rental, corporate bus hire,
-            tempo traveller vs bus, school trip charter, pilgrimage group transport.
-          </p>
-
-          <div className="grid sm:grid-cols-2 gap-4 mt-5 mb-8">
-            <img
-              src={fleetImages.coachSeatsReclining}
-              alt="Premium seater bus interior"
-              className="w-full h-48 object-contain rounded-xl border border-border bg-muted/30"
-              width={900}
-              height={600}
-            />
-            <img
-              src={fleetImages.vanTravellerSide}
-              alt="Mini bus option for city transfers"
-              className="w-full h-48 object-contain rounded-xl border border-border bg-muted/30"
-              width={900}
-              height={600}
-            />
-          </div>
 
           <h2 className="font-display text-2xl font-semibold mt-10 mb-3">Programmatic city pages</h2>
           <p className="text-muted-foreground leading-relaxed mb-6">
