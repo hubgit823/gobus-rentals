@@ -6,7 +6,6 @@ import { BLOG_POSTS } from "@/data/blog-posts";
 import { INDIAN_CITIES } from "@/data/indian-cities";
 import { buildPageMeta } from "@/lib/seo/buildMeta";
 import { COMPANY } from "@/lib/company";
-import { fleetImages } from "@/lib/media";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Clock3, BookOpenCheck } from "lucide-react";
 
@@ -66,11 +65,13 @@ function BlogIndex() {
 
             <div className="rounded-2xl border border-border overflow-hidden bg-card">
               <img
-                src={fleetImages.coachGoldenHour}
-                alt="Luxury coach for India travel guides"
-                className="w-full h-full min-h-[250px] object-contain bg-muted/30"
-                width={1200}
-                height={800}
+                src="/images/blog-luxury-fleet-grid.png"
+                alt="Luxury bus rental fleet grid — tempo traveller, mini bus, coaches and sleeper options for India travel guides"
+                className="w-full min-h-[260px] sm:min-h-[280px] object-cover object-center"
+                width={1600}
+                height={1200}
+                loading="eager"
+                decoding="async"
               />
             </div>
           </section>

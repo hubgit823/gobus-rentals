@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { ChevronDown } from "lucide-react";
 import { homeSeoArticleSections } from "@/data/home-seo-longform";
 import { busCapacities12to66, BUS_SEAT_MIN, BUS_SEAT_MAX } from "@/data/bus-capacities";
 import { COMPANY } from "@/lib/company";
@@ -13,70 +14,172 @@ const tocBands = [
   { label: "62–66", from: 62, to: 66 },
 ];
 
+/** Short labels for topic chips (full titles stay inside each panel). */
+const guideTopicNavLabel: Record<string, string> = {
+  intro: "Overview",
+  "keywords-routes": "Cities & routes",
+  "fleet-tech": "Coach specs",
+  "pricing-gst": "GST & pricing",
+  "safety-compliance": "Safety & permits",
+  "booking-workflow": "How booking works",
+  seasonality: "Peak seasons",
+  sustainability: "BS6 & fleets",
+  conclusion: "Get started",
+  "capacity-planning": "Sizing & luggage",
+};
+
 export function HomeSeoContentSection() {
   return (
     <section id="bus-rental-guide" className="border-t border-border bg-muted/20 py-16 sm:py-24">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <header className="mb-12 text-center sm:text-left">
-          <span className="text-sm font-semibold uppercase tracking-wider text-primary">Tempo Traveller &amp; Bus Rental Guide</span>
-          <h2 className="font-display mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Bus Rental in India: Complete Guide — Tempo Traveller to {BUS_SEAT_MAX} Seater Luxury Coach
-          </h2>
-          <p className="mx-auto mt-3 max-w-3xl text-muted-foreground sm:mx-0">
-            Compare tempo traveller on rent, mini bus on rent, Volvo bus hire, AC luxury bus booking, and sleeper coaches for weddings, corporate travel, group tours &amp; outstation trips across {COMPANY.operatingLocations}. Jump to a capacity band below.
-          </p>
-        </header>
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-16 overflow-hidden rounded-2xl border border-border bg-gradient-to-b from-card to-card/95 shadow-sm ring-1 ring-border/50 sm:rounded-3xl">
+          <div className="border-b border-border/80 bg-muted/40 px-5 py-8 sm:px-8 sm:py-10">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-3xl text-center sm:text-left">
+                <p className="text-xs font-semibold uppercase tracking-wider text-primary">
+                  Tempo Traveller &amp; Bus Rental Guide
+                </p>
+                <h2 className="font-display mt-2 text-balance text-2xl font-bold tracking-tight text-foreground sm:text-3xl lg:text-4xl">
+                  Bus Rental in India: Complete Guide — Tempo Traveller to {BUS_SEAT_MAX} Seater Luxury Coach
+                </h2>
+                <p className="mx-auto mt-3 text-sm leading-relaxed text-muted-foreground sm:mx-0 sm:text-base">
+                  Compare tempo traveller on rent, mini bus on rent, Volvo bus hire, AC luxury bus booking, and
+                  sleeper coaches for weddings, corporate travel, group tours &amp; outstation trips across{" "}
+                  {COMPANY.operatingLocations}. Open a topic below, or jump straight to a seat band.
+                </p>
+              </div>
+              <p className="mx-auto shrink-0 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-medium text-muted-foreground shadow-sm sm:mx-0">
+                {homeSeoArticleSections.length} topics
+              </p>
+            </div>
 
-        <nav
-          aria-label="Bus capacity table of contents"
-          className="mb-10 flex flex-wrap justify-center gap-2 sm:justify-start"
-        >
-          {tocBands.map((b) => (
-            <a
-              key={b.label}
-              href={`#seater-${b.from}`}
-              className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground shadow-sm transition-colors hover:border-primary/50 hover:bg-primary/5"
-            >
-              {b.label} seater
-            </a>
-          ))}
-        </nav>
+            <div className="mt-8 space-y-5">
+              <div>
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  Guide topics
+                </p>
+                <nav aria-label="Guide topics" className="flex flex-wrap justify-center gap-2 sm:justify-start">
+                  {homeSeoArticleSections.map((sec) => (
+                    <a
+                      key={`topic-${sec.id}`}
+                      href={`#guide-${sec.id}`}
+                      className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                    >
+                      {guideTopicNavLabel[sec.id] ?? sec.id}
+                    </a>
+                  ))}
+                </nav>
+              </div>
+              <div>
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                  Seat capacity bands
+                </p>
+                <nav aria-label="Bus capacity table of contents" className="flex flex-wrap justify-center gap-2 sm:justify-start">
+                  {tocBands.map((b) => (
+                    <a
+                      key={b.label}
+                      href={`#seater-${b.from}`}
+                      className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                    >
+                      {b.label} seater
+                    </a>
+                  ))}
+                </nav>
+              </div>
+            </div>
+          </div>
 
-        <article className="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-display prose-a:text-primary">
-          {homeSeoArticleSections.map((sec) => (
-            <section key={sec.id} className="mb-12 border-b border-border/80 pb-12 last:mb-0 last:border-0 last:pb-0">
-              <h3 className="text-foreground">{sec.title}</h3>
-              {sec.paragraphs.map((p, i) => (
-                <p key={`${sec.id}-${i}`}>{p}</p>
-              ))}
-            </section>
-          ))}
-        </article>
-
-        <div className="mt-16 rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-10">
-          <h3 className="font-display text-2xl font-bold text-foreground">
-            All Tempo Traveller &amp; Bus Rental Options: {BUS_SEAT_MIN} Seater to {BUS_SEAT_MAX} Seater
-          </h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            From cheap tempo traveller on rent to premium luxury bus hire — each listing explains use cases, comfort expectations, and bus rental price per km. Availability depends on operator fleet in your route. Serving all major cities in India.
-          </p>
-
-          <ul className="mt-10 divide-y divide-border">
-            {busCapacities12to66.map((row) => (
-              <li
-                key={row.seats}
-                id={`seater-${row.seats}`}
-                className="scroll-mt-28 py-8 first:pt-0 first:md:scroll-mt-32"
+          <div className="divide-y divide-border/80 px-1 sm:px-2">
+            {homeSeoArticleSections.map((sec) => (
+              <details
+                key={sec.id}
+                id={`guide-${sec.id}`}
+                className="scroll-mt-28 group bg-background/40 open:bg-background sm:scroll-mt-32 [&[open]>summary_.cap-chevron-guide]:rotate-180"
+                defaultOpen={sec.id === "intro"}
               >
-                <h4 className="font-display text-lg font-semibold text-foreground sm:text-xl">
-                  {row.title} rental in India
-                </h4>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">{row.description}</p>
-              </li>
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-4 sm:px-6 sm:py-5 [&::-webkit-details-marker]:hidden">
+                  <h3 className="font-display text-left text-base font-semibold leading-snug text-foreground sm:text-lg">
+                    {sec.title}
+                  </h3>
+                  <ChevronDown className="cap-chevron-guide h-5 w-5 shrink-0 text-primary transition-transform duration-200" />
+                </summary>
+                <div className="border-t border-border/60 px-4 pb-5 pt-1 sm:px-6 sm:pb-6">
+                  <div className="prose prose-sm prose-neutral max-w-none dark:prose-invert prose-p:leading-relaxed prose-headings:font-display prose-a:text-primary sm:prose-base">
+                    {sec.paragraphs.map((p, i) => (
+                      <p key={`${sec.id}-${i}`}>{p}</p>
+                    ))}
+                  </div>
+                </div>
+              </details>
             ))}
-          </ul>
+          </div>
+        </div>
 
-          <div className="mt-10 flex flex-col items-start gap-3 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-16 overflow-hidden rounded-2xl border border-border bg-gradient-to-b from-card to-card/95 shadow-sm ring-1 ring-border/50 sm:rounded-3xl">
+          <div className="border-b border-border/80 bg-muted/40 px-5 py-8 sm:px-8 sm:py-10">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+              <div className="max-w-3xl">
+                <p className="text-xs font-semibold uppercase tracking-wider text-primary">Capacity guide</p>
+                <h3 className="font-display text-balance text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+                  All Tempo Traveller &amp; Bus Rental Options: {BUS_SEAT_MIN} to {BUS_SEAT_MAX} Seater
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                  From compact tempo travellers to full-size coaches — open any card for route, luggage, and permit
+                  notes. Availability depends on your city and dates across {COMPANY.operatingLocations}.
+                </p>
+              </div>
+              <p className="shrink-0 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-medium text-muted-foreground tabular-nums shadow-sm">
+                {busCapacities12to66.length} capacities
+              </p>
+            </div>
+
+            <nav
+              aria-label="Jump to seat range inside capacity guide"
+              className="mt-6 flex flex-wrap gap-2"
+            >
+              {tocBands.map((b) => (
+                <a
+                  key={`in-card-${b.label}`}
+                  href={`#seater-${b.from}`}
+                  className="rounded-lg border border-border bg-background px-3 py-2 text-xs font-semibold text-foreground shadow-sm transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                >
+                  {b.label} seater
+                </a>
+              ))}
+            </nav>
+          </div>
+
+          <div className="px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+            <ul className="grid list-none grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-3">
+              {busCapacities12to66.map((row) => (
+                <li key={row.seats} className="min-w-0">
+                  <div
+                    id={`seater-${row.seats}`}
+                    className="scroll-mt-28 rounded-xl border border-border/90 bg-background/60 p-4 shadow-sm transition-colors hover:border-primary/30 hover:bg-background sm:scroll-mt-32"
+                  >
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="font-display text-lg font-bold tabular-nums text-foreground">{row.seats}</span>
+                      <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                        seater
+                      </span>
+                    </div>
+                    <h4 className="mt-1 font-display text-sm font-semibold leading-snug text-foreground sm:text-base">
+                      {row.title} rental in India
+                    </h4>
+                    <details className="mt-3 border-t border-border/60 pt-3 [&[open]>summary_.cap-chevron]:rotate-180">
+                      <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-sm font-medium text-primary hover:underline [&::-webkit-details-marker]:hidden">
+                        <span>Planning &amp; booking notes</span>
+                        <ChevronDown className="cap-chevron h-4 w-4 shrink-0 text-primary transition-transform duration-200" />
+                      </summary>
+                      <p className="mt-3 text-xs leading-relaxed text-muted-foreground sm:text-sm">{row.description}</p>
+                    </details>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex flex-col items-start gap-3 border-t border-border bg-muted/30 px-5 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <p className="text-sm text-muted-foreground">
               Ready to get the best bus rental quote? Book tempo traveller on rent or luxury bus hire instantly.
             </p>

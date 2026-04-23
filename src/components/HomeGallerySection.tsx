@@ -2,12 +2,12 @@ import { COMPANY } from "@/lib/company";
 import { fleetImages } from "@/lib/media";
 
 const photos = [
-  { src: fleetImages.coachSeatsReclining, alt: "Reclining seats on a premium coach", tall: true },
-  { src: fleetImages.coachMountainRoad, alt: "Coach on a scenic mountain road", tall: false },
-  { src: fleetImages.coachGoldenHour, alt: "Luxury coach at sunset", tall: false },
-  { src: fleetImages.vanInteriorAisle, alt: "Spacious mini-bus cabin for groups", tall: true },
-  { src: fleetImages.vanTravellerSide, alt: "Mini bus for airport and city transfers", tall: false },
-  { src: fleetImages.coachFrontMountain, alt: "Volvo coach ready for hill routes", tall: false },
+  { src: "/images/gallery-reclining-seats.png", alt: "Reclining seats on a premium coach", tall: true },
+  { src: "/images/gallery-scenic-mountain-road.png", alt: "Coach on a scenic mountain road", tall: false },
+  { src: "/images/gallery-luxury-sunset.png", alt: "Luxury coach at sunset", tall: false },
+  { src: "/images/gallery-spacious-minibus-cabin.png", alt: "Spacious mini-bus cabin for groups", tall: true },
+  { src: "/images/gallery-mini-bus-airport-city.png", alt: "Mini bus for airport and city transfers", tall: false },
+  { src: "/images/gallery-volvo-hill-routes.png", alt: "Volvo coach ready for hill routes", tall: false },
 ];
 
 export function HomeGallerySection() {
@@ -28,19 +28,14 @@ export function HomeGallerySection() {
         {/* Wide highlight */}
         <figure className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-md mb-4 sm:mb-5 group">
           <img
-            src={fleetImages.coachDepotLine}
+            src="/images/gallery-charter-hero.png"
             alt="Fleet of luxury coaches ready for charter"
             width={1600}
             height={640}
             loading="lazy"
             decoding="async"
-            className="w-full aspect-[21/9] sm:aspect-[3/1] object-contain bg-muted/30 transition-transform duration-700 group-hover:scale-[1.02]"
+            className="w-full h-auto object-contain bg-muted/30 transition-transform duration-700 group-hover:scale-[1.02]"
           />
-          <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-foreground/85 to-transparent px-5 py-6 sm:py-8">
-            <p className="text-primary-foreground font-display text-lg sm:text-xl font-semibold">
-              Charter &amp; intercity — Volvo, Mercedes-Benz, sleeper &amp; seater
-            </p>
-          </figcaption>
         </figure>
 
         {/* Masonry-style columns */}

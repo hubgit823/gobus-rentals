@@ -51,11 +51,13 @@ function BusRentalGuidesPage() {
           <Breadcrumbs items={[{ label: "Bus rental guides" }]} />
           <section className="rounded-2xl border border-border bg-card overflow-hidden mb-8">
             <img
-              src={fleetImages.coachMountainRoad}
-              alt="Bus rental guides for India"
-              className="w-full h-52 sm:h-64 object-contain bg-muted/30"
-              width={1400}
-              height={800}
+              src="/images/bus-rental-guides-hero.png"
+              alt="Bus rental guides for India — luxury coach travel"
+              width={1600}
+              height={900}
+              loading="eager"
+              decoding="async"
+              className="block w-full h-auto object-contain bg-muted/30"
             />
             <div className="p-5 sm:p-7">
               <Badge variant="secondary" className="mb-3">Planning hub</Badge>

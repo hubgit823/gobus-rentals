@@ -203,29 +203,28 @@ function AboutPage() {
                 </a>
               </p>
               <div className="flex flex-col sm:flex-row gap-2 mt-4">
-                <a href={`tel:+91${COMPANY.contactPhone}`} className="sm:flex-1">
-                  <Button variant="secondary" className="w-full gap-2">
+                <Button asChild variant="secondary" className="w-full gap-2 sm:flex-1">
+                  <a href={`tel:+91${COMPANY.contactPhone}`}>
                     <Phone className="w-4 h-4" />
                     Call now
-                  </Button>
-                </a>
-                <a
-                  href={`https://wa.me/${COMPANY.whatsappE164}?text=${encodeURIComponent("Hi, I need bus rental support.")}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="sm:flex-1"
-                >
-                  <Button variant="outline" className="w-full gap-2">
+                  </a>
+                </Button>
+                <Button asChild variant="outline" className="w-full gap-2 sm:flex-1">
+                  <a
+                    href={`https://wa.me/${COMPANY.whatsappE164}?text=${encodeURIComponent("Hi, I need bus rental support.")}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     <MessageCircle className="w-4 h-4" />
                     WhatsApp
-                  </Button>
-                </a>
-                <Link to="/book" className="sm:flex-1">
-                  <Button className="w-full gap-2">
+                  </a>
+                </Button>
+                <Button asChild className="w-full gap-2 sm:flex-1">
+                  <Link to="/book">
                     <Users className="w-4 h-4" />
                     Get quotes
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </div>
               <p className="text-sm text-muted-foreground pt-3">
                 <Link to="/policies/refund-cancellation" className="text-primary hover:underline">
