@@ -1,5 +1,6 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
-import { AdminSidebar } from "@/components/dashboards/AdminSidebar";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { ResponsivePanelLayout } from "@/components/dashboards/ResponsivePanelLayout";
+import { adminPanelLinks } from "@/components/dashboards/panel-links";
 
 export const Route = createFileRoute("/admin")({
   component: AdminLayout,
@@ -7,11 +8,13 @@ export const Route = createFileRoute("/admin")({
 
 function AdminLayout() {
   return (
-    <div className="min-h-screen bg-surface flex">
-      <AdminSidebar />
-      <div className="flex-1 min-w-0">
-        <Outlet />
-      </div>
-    </div>
+    <ResponsivePanelLayout
+      links={adminPanelLinks}
+      panelLabel="Admin Panel"
+      panelLabelClassName="text-destructive font-semibold"
+      logoutTo="/admin/login"
+    >
+      <Outlet />
+    </ResponsivePanelLayout>
   );
 }

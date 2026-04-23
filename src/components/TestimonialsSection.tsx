@@ -4,13 +4,13 @@ const testimonials = [
   {
     name: "Priya Sharma",
     role: "Wedding Planner, Delhi",
-    text: "LuxuryBusRental made our wedding transport seamless. Got 5 quotes within an hour and saved ₹40,000 compared to our usual vendor!",
+    text: "Luxury Bus Rental made our wedding transport seamless. Got 5 quotes within an hour and saved ₹40,000 compared to our usual vendor!",
     rating: 5,
   },
   {
     name: "Rajesh Mehta",
     role: "HR Manager, TCS Mumbai",
-    text: "We use LuxuryBusRental for all our corporate outings. The platform is reliable, buses are clean, and operators are professional.",
+    text: "We use Luxury Bus Rental for all our corporate outings. The platform is reliable, buses are clean, and operators are professional.",
     rating: 5,
   },
   {
@@ -31,7 +31,7 @@ export function TestimonialsSection() {
             Loved by Thousands
           </h2>
           <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-            See what our customers say about their experience with LuxuryBusRental.
+            See what our customers say about their experience with Luxury Bus Rental.
           </p>
         </div>
 

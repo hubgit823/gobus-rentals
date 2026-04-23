@@ -1,6 +1,13 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { Outlet, Link, createRootRoute, HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
+import { queryClient } from "@/lib/query-client";
+import { Toaster } from "@/components/ui/sonner";
+import { StickyLeadBar } from "@/components/seo/StickyLeadBar";
+import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_TWITTER_HANDLE, absoluteUrl } from "@/lib/site";
+import { organizationSchema, websiteSchema } from "@/lib/seo/schemas";
 
 function NotFoundComponent() {
   return (
@@ -31,43 +38,57 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "LuxuryBusRental — Premium Bus Rental Marketplace in India" },
-      { name: "description", content: "Compare quotes from top bus operators across India. Book AC/Non-AC buses for weddings, corporate events, tours & more. Best prices guaranteed." },
-      { name: "author", content: "LuxuryBusRental" },
-      { property: "og:title", content: "LuxuryBusRental — Premium Bus Rental Marketplace" },
-      { property: "og:description", content: "Compare quotes from top bus operators across India. Book AC/Non-AC buses for weddings, corporate events, tours & more." },
+      { title: `Kartar Travels — Luxury bus rental across North India | ${SITE_NAME}` },
+      {
+        name: "description",
+        content:
+          "Kartar Travels Private Limited — Volvo, Mercedes-Benz, seater & sleeper buses. Chandigarh, Delhi, Punjab, Haryana, Himachal & North India. Compare quotes and book with GST-transparent pricing.",
+      },
+      { name: "author", content: "Kartar Travels Private Limited" },
+      {
+        name: "keywords",
+        content:
+          "bus rental India, luxury bus hire, bus hire online, Volvo bus rental, wedding bus rental, corporate bus hire, tempo traveller booking, group travel bus, bus rental Delhi, bus rental Mumbai, Luxury Bus Rental",
+      },
+      { property: "og:title", content: "Kartar Travels — Premium bus rental marketplace" },
+      {
+        property: "og:description",
+        content:
+          "Trusted luxury bus rentals since 2018. Safe, reliable travel across North India at competitive prices with clear GST on every booking.",
+      },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: "https://lovable.dev/opengraph-image-p98pqg.png" },
+      { property: "og:url", content: absoluteUrl("/") },
+      { property: "og:image", content: DEFAULT_OG_IMAGE },
+      { property: "og:locale", content: "en_IN" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:image", content: "https://lovable.dev/opengraph-image-p98pqg.png" },
+      { name: "twitter:site", content: SITE_TWITTER_HANDLE },
+      { name: "twitter:image", content: DEFAULT_OG_IMAGE },
+      { "script:ld+json": organizationSchema() },
+      { "script:ld+json": websiteSchema() },
     ],
     links: [
       {
+        rel: "icon",
+        type: "image/png",
+        href: "/images/logo.png",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/images/logo.png",
+      },
+      {
         rel: "stylesheet",
         href: appCss,
-      },
-      {
-        rel: "preconnect",
-        href: "https://fonts.googleapis.com",
-      },
-      {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
-        crossOrigin: "anonymous" as const,
-      },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap",
       },
     ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
+  errorComponent: RootErrorComponent,
   notFoundComponent: NotFoundComponent,
 });
 
-function RootShell({ children }: { children: React.ReactNode }) {
+function RootShell({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <head>
@@ -82,5 +103,59 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const hideSticky =
+    /^\/admin(\/|$)/.test(pathname) ||
+    /^\/vendor(\/|$)/.test(pathname) ||
+    /^\/customer(\/|$)/.test(pathname) ||
+    pathname === "/" ||
+    pathname === "/login" ||
+    pathname === "/signup";
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div className={hideSticky ? "" : "pb-16 md:pb-0 min-h-screen"}>
+        <Outlet />
+      </div>
+      {!hideSticky ? <StickyLeadBar /> : null}
+      <Toaster richColors position="top-center" />
+    </QueryClientProvider>
+  );
+}
+
+function RootErrorComponent({ error }: Readonly<{ error: Error }>) {
+  const msg = error?.message || "Unexpected application error";
+  const isDomRemoveChildRace = msg.includes("removeChild") && msg.includes("not a child of this node");
+
+  useEffect(() => {
+    if (globalThis.window === undefined || !isDomRemoveChildRace) return;
+    const key = "__lbr_removeChild_recovered__";
+    const alreadyRecovered = sessionStorage.getItem(key) === "1";
+    if (!alreadyRecovered) {
+      sessionStorage.setItem(key, "1");
+      globalThis.window.setTimeout(() => globalThis.window.location.reload(), 50);
+    }
+  }, [isDomRemoveChildRace]);
+
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="max-w-md text-center">
+        <h2 className="text-xl font-semibold text-foreground">Page recovery in progress</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {isDomRemoveChildRace
+            ? "A temporary UI race condition was detected. The app has been refreshed."
+            : msg}
+        </p>
+        <div className="mt-5">
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            onClick={() => globalThis.window.location.reload()}
+          >
+            Reload now
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }

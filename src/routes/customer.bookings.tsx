@@ -1,67 +1,296 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Download, Eye, X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Download, Eye, X, CreditCard } from "lucide-react";
+import { api } from "@/lib/api";
+import { COMPANY } from "@/lib/company";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
+import { RazorpayBookingPayButton } from "@/components/payments/RazorpayBookingPayButton";
 
 export const Route = createFileRoute("/customer/bookings")({
   component: CustomerBookings,
 });
 
-const bookings = [
-  { id: "BK001", from: "Mumbai", to: "Pune", date: "2025-02-15", bus: "40 Seater AC", vendor: "ABC Travels", status: "Confirmed", amount: "₹18,000" },
-  { id: "BK002", from: "Delhi", to: "Jaipur", date: "2025-02-20", bus: "26 Seater AC", vendor: "Royal Tours", status: "Pending", amount: "₹12,500" },
-  { id: "BK003", from: "Bangalore", to: "Mysore", date: "2025-01-10", bus: "17 Seater Mini", vendor: "Green Travels", status: "Completed", amount: "₹8,000" },
-  { id: "BK004", from: "Chennai", to: "Pondicherry", date: "2024-12-25", bus: "12 Seater Mini", vendor: "Star Bus Co.", status: "Cancelled", amount: "₹5,500" },
-];
-
-const statusColor: Record<string, string> = {
-  Confirmed: "bg-chart-4/20 text-chart-4",
-  Pending: "bg-chart-5/20 text-chart-5",
-  Completed: "bg-chart-2/20 text-chart-2",
-  Cancelled: "bg-destructive/20 text-destructive",
+type BookingRow = {
+  id: string;
+  from: string;
+  to: string;
+  date: string;
+  bus: string;
+  vendor: string;
+  status: string;
+  rawStatus: string;
+  amount: string;
+  subtotal: string;
+  gstAmount: string;
+  totalWithGst: string;
+  paymentType: string;
+  advanceRequired: string;
+  amountPaid: string;
+  balanceDue: string;
+  paymentStatus: string;
+  gstRatePercent: number;
 };
 
-function CustomerBookings() {
-  return (
-    <div className="p-6 sm:p-8 max-w-6xl">
-      <h1 className="font-display text-2xl font-bold text-foreground mb-1">My Bookings</h1>
-      <p className="text-muted-foreground text-sm mb-6">View and manage all your bus bookings</p>
+type Res = { bookings: BookingRow[] };
 
-      <div className="bg-card rounded-xl border border-border overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border text-muted-foreground">
-              <th className="text-left px-5 py-3 font-medium">ID</th>
-              <th className="text-left px-5 py-3 font-medium">Route</th>
-              <th className="text-left px-5 py-3 font-medium">Date</th>
-              <th className="text-left px-5 py-3 font-medium">Bus</th>
-              <th className="text-left px-5 py-3 font-medium">Operator</th>
-              <th className="text-left px-5 py-3 font-medium">Status</th>
-              <th className="text-left px-5 py-3 font-medium">Amount</th>
-              <th className="text-left px-5 py-3 font-medium">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bookings.map((b) => (
-              <tr key={b.id} className="border-b border-border last:border-0 hover:bg-muted/50">
-                <td className="px-5 py-3 font-medium text-foreground">{b.id}</td>
-                <td className="px-5 py-3 text-foreground">{b.from} → {b.to}</td>
-                <td className="px-5 py-3 text-muted-foreground">{b.date}</td>
-                <td className="px-5 py-3 text-muted-foreground">{b.bus}</td>
-                <td className="px-5 py-3 text-foreground">{b.vendor}</td>
-                <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor[b.status]}`}>{b.status}</span></td>
-                <td className="px-5 py-3 font-medium text-foreground">{b.amount}</td>
-                <td className="px-5 py-3">
-                  <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" className="h-7 w-7"><Eye className="w-3.5 h-3.5" /></Button>
-                    <Button variant="ghost" size="icon" className="h-7 w-7"><Download className="w-3.5 h-3.5" /></Button>
-                    {b.status === "Pending" && <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive"><X className="w-3.5 h-3.5" /></Button>}
-                  </div>
-                </td>
+const useRazorpayRemote = Boolean(import.meta.env.VITE_API_URL?.trim());
+
+function CustomerBookings() {
+  const qc = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["customer-bookings"],
+    queryFn: () => api<Res>("/api/customer/bookings"),
+  });
+
+  const cancelMut = useMutation({
+    mutationFn: (id: string) => api("/api/customer/bookings/" + id + "/cancel", { method: "POST" }),
+    onSuccess: () => {
+      toast.success("Booking cancelled");
+      qc.invalidateQueries({ queryKey: ["customer-bookings"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const payAdvanceMut = useMutation({
+    mutationFn: (id: string) => api("/api/customer/bookings/" + id + "/pay-advance", { method: "POST" }),
+    onSuccess: () => {
+      toast.success("Advance payment recorded");
+      qc.invalidateQueries({ queryKey: ["customer-bookings"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const payBalanceMut = useMutation({
+    mutationFn: (id: string) => api("/api/customer/bookings/" + id + "/pay-balance", { method: "POST" }),
+    onSuccess: () => {
+      toast.success("Balance payment recorded");
+      qc.invalidateQueries({ queryKey: ["customer-bookings"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const payFullMut = useMutation({
+    mutationFn: (id: string) => api("/api/customer/bookings/" + id + "/pay-full", { method: "POST" }),
+    onSuccess: () => {
+      toast.success("Payment recorded — booking confirmed");
+      qc.invalidateQueries({ queryKey: ["customer-bookings"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const statusColor: Record<string, string> = {
+    Confirmed: "bg-chart-4/20 text-chart-4",
+    "Pending payment": "bg-chart-5/20 text-chart-5",
+    Pending: "bg-chart-5/20 text-chart-5",
+    Completed: "bg-chart-2/20 text-chart-2",
+    Cancelled: "bg-destructive/20 text-destructive",
+    "On Trip": "bg-primary/20 text-primary",
+  };
+
+  function invoicePayload(b: BookingRow) {
+    return {
+      issuer: COMPANY.legalName,
+      platform: COMPANY.platformBrand,
+      gstinNote: COMPANY.gstNumber,
+      bookingId: b.id,
+      route: `${b.from} → ${b.to}`,
+      tripDate: b.date,
+      operator: b.vendor,
+      lines: [
+        { label: "Rental (taxable value)", amount: b.subtotal },
+        { label: `GST (${b.gstRatePercent || COMPANY.gstPercentage}%)`, amount: b.gstAmount },
+        { label: "Total payable", amount: b.totalWithGst },
+      ],
+      amountPaid: b.amountPaid,
+      balanceDue: b.balanceDue,
+      paymentStatus: b.paymentStatus,
+      paymentType: b.paymentType,
+      status: b.status,
+    };
+  }
+
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading bookings…</div>;
+  if (error) {
+    return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
+  }
+
+  const bookings = data?.bookings ?? [];
+
+  return (
+    <div className={panelPage.standard}>
+      <h1 className="font-display text-2xl font-bold text-foreground mb-1">My Bookings</h1>
+      <p className="text-muted-foreground text-sm mb-2">View and manage all your bus bookings</p>
+      <p className="text-xs text-muted-foreground mb-6">
+        Totals include GST where shown. Balance must be cleared before trip start.{" "}
+        <Link to="/policies/refund-cancellation" className="text-primary hover:underline">
+          Policy
+        </Link>
+        {useRazorpayRemote ? (
+          <span className="block mt-2 text-chart-4">
+            Online checkout uses Razorpay (configure <code className="rounded bg-muted px-1">RAZORPAY_*</code> on the API
+            server).
+          </span>
+        ) : (
+          <span className="block mt-2">
+            Demo mode: payments record instantly. For Razorpay, set <code className="rounded bg-muted px-1">VITE_API_URL</code>{" "}
+            to your mock API and add Razorpay keys there — see <code className="rounded bg-muted px-1">.env.example</code>.
+          </span>
+        )}
+      </p>
+
+      {bookings.length === 0 ? (
+        <p className="text-sm text-muted-foreground border rounded-xl p-8 text-center bg-card border-border">
+          No bookings yet. Accept a quote from My Quotes to create one.
+        </p>
+      ) : (
+        <div className="bg-card rounded-xl border border-border overflow-x-auto">
+          <table className="w-full min-w-[800px] text-sm">
+            <thead>
+              <tr className="border-b border-border text-muted-foreground">
+                <th className="text-left px-5 py-3 font-medium">ID</th>
+                <th className="text-left px-5 py-3 font-medium">Route</th>
+                <th className="text-left px-5 py-3 font-medium">Date</th>
+                <th className="text-left px-5 py-3 font-medium">Bus</th>
+                <th className="text-left px-5 py-3 font-medium">Operator</th>
+                <th className="text-left px-5 py-3 font-medium">Status</th>
+                <th className="text-left px-5 py-3 font-medium">Total (incl. GST)</th>
+                <th className="text-left px-5 py-3 font-medium">Pay</th>
+                <th className="text-left px-5 py-3 font-medium">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {bookings.map((b) => (
+                <tr key={b.id} className="border-b border-border last:border-0 hover:bg-muted/50">
+                  <td className="px-5 py-3 font-medium text-foreground font-mono text-xs">{b.id.slice(-8)}</td>
+                  <td className="px-5 py-3 text-foreground">{b.from} → {b.to}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{b.date}</td>
+                  <td className="px-5 py-3 text-muted-foreground">{b.bus}</td>
+                  <td className="px-5 py-3 text-foreground">{b.vendor}</td>
+                  <td className="px-5 py-3">
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColor[b.status] ?? "bg-muted"}`}>{b.status}</span>
+                    <div className="text-[10px] text-muted-foreground mt-1">{b.paymentStatus}</div>
+                  </td>
+                  <td className="px-5 py-3 font-medium text-foreground">{b.amount}</td>
+                  <td className="px-5 py-3">
+                    <div className="flex flex-col gap-1">
+                      {b.rawStatus !== "cancelled" && b.paymentStatus === "Unpaid" && b.paymentType === "advance" && (
+                        useRazorpayRemote ? (
+                          <RazorpayBookingPayButton bookingId={b.id} purpose="advance">
+                            Pay advance (Razorpay)
+                          </RazorpayBookingPayButton>
+                        ) : (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-7 gap-1 text-xs"
+                            type="button"
+                            disabled={payAdvanceMut.isPending}
+                            onClick={() => payAdvanceMut.mutate(b.id)}
+                          >
+                            <CreditCard className="h-3 w-3" /> Advance
+                          </Button>
+                        )
+                      )}
+                      {b.rawStatus !== "cancelled" && b.paymentStatus === "Unpaid" && b.paymentType === "full" && (
+                        useRazorpayRemote ? (
+                          <RazorpayBookingPayButton bookingId={b.id} purpose="full">
+                            Pay full (Razorpay)
+                          </RazorpayBookingPayButton>
+                        ) : (
+                          <Button
+                            variant="default"
+                            size="sm"
+                            className="h-7 gap-1 text-xs"
+                            type="button"
+                            disabled={payFullMut.isPending}
+                            onClick={() => payFullMut.mutate(b.id)}
+                          >
+                            <CreditCard className="h-3 w-3" /> Pay full
+                          </Button>
+                        )
+                      )}
+                      {b.rawStatus !== "cancelled" && b.paymentStatus === "Partial" && (
+                        useRazorpayRemote ? (
+                          <RazorpayBookingPayButton bookingId={b.id} purpose="balance">
+                            Pay balance (Razorpay)
+                          </RazorpayBookingPayButton>
+                        ) : (
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="h-7 gap-1 text-xs"
+                            type="button"
+                            disabled={payBalanceMut.isPending}
+                            onClick={() => payBalanceMut.mutate(b.id)}
+                          >
+                            <CreditCard className="h-3 w-3" /> Balance
+                          </Button>
+                        )
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-5 py-3">
+                    <div className="flex gap-1 flex-wrap">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="ghost" size="icon" className="h-7 w-7" type="button"><Eye className="w-3.5 h-3.5" /></Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Booking details</DialogTitle>
+                          </DialogHeader>
+                          <div className="text-xs space-y-2">
+                            <pre className="bg-muted p-3 rounded-md overflow-auto">{JSON.stringify(b, null, 2)}</pre>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        type="button"
+                        onClick={() => {
+                          const blob = new Blob([JSON.stringify(invoicePayload(b), null, 2)], { type: "application/json" });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement("a");
+                          a.href = url;
+                          a.download = `invoice-${b.id.slice(-8)}.json`;
+                          a.click();
+                          URL.revokeObjectURL(url);
+                          toast.message("Downloaded invoice summary (JSON). Replace with PDF when gateway is live.");
+                        }}
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                      </Button>
+                      {(b.status === "Pending payment" || b.status === "Confirmed" || b.status === "Pending") && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-destructive"
+                          type="button"
+                          disabled={cancelMut.isPending}
+                          onClick={() => cancelMut.mutate(b.id)}
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </Button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

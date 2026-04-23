@@ -1,29 +1,61 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { IndianRupee, TrendingUp, ArrowDownRight, RefreshCw } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { IndianRupee, TrendingUp, ArrowDownRight, RefreshCw } from "lucide-react";
+import { api } from "@/lib/api";
+import { panelPage, panelStatePadding } from "@/lib/panel-page";
 
 export const Route = createFileRoute("/admin/payments")({
   component: AdminPayments,
 });
 
-const payments = [
-  { id: "PAY001", booking: "BK1003", vendor: "Green Travels", amount: "₹8,000", commission: "₹800", payout: "₹7,200", status: "Paid", date: "2025-01-15" },
-  { id: "PAY002", booking: "BK1001", vendor: "ABC Travels", amount: "₹22,000", commission: "₹2,200", payout: "₹19,800", status: "Pending", date: "2025-02-20" },
-  { id: "PAY003", booking: "BK1004", vendor: "Star Bus Co.", amount: "₹5,500", commission: "₹0", payout: "₹5,500", status: "Refunded", date: "2024-12-28" },
-];
+type P = {
+  id: string;
+  booking: string;
+  vendor: string;
+  amount: string;
+  commission: string;
+  payout: string;
+  status: string;
+  date: string;
+};
+
+type Res = { payments: P[] };
 
 function AdminPayments() {
+  const qc = useQueryClient();
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["admin-payments"],
+    queryFn: () => api<Res>("/api/admin/payments"),
+  });
+
+  const refundMut = useMutation({
+    mutationFn: (id: string) => api("/api/admin/payments/" + id + "/refund", { method: "POST" }),
+    onSuccess: () => {
+      toast.success("Refund recorded");
+      qc.invalidateQueries({ queryKey: ["admin-payments"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  if (isLoading) return <div className={`${panelStatePadding} text-sm text-muted-foreground`}>Loading…</div>;
+  if (error) return <div className={`${panelStatePadding} text-sm text-destructive`}>{(error as Error).message}</div>;
+
+  const payments = data?.payments ?? [];
+  const totalRev = payments.filter((p) => p.status === "Paid").length;
+
   return (
-    <div className="p-6 sm:p-8 max-w-6xl">
+    <div className={panelPage.standard}>
       <h1 className="font-display text-2xl font-bold text-foreground mb-1">Payment Management</h1>
       <p className="text-muted-foreground text-sm mb-6">Commission tracking, refunds, and vendor payouts</p>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
         {[
-          { label: "Total Revenue", value: "₹2.8 Cr", icon: IndianRupee, color: "text-chart-2" },
-          { label: "Commission", value: "₹28 L", icon: TrendingUp, color: "text-primary" },
-          { label: "Pending Payouts", value: "₹3.2 L", icon: ArrowDownRight, color: "text-chart-5" },
-          { label: "Refunds", value: "₹45,000", icon: RefreshCw, color: "text-destructive" },
+          { label: "Recorded payments", value: String(payments.length), icon: IndianRupee, color: "text-chart-2" },
+          { label: "Completed", value: String(totalRev), icon: TrendingUp, color: "text-primary" },
+          { label: "Pending rows", value: String(payments.filter((p) => p.status === "Pending").length), icon: ArrowDownRight, color: "text-chart-5" },
+          { label: "Refunded", value: String(payments.filter((p) => p.status === "Refunded").length), icon: RefreshCw, color: "text-destructive" },
         ].map((s) => (
           <div key={s.label} className="bg-card rounded-xl border border-border p-5">
             <s.icon className={`w-5 h-5 ${s.color} mb-2`} />
@@ -34,7 +66,7 @@ function AdminPayments() {
       </div>
 
       <div className="bg-card rounded-xl border border-border overflow-x-auto">
-        <table className="w-full text-sm">
+        <table className="w-full min-w-[720px] text-sm">
           <thead>
             <tr className="border-b border-border text-muted-foreground">
               <th className="text-left px-5 py-3 font-medium">Payment ID</th>
@@ -45,19 +77,25 @@ function AdminPayments() {
               <th className="text-left px-5 py-3 font-medium">Payout</th>
               <th className="text-left px-5 py-3 font-medium">Status</th>
               <th className="text-left px-5 py-3 font-medium">Date</th>
+              <th className="text-left px-5 py-3 font-medium">Refund</th>
             </tr>
           </thead>
           <tbody>
             {payments.map((p) => (
               <tr key={p.id} className="border-b border-border last:border-0 hover:bg-muted/50">
-                <td className="px-5 py-3 font-medium text-foreground">{p.id}</td>
+                <td className="px-5 py-3 font-medium text-foreground font-mono text-xs">{p.id.slice(-8)}</td>
                 <td className="px-5 py-3 text-foreground">{p.booking}</td>
                 <td className="px-5 py-3 text-foreground">{p.vendor}</td>
                 <td className="px-5 py-3 font-medium text-foreground">{p.amount}</td>
                 <td className="px-5 py-3 text-primary">{p.commission}</td>
                 <td className="px-5 py-3 font-medium text-chart-2">{p.payout}</td>
-                <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.status === "Paid" ? "bg-chart-2/20 text-chart-2" : p.status === "Pending" ? "bg-chart-5/20 text-chart-5" : "bg-destructive/20 text-destructive"}`}>{p.status}</span></td>
+                <td className="px-5 py-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${p.status === "Paid" ? "bg-chart-2/20 text-chart-2" : p.status === "Pending" ? "bg-chart-5/20 text-chart-5" : p.status === "On hold" ? "bg-destructive/20 text-destructive" : p.status === "Collected" ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"}`}>{p.status}</span></td>
                 <td className="px-5 py-3 text-muted-foreground">{p.date}</td>
+                <td className="px-5 py-3">
+                  {(p.status === "Paid" || p.status === "Collected") && (
+                    <Button variant="outline" size="sm" className="text-xs h-7" type="button" disabled={refundMut.isPending} onClick={() => refundMut.mutate(p.id)}>Refund</Button>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

@@ -1,14 +1,70 @@
 import { Users, Snowflake, Moon } from "lucide-react";
 
 const fleetItems = [
-  { title: "12 Seater Mini Bus", seats: "12", desc: "Perfect for small groups & airport transfers", ac: true },
-  { title: "17 Seater Mini Bus", seats: "17", desc: "Ideal for family trips & outings", ac: true },
-  { title: "26 Seater Bus", seats: "26", desc: "Great for school trips & office outings", ac: true },
-  { title: "32 Seater Bus", seats: "32", desc: "Best for medium-sized group tours", ac: true },
-  { title: "40 Seater Luxury Bus", seats: "40", desc: "Premium comfort for large groups", ac: true },
-  { title: "49/52 Seater Coach", seats: "49-52", desc: "Full-size coach for weddings & events", ac: true },
-  { title: "Sleeper Bus", seats: "30-40", desc: "Overnight journeys in comfort", ac: true },
-  { title: "Non-AC Bus", seats: "40-52", desc: "Budget-friendly option for any trip", ac: false },
+  {
+    title: "12 Seater Tempo Traveller",
+    seats: "12",
+    desc: "Best tempo traveller on rent for airport transfers, family tours & small group travel",
+    ac: true,
+    image: "/images/fleet-12-seater-tempo-traveller.png",
+    alt: "12 seater tempo traveller on rent — AC mini bus for small groups India",
+  },
+  {
+    title: "17 Seater Mini Bus on Rent",
+    seats: "17",
+    desc: "Affordable mini bus on rent for family outings, pilgrimages & city transfers",
+    ac: true,
+    image: "/images/fleet-17-seater-mini-bus.png",
+    alt: "17 seater mini bus on rent India — tempo traveller for group travel",
+  },
+  {
+    title: "26 Seater AC Bus Rental",
+    seats: "26",
+    desc: "Ideal for corporate travel, school trips & office outings — best bus rental price per km",
+    ac: true,
+    image: "/images/fleet-26-seater-ac-bus.png",
+    alt: "26 seater AC bus rental India — affordable bus hire for corporate travel",
+  },
+  {
+    title: "32 Seater Bus for Group Travel",
+    seats: "32",
+    desc: "Best bus rental for group travel, medium tours & outstation trips across India",
+    ac: true,
+    image: "/images/fleet-32-seater-bus.png",
+    alt: "32 seater bus for group travel — bus rental for outstation trip India",
+  },
+  {
+    title: "40 Seater Luxury Bus Rental",
+    seats: "40",
+    desc: "Premium luxury bus rental in India for weddings, corporate events & large group tours",
+    ac: true,
+    image: "/images/fleet-40-seater-luxury-bus.png",
+    alt: "40 seater luxury bus rental India — premium AC coach for weddings and corporate travel",
+  },
+  {
+    title: "49/52 Seater Coach Hire",
+    seats: "49-52",
+    desc: "Best bus rental for weddings & events — full-size luxury coach hire at best price",
+    ac: true,
+    image: "/images/fleet-49-52-seater-coach.png",
+    alt: "49 seater bus rental for wedding India — luxury coach hire best price",
+  },
+  {
+    title: "Sleeper Bus Rental",
+    seats: "30-40",
+    desc: "Comfortable sleeper bus rental for overnight outstation trips across India",
+    ac: true,
+    image: "/images/fleet-sleeper-bus-rental.png",
+    alt: "sleeper bus rental India — overnight AC sleeper coach for outstation travel",
+  },
+  {
+    title: "Non-AC Bus Hire",
+    seats: "40-52",
+    desc: "Cheap bus hire option — affordable non-AC bus rental for budget group travel",
+    ac: false,
+    image: "/images/fleet-non-ac-bus-hire.png",
+    alt: "non-AC bus hire India — cheap affordable bus rental for budget group travel",
+  },
 ];
 
 export function FleetSection() {
@@ -16,12 +72,12 @@ export function FleetSection() {
     <section id="fleet" className="py-20 sm:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <span className="text-primary font-semibold text-sm uppercase tracking-wider">Our Fleet</span>
+          <span className="text-primary font-semibold text-sm uppercase tracking-wider">Types of Vehicles Available</span>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mt-2">
-            Choose Your Perfect Bus
+            Tempo Traveller &amp; Bus Types for Hire in India
           </h2>
           <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-            From compact mini buses to full-size luxury coaches — we have the right bus for every occasion.
+            From 12 seater tempo traveller on rent to 52 seater luxury coaches — best bus rental service for weddings, corporate travel, group tours &amp; outstation trips.
           </p>
         </div>
 
@@ -29,21 +85,34 @@ export function FleetSection() {
           {fleetItems.map((item) => (
             <div
               key={item.title}
-              className="group bg-card rounded-xl border border-border p-6 hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover:-translate-y-1"
+              className="group bg-card rounded-xl border border-border overflow-hidden hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover:-translate-y-1"
             >
-              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <Users className="w-6 h-6 text-primary" />
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.alt}
+                  width={640}
+                  height={400}
+                  loading="lazy"
+                  decoding="async"
+                  className="w-full h-full object-contain bg-muted/30 transition-transform duration-500 group-hover:scale-105"
+                />
               </div>
-              <h3 className="font-display font-semibold text-foreground text-lg mb-1">{item.title}</h3>
-              <p className="text-muted-foreground text-sm mb-3">{item.desc}</p>
-              <div className="flex items-center gap-3 text-xs">
-                <span className="flex items-center gap-1 text-foreground font-medium">
-                  <Users className="w-3.5 h-3.5 text-primary" /> {item.seats} seats
-                </span>
-                <span className="flex items-center gap-1 text-foreground font-medium">
-                  {item.ac ? <Snowflake className="w-3.5 h-3.5 text-primary" /> : <Moon className="w-3.5 h-3.5 text-muted-foreground" />}
-                  {item.ac ? "AC" : "Non-AC"}
-                </span>
+              <div className="p-5 pt-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-3 group-hover:bg-primary/20 transition-colors">
+                  <Users className="w-6 h-6 text-primary" />
+                </div>
+                <h3 className="font-display font-semibold text-foreground text-lg mb-1">{item.title}</h3>
+                <p className="text-muted-foreground text-sm mb-3">{item.desc}</p>
+                <div className="flex items-center gap-3 text-xs">
+                  <span className="flex items-center gap-1 text-foreground font-medium">
+                    <Users className="w-3.5 h-3.5 text-primary" /> {item.seats} seats
+                  </span>
+                  <span className="flex items-center gap-1 text-foreground font-medium">
+                    {item.ac ? <Snowflake className="w-3.5 h-3.5 text-primary" /> : <Moon className="w-3.5 h-3.5 text-muted-foreground" />}
+                    {item.ac ? "AC" : "Non-AC"}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

@@ -3,23 +3,23 @@ import { ClipboardList, MessageSquareQuote, CheckCircle2, Bus } from "lucide-rea
 const steps = [
   {
     icon: ClipboardList,
-    title: "Submit Requirement",
-    desc: "Tell us your pickup, drop, date, bus type & group size.",
+    title: "Submit Your Requirement",
+    desc: "Tell us your pickup, drop, date, bus type & group size — tempo traveller, mini bus or luxury coach.",
   },
   {
     icon: MessageSquareQuote,
-    title: "Get Multiple Quotes",
-    desc: "Verified bus operators in your city send competitive quotes.",
+    title: "Get Multiple Bus Rental Quotes",
+    desc: "Verified bus operators across India send competitive bus hire quotes with GST-clear pricing.",
   },
   {
     icon: CheckCircle2,
-    title: "Compare & Choose",
-    desc: "Compare prices, ratings & reviews. Pick the best operator.",
+    title: "Compare & Choose Best Price",
+    desc: "Compare bus rental prices, ratings & reviews. Pick the best affordable bus rental service.",
   },
   {
     icon: Bus,
-    title: "Travel in Comfort",
-    desc: "Confirm booking, pay securely, and enjoy your journey.",
+    title: "Book & Travel in Comfort",
+    desc: "Confirm your tempo traveller or bus booking, pay securely, and enjoy a safe, comfortable journey.",
   },
 ];
 
@@ -28,12 +28,12 @@ export function HowItWorks() {
     <section id="how-it-works" className="py-20 sm:py-28 bg-surface">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <span className="text-primary font-semibold text-sm uppercase tracking-wider">Simple Process</span>
+          <span className="text-primary font-semibold text-sm uppercase tracking-wider">Simple &amp; Fast Process</span>
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mt-2">
-            How It Works
+            How to Book Tempo Traveller &amp; Bus Rental Online
           </h2>
           <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
-            Book your bus in 4 easy steps — no hassle, best prices guaranteed.
+            Book tempo traveller on rent or luxury bus hire in 4 easy steps — no hassle, best bus rental price guaranteed.
           </p>
         </div>
 
